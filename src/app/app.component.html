@@ -1,0 +1,63 @@
+<!-- <h1>{{title | uppercase}}</h1>
+<h1>{{jsonValue | json}}</h1>
+<h1>{{newDate | date:'M:d:H'}}</h1>
+
+<h1>{{title | truncate}}</h1>
+<button (click)="handleEvent($event)">Click Me</button>
+<input placeholder="hello" [(ngModel)]="title"/>
+
+<input placeholder="user" [(ngModel)]="userObject.name"/>
+<input placeholder="user" [(ngModel)]="userObject.age"/>
+<input placeholder="user" [(ngModel)]="userObject.id"/>
+<ng-container *ngIf="showUser">
+    <app-user [user]="userObject" (userEvent)="handleEvent($event)"></app-user>
+</ng-container>
+<ul *ngFor="let item of posts">
+    <li>{{item.userId}}</li>
+    <li>{{item.title}}</li>
+    <li>{{item.body}}</li>
+</ul>
+<ul *ngFor="let item of (postsAsync | async); let i = index">
+    <li>{{i}}</li>
+    <li>{{item.userId}}</li>
+    <li>{{item.title}}</li>
+    <li>{{item.body}}</li>
+</ul> -->
+<!-- <a routerLink='/User'>User</a>
+<br/>
+<a routerLink='/Admin'>Admin</a>
+<br/>
+<div [formGroup]="profileForm">
+    <input type="text" id="firstName" class="form-control"
+    formControlName="firstName" required>
+
+    <div *ngIf="firstName?.invalid && (firstName?.dirty || firstName?.touched)"
+    class="alert alert-danger">
+
+        <div *ngIf="firstName?.errors?.required">
+            Name is required.
+        </div>
+        <div *ngIf="firstName?.errors?.minlength">
+            Name must be at least 2 characters long.
+        </div>
+        <div *ngIf="firstName?.errors?.forbiddenName">
+            Name cannot be Bob.
+        </div>
+    </div>
+    <h3>Raised Buttons</h3>
+    <div class="example-button-row">
+        <button mat-raised-button>Basic</button>
+        <button mat-raised-button color="primary">Primary</button>
+        <button mat-raised-button color="accent">Accent</button>
+        <button mat-raised-button color="warn">Warn</button>
+        <button mat-raised-button disabled>Disabled</button>
+        <a mat-raised-button routerLink=".">Link</a>
+    </div>
+</div>
+
+<br>
+<button (click)="modifyFormControl()">Modify</button>
+<input type="text" [formControl]="testProp" name="testProp">
+{{testProp.value}} -->
+<router-outlet></router-outlet>
+
