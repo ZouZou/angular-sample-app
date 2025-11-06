@@ -10,7 +10,8 @@ interface UserInterface {
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
-  styleUrls: ['./user.component.sass']
+  styleUrls: ['./user.component.sass'],
+  standalone: false
 })
 export class UserComponent implements OnInit {
 

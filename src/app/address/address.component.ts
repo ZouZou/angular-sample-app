@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 
 @Component({
+  standalone: false,
   selector: 'app-address',
   templateUrl: './address.component.html',
   styleUrls: ['./address.component.css']

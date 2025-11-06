@@ -9,6 +9,7 @@ interface QuoteResult {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-motor-quotation',
   templateUrl: './motor-quotation.component.html',
   styleUrls: ['./motor-quotation.component.css']

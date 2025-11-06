@@ -41,7 +41,7 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "1mb",
+                  "maximumWarning": "1.1mb",
                   "maximumError": "2mb"
                 },
                 {
@@ -81,10 +81,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "myapp:build:production"
+              "buildTarget": "myapp:build:production"
             },
             "development": {
-              "browserTarget": "myapp:build:development"
+              "buildTarget": "myapp:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -92,7 +92,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "myapp:build"
+            "buildTarget": "myapp:build"
           }
         },
         "test": {
