@@ -1,0 +1,346 @@
+<div class="quotation-container">
+  <!-- Header -->
+  <div class="header">
+    <div class="header-content">
+      <mat-icon class="header-icon">directions_car</mat-icon>
+      <div class="header-text">
+        <h1>Motor Insurance Quotation</h1>
+        <p>Get your personalized quote in minutes</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Progress Stepper -->
+  <div class="stepper-container">
+    <div class="stepper">
+      <div *ngFor="let i of [0, 1, 2, 3]"
+           class="step"
+           [class.active]="currentStep === i"
+           [class.completed]="currentStep > i">
+        <div class="step-icon">
+          <mat-icon>{{ getStepIcon(i) }}</mat-icon>
+        </div>
+        <div class="step-label">{{ getStepLabel(i) }}</div>
+        <div class="step-line" *ngIf="i < 3"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form Content -->
+  <div class="form-container">
+    <mat-card class="form-card">
+      <!-- Step 1: Vehicle Information -->
+      <div *ngIf="currentStep === 0" class="step-content" @slideIn>
+        <div class="step-header">
+          <mat-icon class="step-header-icon">directions_car</mat-icon>
+          <div>
+            <h2>Vehicle Information</h2>
+            <p>Tell us about your vehicle</p>
+          </div>
+        </div>
+
+        <form [formGroup]="vehicleFormGroup" class="form-grid">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Vehicle Make</mat-label>
+            <mat-select formControlName="make" required>
+              <mat-option *ngFor="let make of vehicleMakes" [value]="make">
+                {{ make }}
+              </mat-option>
+            </mat-select>
+            <mat-icon matPrefix>business</mat-icon>
+            <mat-error *ngIf="vehicleFormGroup.get('make')?.invalid">
+              {{ getErrorMessage(vehicleFormGroup, 'make') }}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Vehicle Model</mat-label>
+            <mat-select formControlName="model" required [disabled]="!currentModels.length">
+              <mat-option *ngFor="let model of currentModels" [value]="model">
+                {{ model }}
+              </mat-option>
+            </mat-select>
+            <mat-icon matPrefix>drive_eta</mat-icon>
+            <mat-error *ngIf="vehicleFormGroup.get('model')?.invalid">
+              {{ getErrorMessage(vehicleFormGroup, 'model') }}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Year</mat-label>
+            <mat-select formControlName="year" required>
+              <mat-option *ngFor="let year of years" [value]="year">
+                {{ year }}
+              </mat-option>
+            </mat-select>
+            <mat-icon matPrefix>calendar_today</mat-icon>
+            <mat-error *ngIf="vehicleFormGroup.get('year')?.invalid">
+              {{ getErrorMessage(vehicleFormGroup, 'year') }}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Registration Number</mat-label>
+            <input matInput formControlName="registration" placeholder="ABC1234"
+                   [style.text-transform]="'uppercase'">
+            <mat-icon matPrefix>confirmation_number</mat-icon>
+            <mat-error *ngIf="vehicleFormGroup.get('registration')?.invalid">
+              {{ getErrorMessage(vehicleFormGroup, 'registration') }}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Vehicle Value ($)</mat-label>
+            <input matInput type="number" formControlName="vehicleValue" placeholder="25000">
+            <mat-icon matPrefix>attach_money</mat-icon>
+            <mat-hint>Estimated market value of your vehicle</mat-hint>
+            <mat-error *ngIf="vehicleFormGroup.get('vehicleValue')?.invalid">
+              {{ getErrorMessage(vehicleFormGroup, 'vehicleValue') }}
+            </mat-error>
+          </mat-form-field>
+        </form>
+      </div>
+
+      <!-- Step 2: Personal Information -->
+      <div *ngIf="currentStep === 1" class="step-content" @slideIn>
+        <div class="step-header">
+          <mat-icon class="step-header-icon">person</mat-icon>
+          <div>
+            <h2>Personal Details</h2>
+            <p>We need some information about you</p>
+          </div>
+        </div>
+
+        <form [formGroup]="personalFormGroup" class="form-grid">
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>First Name</mat-label>
+            <input matInput formControlName="firstName" placeholder="John">
+            <mat-icon matPrefix>person_outline</mat-icon>
+            <mat-error *ngIf="personalFormGroup.get('firstName')?.invalid">
+              {{ getErrorMessage(personalFormGroup, 'firstName') }}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Last Name</mat-label>
+            <input matInput formControlName="lastName" placeholder="Doe">
+            <mat-icon matPrefix>person_outline</mat-icon>
+            <mat-error *ngIf="personalFormGroup.get('lastName')?.invalid">
+              {{ getErrorMessage(personalFormGroup, 'lastName') }}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Email Address</mat-label>
+            <input matInput type="email" formControlName="email" placeholder="john.doe@example.com">
+            <mat-icon matPrefix>email</mat-icon>
+            <mat-error *ngIf="personalFormGroup.get('email')?.invalid">
+              {{ getErrorMessage(personalFormGroup, 'email') }}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Phone Number</mat-label>
+            <input matInput type="tel" formControlName="phone" placeholder="1234567890">
+            <mat-icon matPrefix>phone</mat-icon>
+            <mat-hint>10 digits without spaces</mat-hint>
+            <mat-error *ngIf="personalFormGroup.get('phone')?.invalid">
+              {{ getErrorMessage(personalFormGroup, 'phone') }}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Date of Birth</mat-label>
+            <input matInput type="date" formControlName="dateOfBirth">
+            <mat-icon matPrefix>cake</mat-icon>
+            <mat-error *ngIf="personalFormGroup.get('dateOfBirth')?.invalid">
+              {{ getErrorMessage(personalFormGroup, 'dateOfBirth') }}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Driver's License Number</mat-label>
+            <input matInput formControlName="licenseNumber" placeholder="D1234567">
+            <mat-icon matPrefix>badge</mat-icon>
+            <mat-error *ngIf="personalFormGroup.get('licenseNumber')?.invalid">
+              {{ getErrorMessage(personalFormGroup, 'licenseNumber') }}
+            </mat-error>
+          </mat-form-field>
+        </form>
+      </div>
+
+      <!-- Step 3: Coverage Options -->
+      <div *ngIf="currentStep === 2" class="step-content" @slideIn>
+        <div class="step-header">
+          <mat-icon class="step-header-icon">shield</mat-icon>
+          <div>
+            <h2>Coverage Options</h2>
+            <p>Choose the coverage that suits you best</p>
+          </div>
+        </div>
+
+        <form [formGroup]="coverageFormGroup" class="form-grid">
+          <div class="coverage-types full-width">
+            <mat-radio-group formControlName="coverageType" class="coverage-radio-group">
+              <mat-card *ngFor="let coverage of coverageTypes"
+                        class="coverage-card"
+                        [class.selected]="coverageFormGroup.get('coverageType')?.value === coverage.value"
+                        (click)="coverageFormGroup.patchValue({coverageType: coverage.value})">
+                <mat-radio-button [value]="coverage.value" class="coverage-radio">
+                  <div class="coverage-content">
+                    <div class="coverage-title">{{ coverage.label }}</div>
+                    <div class="coverage-description">{{ coverage.description }}</div>
+                  </div>
+                </mat-radio-button>
+              </mat-card>
+            </mat-radio-group>
+          </div>
+
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Deductible ($)</mat-label>
+            <mat-select formControlName="deductible" required>
+              <mat-option *ngFor="let deductible of deductibles" [value]="deductible">
+                ${{ deductible }}
+              </mat-option>
+            </mat-select>
+            <mat-icon matPrefix>savings</mat-icon>
+            <mat-hint>Higher deductible = Lower premium</mat-hint>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Annual Mileage</mat-label>
+            <input matInput type="number" formControlName="annualMileage" placeholder="12000">
+            <mat-icon matPrefix>speed</mat-icon>
+            <mat-hint>Estimated miles per year</mat-hint>
+            <mat-error *ngIf="coverageFormGroup.get('annualMileage')?.invalid">
+              {{ getErrorMessage(coverageFormGroup, 'annualMileage') }}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Primary Parking Location</mat-label>
+            <mat-select formControlName="parkingType" required>
+              <mat-option *ngFor="let parking of parkingTypes" [value]="parking">
+                {{ parking }}
+              </mat-option>
+            </mat-select>
+            <mat-icon matPrefix>local_parking</mat-icon>
+            <mat-hint>Where you usually park your vehicle</mat-hint>
+          </mat-form-field>
+        </form>
+      </div>
+
+      <!-- Step 4: Quote Result -->
+      <div *ngIf="currentStep === 3" class="step-content quote-result" @slideIn>
+        <div class="step-header">
+          <mat-icon class="step-header-icon">request_quote</mat-icon>
+          <div>
+            <h2>Your Personalized Quote</h2>
+            <p>Based on the information you provided</p>
+          </div>
+        </div>
+
+        <div *ngIf="isCalculating" class="calculating">
+          <mat-spinner diameter="60"></mat-spinner>
+          <p>Calculating your quote...</p>
+        </div>
+
+        <div *ngIf="!isCalculating && quoteResult" class="quote-details">
+          <div class="premium-card">
+            <div class="premium-label">Annual Premium</div>
+            <div class="premium-amount">${{ quoteResult.premium | number:'1.2-2' }}</div>
+            <div class="premium-subtext">or ${{ (quoteResult.premium / 12) | number:'1.2-2' }}/month</div>
+          </div>
+
+          <div class="quote-summary">
+            <h3>Coverage Summary</h3>
+            <div class="summary-grid">
+              <div class="summary-item">
+                <mat-icon>directions_car</mat-icon>
+                <div class="summary-content">
+                  <div class="summary-label">Vehicle</div>
+                  <div class="summary-value">
+                    {{ vehicleFormGroup.value.year }}
+                    {{ vehicleFormGroup.value.make }}
+                    {{ vehicleFormGroup.value.model }}
+                  </div>
+                </div>
+              </div>
+
+              <div class="summary-item">
+                <mat-icon>shield</mat-icon>
+                <div class="summary-content">
+                  <div class="summary-label">Coverage Type</div>
+                  <div class="summary-value">{{ quoteResult.coverageType }}</div>
+                </div>
+              </div>
+
+              <div class="summary-item">
+                <mat-icon>savings</mat-icon>
+                <div class="summary-content">
+                  <div class="summary-label">Deductible</div>
+                  <div class="summary-value">${{ quoteResult.deductible }}</div>
+                </div>
+              </div>
+
+              <div class="summary-item">
+                <mat-icon>person</mat-icon>
+                <div class="summary-content">
+                  <div class="summary-label">Policy Holder</div>
+                  <div class="summary-value">
+                    {{ personalFormGroup.value.firstName }}
+                    {{ personalFormGroup.value.lastName }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="quote-actions">
+            <button mat-raised-button color="primary" class="action-button">
+              <mat-icon>shopping_cart</mat-icon>
+              Buy This Policy
+            </button>
+            <button mat-raised-button color="accent" class="action-button" (click)="startNewQuote()">
+              <mat-icon>refresh</mat-icon>
+              Get Another Quote
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Buttons -->
+      <div class="form-actions" *ngIf="currentStep < 3">
+        <button mat-button (click)="previousStep()" [disabled]="currentStep === 0">
+          <mat-icon>arrow_back</mat-icon>
+          Previous
+        </button>
+        <button mat-raised-button color="primary"
+                (click)="nextStep()"
+                [disabled]="!canProceed()">
+          Next
+          <mat-icon>arrow_forward</mat-icon>
+        </button>
+      </div>
+    </mat-card>
+  </div>
+
+  <!-- Features Section -->
+  <div class="features">
+    <div class="feature">
+      <mat-icon>verified_user</mat-icon>
+      <h3>Secure & Trusted</h3>
+      <p>Your data is encrypted and protected</p>
+    </div>
+    <div class="feature">
+      <mat-icon>flash_on</mat-icon>
+      <h3>Instant Quotes</h3>
+      <p>Get your quote in under 2 minutes</p>
+    </div>
+    <div class="feature">
+      <mat-icon>support_agent</mat-icon>
+      <h3>24/7 Support</h3>
+      <p>We're here to help anytime</p>
+    </div>
+  </div>
+</div>

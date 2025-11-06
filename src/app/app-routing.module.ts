@@ -4,6 +4,7 @@ import { AdminComponent } from './admin/admin.component';
 import { BlockitGuard } from './blockit.guard';
 import { NavigationComponent } from './navigation/navigation.component';
 import { UserComponent } from './user/user.component';
+import { MotorQuotationComponent } from './motor-quotation/motor-quotation.component';
 
 const routes: Routes = [
   {
@@ -16,10 +17,13 @@ const routes: Routes = [
     path: 'Navigation', component: NavigationComponent
   },
   {
-    path: '', redirectTo: '/Navigation', pathMatch: 'full'
+    path: 'motor-quote', component: MotorQuotationComponent
   },
-  { 
-    path: 'customer', 
+  {
+    path: '', redirectTo: '/motor-quote', pathMatch: 'full'
+  },
+  {
+    path: 'customer',
     canActivate: [BlockitGuard],
     loadChildren: () => import('./customer/customer.module').then(m => m.CustomerModule) },
   {

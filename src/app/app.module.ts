@@ -24,6 +24,8 @@ import { AddressComponent } from './address/address.component';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MotorQuotationComponent } from './motor-quotation/motor-quotation.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +35,8 @@ import { MatRadioModule } from '@angular/material/radio';
     AdminComponent,
     DashboardComponent,
     NavigationComponent,
-    AddressComponent
+    AddressComponent,
+    MotorQuotationComponent
   ],
   imports: [
     BrowserModule,
@@ -53,7 +56,8 @@ import { MatRadioModule } from '@angular/material/radio';
     MatListModule,
     MatInputModule,
     MatSelectModule,
-    MatRadioModule
+    MatRadioModule,
+    MatProgressSpinnerModule
   ],
   providers: [
   ],
