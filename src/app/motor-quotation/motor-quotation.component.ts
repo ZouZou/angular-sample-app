@@ -235,13 +235,13 @@ export class MotorQuotationComponent implements OnInit {
       }
     }
     if (control.hasError('minlength')) {
-      return `Minimum length is ${control.errors?.minlength.requiredLength}`;
+      return `Minimum length is ${control.errors?.['minlength'].requiredLength}`;
     }
     if (control.hasError('min')) {
-      return `Minimum value is ${control.errors?.min.min}`;
+      return `Minimum value is ${control.errors?.['min'].min}`;
     }
     if (control.hasError('max')) {
-      return `Maximum value is ${control.errors?.max.max}`;
+      return `Maximum value is ${control.errors?.['max'].max}`;
     }
     return '';
   }
