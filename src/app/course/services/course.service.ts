@@ -14,31 +14,61 @@ export class CourseService {
   private mockCourses: Course[] = [
     {
       id: 1,
-      title: 'Angular Fundamentals',
-      description: 'Learn the basics of Angular framework including components, services, and routing.',
-      instructor: 'John Doe',
-      duration: 20,
-      price: 99.99,
+      title: 'Complete Angular Developer Course',
+      description: 'Master Angular from beginner to advanced. Build real-world applications with Angular 20, TypeScript, RxJS, and Material Design. Learn components, services, routing, forms, HTTP, state management, and deployment.',
+      instructor: 'Sarah Anderson',
+      duration: 40,
+      price: 149.99,
       category: 'Web Development',
       level: 'Beginner',
-      thumbnailUrl: 'https://via.placeholder.com/300x200?text=Angular',
-      enrollmentCount: 1234,
-      rating: 4.5,
-      createdDate: new Date('2024-01-15')
+      thumbnailUrl: 'https://source.unsplash.com/400x300/?angular,programming',
+      bannerUrl: 'https://source.unsplash.com/1200x400/?angular,code',
+      enrollmentCount: 3247,
+      rating: 4.8,
+      createdDate: new Date('2024-01-15'),
+      language: 'English',
+      requirements: [
+        'Basic HTML, CSS, and JavaScript knowledge',
+        'Understanding of TypeScript basics',
+        'Node.js and npm installed'
+      ],
+      learningOutcomes: [
+        'Build complete Angular applications from scratch',
+        'Master Angular components, services, and dependency injection',
+        'Implement routing and navigation',
+        'Work with reactive forms and validation',
+        'Use RxJS observables and operators',
+        'Consume REST APIs with HttpClient',
+        'Apply Angular Material Design',
+        'Deploy Angular applications'
+      ],
+      published: true
     },
     {
       id: 2,
       title: 'Advanced TypeScript',
-      description: 'Master TypeScript with advanced concepts like generics, decorators, and type guards.',
+      description: 'Master TypeScript with advanced concepts like generics, decorators, and type guards. Build type-safe applications.',
       instructor: 'Jane Smith',
       duration: 15,
-      price: 149.99,
+      price: 129.99,
       category: 'Programming',
       level: 'Advanced',
-      thumbnailUrl: 'https://via.placeholder.com/300x200?text=TypeScript',
+      thumbnailUrl: 'https://source.unsplash.com/400x300/?typescript,code',
+      bannerUrl: 'https://source.unsplash.com/1200x400/?typescript,programming',
       enrollmentCount: 856,
       rating: 4.8,
-      createdDate: new Date('2024-02-20')
+      createdDate: new Date('2024-02-20'),
+      language: 'English',
+      requirements: [
+        'Intermediate TypeScript knowledge',
+        'Experience with JavaScript ES6+'
+      ],
+      learningOutcomes: [
+        'Master advanced TypeScript features',
+        'Write type-safe code',
+        'Use generics effectively'
+      ],
+      published: true
     },
     {
       id: 3,
@@ -49,10 +79,22 @@ export class CourseService {
       price: 79.99,
       category: 'Web Development',
       level: 'Intermediate',
-      thumbnailUrl: 'https://via.placeholder.com/300x200?text=RxJS',
+      thumbnailUrl: 'https://source.unsplash.com/400x300/?reactive,programming',
+      bannerUrl: 'https://source.unsplash.com/1200x400/?streams,data',
       enrollmentCount: 642,
       rating: 4.6,
-      createdDate: new Date('2024-03-10')
+      createdDate: new Date('2024-03-10'),
+      language: 'English',
+      requirements: [
+        'Basic Angular knowledge',
+        'Understanding of asynchronous programming'
+      ],
+      learningOutcomes: [
+        'Master RxJS operators',
+        'Build reactive applications',
+        'Handle async data streams'
+      ],
+      published: true
     }
   ];
 
