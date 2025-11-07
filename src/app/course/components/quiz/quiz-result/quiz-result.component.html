@@ -1,0 +1,109 @@
+<div class="quiz-result-container">
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading">
+    <mat-spinner></mat-spinner>
+    <p>Loading results...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error && !isLoading" class="error">
+    <mat-icon color="warn">error</mat-icon>
+    <p>{{ error }}</p>
+  </div>
+
+  <!-- Results Display -->
+  <div *ngIf="!isLoading && !error && quiz && attempt" class="result-content">
+    <mat-card class="result-card">
+      <mat-card-header>
+        <mat-card-title>Quiz Results</mat-card-title>
+        <mat-card-subtitle>{{ quiz.title }}</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <!-- Score Display -->
+        <div class="score-display" [class.passed]="attempt.passed" [class.failed]="!attempt.passed">
+          <mat-icon [color]="getScoreColor()">{{ getScoreIcon() }}</mat-icon>
+          <div class="score-info">
+            <h2>{{ attempt.percentage }}%</h2>
+            <p>{{ attempt.score }} / {{ attempt.totalPoints }} points</p>
+          </div>
+        </div>
+
+        <!-- Pass/Fail Status -->
+        <div class="status-banner" [class.passed]="attempt.passed" [class.failed]="!attempt.passed">
+          <mat-icon>{{ attempt.passed ? 'celebration' : 'info' }}</mat-icon>
+          <div>
+            <h3 *ngIf="attempt.passed">Congratulations! You Passed!</h3>
+            <h3 *ngIf="!attempt.passed">You Did Not Pass</h3>
+            <p *ngIf="attempt.passed">Great job! You've successfully completed this quiz.</p>
+            <p *ngIf="!attempt.passed">
+              You need {{ quiz.passingScore }}% to pass. Keep learning and try again!
+            </p>
+          </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-grid">
+          <div class="stat-item">
+            <mat-icon>check_circle</mat-icon>
+            <div>
+              <strong>{{ getCorrectAnswersCount() }}</strong>
+              <span>Correct</span>
+            </div>
+          </div>
+
+          <div class="stat-item">
+            <mat-icon>cancel</mat-icon>
+            <div>
+              <strong>{{ getIncorrectAnswersCount() }}</strong>
+              <span>Incorrect</span>
+            </div>
+          </div>
+
+          <div class="stat-item">
+            <mat-icon>assignment</mat-icon>
+            <div>
+              <strong>{{ quiz.questions.length }}</strong>
+              <span>Total Questions</span>
+            </div>
+          </div>
+
+          <div class="stat-item">
+            <mat-icon>event</mat-icon>
+            <div>
+              <strong>Attempt #{{ attempt.attemptNumber }}</strong>
+              <span>Attempt Number</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Additional Info -->
+        <div class="additional-info">
+          <p>
+            <mat-icon>schedule</mat-icon>
+            Completed on: {{ attempt.completedAt | date:'medium' }}
+          </p>
+          <p>
+            <mat-icon>stars</mat-icon>
+            Passing score: {{ quiz.passingScore }}%
+          </p>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions>
+        <button mat-raised-button (click)="reviewAnswers()">
+          <mat-icon>visibility</mat-icon>
+          Review Answers
+        </button>
+        <button mat-raised-button color="accent" (click)="retakeQuiz()">
+          <mat-icon>replay</mat-icon>
+          Retake Quiz
+        </button>
+        <button mat-raised-button color="primary" (click)="continueCourse()">
+          <mat-icon>arrow_forward</mat-icon>
+          Continue Course
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>

@@ -116,13 +116,43 @@
         <mat-card class="pricing-card">
           <mat-card-content>
             <div class="price-section">
-              <div class="price">
+              <div class="price" *ngIf="!isEnrolled()">
                 <span class="currency">$</span>
                 <span class="amount">{{ course.price }}</span>
               </div>
-              <button mat-raised-button color="primary" class="enroll-button" (click)="enrollCourse()">
-                <mat-icon>school</mat-icon>
-                Enroll Now
+
+              <!-- Enrollment Status Badge -->
+              <div *ngIf="isEnrolled() && enrollment" class="enrollment-status">
+                <mat-icon>check_circle</mat-icon>
+                <div>
+                  <strong>Enrolled</strong>
+                  <span>{{ enrollment.progress }}% Complete</span>
+                </div>
+              </div>
+
+              <!-- Enroll Button (if not enrolled) -->
+              <button
+                *ngIf="!isEnrolled()"
+                mat-raised-button
+                color="primary"
+                class="enroll-button"
+                (click)="enrollCourse()"
+                [disabled]="isEnrolling">
+                <mat-spinner *ngIf="isEnrolling" diameter="20"></mat-spinner>
+                <mat-icon *ngIf="!isEnrolling">school</mat-icon>
+                <span *ngIf="!isEnrolling">Enroll Now</span>
+                <span *ngIf="isEnrolling">Enrolling...</span>
+              </button>
+
+              <!-- Start Learning Button (if enrolled) -->
+              <button
+                *ngIf="isEnrolled()"
+                mat-raised-button
+                color="accent"
+                class="enroll-button"
+                (click)="startLearning()">
+                <mat-icon>play_circle</mat-icon>
+                {{ enrollment?.progress === 0 ? 'Start Learning' : 'Continue Learning' }}
               </button>
             </div>
           </mat-card-content>

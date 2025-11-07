@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CourseService } from '../../services/course.service';
+import { EnrollmentService } from '../../services/enrollment.service';
+import { AuthService } from '../../services/auth.service';
 import { Course } from '../../models/course.interface';
+import { Enrollment } from '../../models/enrollment.interface';
 
 @Component({
   selector: 'app-course-detail',
@@ -11,11 +14,15 @@ import { Course } from '../../models/course.interface';
 })
 export class CourseDetailComponent implements OnInit {
   course: Course | null = null;
+  enrollment: Enrollment | null = null;
   isLoading = false;
+  isEnrolling = false;
   error: string | null = null;
 
   constructor(
     private courseService: CourseService,
+    private enrollmentService: EnrollmentService,
+    private authService: AuthService,
     private route: ActivatedRoute,
     private router: Router
   ) {}
@@ -37,6 +44,7 @@ export class CourseDetailComponent implements OnInit {
     this.courseService.getCourse(id).subscribe({
       next: (course) => {
         this.course = course;
+        this.checkEnrollment(id);
         this.isLoading = false;
       },
       error: (error) => {
@@ -45,6 +53,20 @@ export class CourseDetailComponent implements OnInit {
         this.isLoading = false;
       }
     });
+  }
+
+  checkEnrollment(courseId: number): void {
+    const userId = this.authService.currentUserId;
+    if (userId) {
+      this.enrollmentService.getEnrollment(userId, courseId).subscribe({
+        next: (enrollment) => {
+          this.enrollment = enrollment;
+        },
+        error: (error) => {
+          console.error('Error checking enrollment:', error);
+        }
+      });
+    }
   }
 
   navigateToEdit(): void {
@@ -87,9 +109,38 @@ export class CourseDetailComponent implements OnInit {
   }
 
   enrollCourse(): void {
-    if (this.course) {
-      alert(`Enrollment functionality would be implemented here for: ${this.course.title}`);
-      // In a real application, this would handle enrollment logic
+    if (!this.course?.id) return;
+
+    const userId = this.authService.currentUserId;
+    if (!userId) {
+      alert('Please log in to enroll in courses');
+      return;
     }
+
+    this.isEnrolling = true;
+
+    this.enrollmentService.enrollInCourse(userId, this.course.id).subscribe({
+      next: (enrollment) => {
+        this.enrollment = enrollment;
+        this.isEnrolling = false;
+        // Navigate to course player
+        this.router.navigate(['/courses', this.course!.id, 'learn']);
+      },
+      error: (error) => {
+        console.error('Error enrolling in course:', error);
+        alert(error.message || 'Failed to enroll in course. Please try again.');
+        this.isEnrolling = false;
+      }
+    });
+  }
+
+  startLearning(): void {
+    if (this.course?.id) {
+      this.router.navigate(['/courses', this.course.id, 'learn']);
+    }
+  }
+
+  isEnrolled(): boolean {
+    return this.enrollment !== null;
   }
 }

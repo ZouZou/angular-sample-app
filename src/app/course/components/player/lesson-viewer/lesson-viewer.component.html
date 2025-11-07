@@ -1,0 +1,70 @@
+<div class="lesson-viewer-container">
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading">
+    <mat-spinner></mat-spinner>
+    <p>Loading lesson...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error && !isLoading" class="error">
+    <mat-icon color="warn">error</mat-icon>
+    <p>{{ error }}</p>
+  </div>
+
+  <!-- Lesson Content -->
+  <div *ngIf="!isLoading && !error && lesson" class="lesson-content">
+    <!-- Lesson Header -->
+    <div class="lesson-header">
+      <div class="lesson-info">
+        <div class="lesson-type">
+          <mat-icon>{{ getLessonTypeIcon() }}</mat-icon>
+          <span>{{ getLessonTypeLabel() }}</span>
+        </div>
+        <h1>{{ lesson.title }}</h1>
+        <p *ngIf="lesson.description" class="lesson-description">{{ lesson.description }}</p>
+        <div class="lesson-meta">
+          <span *ngIf="lesson.duration">
+            <mat-icon>access_time</mat-icon>
+            {{ lesson.duration }} minutes
+          </span>
+          <span *ngIf="isCompleted" class="completed-badge">
+            <mat-icon>check_circle</mat-icon>
+            Completed
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Video Content -->
+    <div *ngIf="lesson.type === 'video' && safeVideoUrl" class="video-container">
+      <iframe
+        [src]="safeVideoUrl"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen>
+      </iframe>
+    </div>
+
+    <!-- Text Content -->
+    <div *ngIf="lesson.type === 'text' && lesson.content" class="text-container">
+      <div class="text-content" [innerHTML]="lesson.content | markdown"></div>
+    </div>
+
+    <!-- Completion Section -->
+    <div class="completion-section">
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="markAsComplete()"
+        [disabled]="isCompleted"
+        class="complete-button">
+        <mat-icon>{{ isCompleted ? 'check_circle' : 'check_circle_outline' }}</mat-icon>
+        {{ isCompleted ? 'Lesson Completed' : 'Mark as Complete' }}
+      </button>
+
+      <p *ngIf="!isCompleted" class="completion-hint">
+        Mark this lesson as complete to track your progress
+      </p>
+    </div>
+  </div>
+</div>
