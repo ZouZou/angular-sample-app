@@ -8,7 +8,12 @@ export interface Course {
   category: string;
   level: 'Beginner' | 'Intermediate' | 'Advanced';
   thumbnailUrl?: string;
+  bannerUrl?: string;
   enrollmentCount?: number;
   rating?: number;
   createdDate?: Date;
+  language?: string;
+  requirements?: string[];
+  learningOutcomes?: string[];
+  published?: boolean;
 }
