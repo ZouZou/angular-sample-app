@@ -27,6 +27,10 @@ const routes: Routes = [
     canActivate: [BlockitGuard],
     loadChildren: () => import('./customer/customer.module').then(m => m.CustomerModule) },
   {
+    path: 'courses',
+    loadChildren: () => import('./course/course.module').then(m => m.CourseModule)
+  },
+  {
     path: '**', component: AdminComponent
   }
 ];
