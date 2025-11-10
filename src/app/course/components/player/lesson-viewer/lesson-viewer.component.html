@@ -15,56 +15,111 @@
   <div *ngIf="!isLoading && !error && lesson" class="lesson-content">
     <!-- Lesson Header -->
     <div class="lesson-header">
-      <div class="lesson-info">
-        <div class="lesson-type">
+      <div class="lesson-badge-row">
+        <div class="lesson-type-badge">
           <mat-icon>{{ getLessonTypeIcon() }}</mat-icon>
           <span>{{ getLessonTypeLabel() }}</span>
         </div>
-        <h1>{{ lesson.title }}</h1>
-        <p *ngIf="lesson.description" class="lesson-description">{{ lesson.description }}</p>
-        <div class="lesson-meta">
-          <span *ngIf="lesson.duration">
-            <mat-icon>access_time</mat-icon>
-            {{ lesson.duration }} minutes
-          </span>
-          <span *ngIf="isCompleted" class="completed-badge">
-            <mat-icon>check_circle</mat-icon>
-            Completed
-          </span>
-        </div>
+        <span *ngIf="lesson.duration" class="duration-badge">
+          <mat-icon>schedule</mat-icon>
+          {{ lesson.duration }} min
+        </span>
+        <span *ngIf="isCompleted" class="status-badge completed">
+          <mat-icon>check_circle</mat-icon>
+          Completed
+        </span>
       </div>
+
+      <h1 class="lesson-title">{{ lesson.title }}</h1>
+
+      <p *ngIf="lesson.description" class="lesson-description">
+        {{ lesson.description }}
+      </p>
     </div>
 
     <!-- Video Content -->
-    <div *ngIf="lesson.type === 'video' && safeVideoUrl" class="video-container">
-      <iframe
-        [src]="safeVideoUrl"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen>
-      </iframe>
+    <div *ngIf="lesson.type === 'video' && safeVideoUrl" class="video-wrapper">
+      <div class="video-container">
+        <iframe
+          [src]="safeVideoUrl"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen>
+        </iframe>
+      </div>
+      <div class="video-info">
+        <div class="video-meta">
+          <mat-icon>play_circle</mat-icon>
+          <span>Video Lesson</span>
+        </div>
+        <p class="video-hint">Click play to start the video. You can pause, rewind, or adjust playback speed as needed.</p>
+      </div>
     </div>
 
     <!-- Text Content -->
-    <div *ngIf="lesson.type === 'text' && lesson.content" class="text-container">
-      <div class="text-content" [innerHTML]="lesson.content | markdown"></div>
+    <div *ngIf="lesson.type === 'text' && lesson.content" class="text-wrapper">
+      <mat-card class="text-card">
+        <mat-card-content>
+          <div class="text-content" [innerHTML]="lesson.content | markdown"></div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Lesson Notes Section -->
+    <div class="lesson-extras">
+      <mat-expansion-panel class="notes-panel">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon>note</mat-icon>
+            <span>Lesson Notes</span>
+          </mat-panel-title>
+          <mat-panel-description>
+            Take notes while learning
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div class="notes-content">
+          <p class="notes-hint">
+            <mat-icon>lightbulb</mat-icon>
+            Write down key points, questions, or insights from this lesson
+          </p>
+          <mat-form-field appearance="outline" class="notes-field">
+            <mat-label>Your notes</mat-label>
+            <textarea
+              matInput
+              rows="6"
+              placeholder="Add your notes here..."
+              [(ngModel)]="lessonNotes">
+            </textarea>
+          </mat-form-field>
+          <button mat-stroked-button color="primary" class="save-notes-btn">
+            <mat-icon>save</mat-icon>
+            Save Notes
+          </button>
+        </div>
+      </mat-expansion-panel>
     </div>
 
     <!-- Completion Section -->
     <div class="completion-section">
-      <button
-        mat-raised-button
-        color="primary"
-        (click)="markAsComplete()"
-        [disabled]="isCompleted"
-        class="complete-button">
-        <mat-icon>{{ isCompleted ? 'check_circle' : 'check_circle_outline' }}</mat-icon>
-        {{ isCompleted ? 'Lesson Completed' : 'Mark as Complete' }}
-      </button>
-
-      <p *ngIf="!isCompleted" class="completion-hint">
-        Mark this lesson as complete to track your progress
-      </p>
+      <div class="completion-card">
+        <div class="completion-icon" [class.completed]="isCompleted">
+          <mat-icon>{{ isCompleted ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
+        </div>
+        <div class="completion-info">
+          <h3>{{ isCompleted ? 'Lesson Completed!' : 'Mark as Complete' }}</h3>
+          <p *ngIf="isCompleted">Great job! You've completed this lesson.</p>
+          <p *ngIf="!isCompleted">Have you finished watching this lesson? Mark it as complete to track your progress.</p>
+        </div>
+        <button
+          mat-raised-button
+          [color]="isCompleted ? 'accent' : 'primary'"
+          (click)="markAsComplete()"
+          [disabled]="isCompleted"
+          class="complete-button">
+          <mat-icon>{{ isCompleted ? 'verified' : 'check_circle' }}</mat-icon>
+          {{ isCompleted ? 'Completed' : 'Complete Lesson' }}
+        </button>
+      </div>
     </div>
   </div>
 </div>

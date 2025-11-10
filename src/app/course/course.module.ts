@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 // Angular Material Modules
 import { MatCardModule } from '@angular/material/card';
@@ -16,6 +16,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatListModule } from '@angular/material/list';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 // Course Module Components
 import { CourseRoutingModule } from './course-routing.module';
@@ -47,6 +48,7 @@ import { LayoutModule } from '@angular/cdk/layout';
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    FormsModule,
     CourseRoutingModule,
     LayoutModule,
     // Material Modules
@@ -62,7 +64,8 @@ import { LayoutModule } from '@angular/cdk/layout';
     MatExpansionModule,
     MatListModule,
     MatRadioModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatTooltipModule
   ]
 })
 export class CourseModule { }
