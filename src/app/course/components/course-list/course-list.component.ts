@@ -90,6 +90,14 @@ export class CourseListComponent implements OnInit {
     this.router.navigate(['/courses', 'new']);
   }
 
+  navigateToDashboard(): void {
+    this.router.navigate(['/dashboard']);
+  }
+
+  navigateToAdmin(): void {
+    this.router.navigate(['/admin']);
+  }
+
   deleteCourse(event: Event, courseId: number | undefined): void {
     event.stopPropagation();
     if (!courseId) return;

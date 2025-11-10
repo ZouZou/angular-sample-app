@@ -1,10 +1,20 @@
 <div class="course-list-container">
   <div class="header">
     <h1>Course Catalog</h1>
-    <button *ngIf="isAdmin()" mat-raised-button color="primary" (click)="navigateToCreate()">
-      <mat-icon>add</mat-icon>
-      New Course
-    </button>
+    <div class="header-actions">
+      <button mat-button (click)="navigateToDashboard()">
+        <mat-icon>dashboard</mat-icon>
+        Dashboard
+      </button>
+      <button *ngIf="isAdmin()" mat-button (click)="navigateToAdmin()">
+        <mat-icon>admin_panel_settings</mat-icon>
+        Admin Dashboard
+      </button>
+      <button *ngIf="isAdmin()" mat-raised-button color="primary" (click)="navigateToCreate()">
+        <mat-icon>add</mat-icon>
+        New Course
+      </button>
+    </div>
   </div>
 
   <!-- Filters -->
