@@ -670,4 +670,523 @@ When this skill is invoked, you should:
 
 ---
 
-Now, proceed to implement the complete Learning Management System following these comprehensive guidelines.
+## Implementation Status
+
+### ✅ Completed Frontend Components
+
+**Models:**
+- ✅ Extended Course interface with all LMS fields
+- ✅ Curriculum interfaces (CourseSection, Lesson)
+- ✅ Quiz interfaces (Quiz, QuizQuestion, QuizOption, QuizAttempt, UserAnswer)
+- ✅ Enrollment interface
+- ✅ Progress interface (UserProgress)
+- ✅ User interface
+
+**Services:**
+- ✅ CourseService with mock data (3 courses with proper images)
+- ✅ CurriculumService with complete Angular course (5 sections, 20 lessons)
+- ✅ QuizService with 4 complete quizzes
+- ✅ EnrollmentService with enrollment management
+- ✅ ProgressService with lesson completion tracking
+- ✅ AuthService with mock authentication
+- ✅ ImageService (basic placeholder implementation)
+
+**Components:**
+- ✅ CourseListComponent - Enhanced with thumbnail images
+- ✅ CourseFormComponent - Basic CRUD functionality
+- ✅ CourseDetailComponent - Enhanced with:
+  - Banner images
+  - Curriculum display with accordion
+  - Enrollment status and buttons
+  - Course statistics
+- ✅ CoursePlayerComponent - Complete learning interface
+- ✅ LessonViewerComponent - Video and text lesson display
+- ✅ QuizPlayerComponent - Interactive quiz taking
+- ✅ QuizResultComponent - Results display with statistics
+
+**Additional Features:**
+- ✅ MarkdownPipe for text content rendering
+- ✅ Proper image URLs (Unsplash)
+- ✅ Responsive design for all components
+- ✅ Material Design integration
+- ✅ Curriculum summary statistics
+- ✅ Progress tracking per lesson
+
+### ✅ Backend Implementation Complete
+
+The backend API has been fully implemented with Express.js, TypeORM, and PostgreSQL:
+
+**Implemented Services:**
+- ✅ AuthService - User registration, login, JWT tokens, profile management
+- ✅ CourseService - Full CRUD for courses, filtering, enrollment counting
+- ✅ CurriculumService - Sections and lessons management, reordering
+- ✅ EnrollmentService - Course enrollment, progress calculation
+- ✅ ProgressService - Lesson completion tracking, time spent, statistics
+- ✅ QuizService - Quiz management, automatic grading, attempt tracking
+
+**Implemented Controllers:**
+- ✅ AuthController - Authentication endpoints with validation
+- ✅ CourseController - Course management endpoints
+- ✅ CurriculumController - Sections and lessons endpoints
+- ✅ EnrollmentController - Enrollment management endpoints
+- ✅ ProgressController - Progress tracking endpoints
+- ✅ QuizController - Quiz and attempt endpoints
+
+**API Endpoints:**
+- ✅ `/api/auth/*` - Registration, login, profile management
+- ✅ `/api/courses/*` - Course CRUD operations
+- ✅ `/api/sections/*` and `/api/lessons/*` - Curriculum management
+- ✅ `/api/enrollments/*` - Enrollment operations
+- ✅ `/api/progress/*` - Progress tracking
+- ✅ `/api/quizzes/*` - Quiz management and attempts
+
+**Security Features:**
+- ✅ JWT authentication with bcrypt password hashing
+- ✅ Role-based authorization (student, instructor, admin)
+- ✅ Authentication middleware for protected routes
+- ✅ Input validation on all endpoints
+- ✅ Comprehensive error handling
+
+**Database:**
+- ✅ TypeORM entities for all models
+- ✅ PostgreSQL database with auto-synchronization
+- ✅ Proper relations and cascading deletes
+- ✅ Unique constraints and indexes
+
+### ✅ Frontend-Backend Integration Complete
+
+The Angular frontend is now fully integrated with the Express.js backend:
+
+**Completed Integration Steps:**
+- ✅ **Updated All Angular Services** - Replaced ALL mock data with real HttpClient API calls
+- ✅ **HTTP Interceptor** - JWT tokens automatically attached to authenticated requests
+- ✅ **Environment Configuration** - API base URL configured (`http://localhost:3000/api`)
+- ✅ **Authentication State** - JWT tokens and user data stored in localStorage
+- ✅ **Auto-Redirect on Auth Errors** - 401 errors clear auth and redirect users
+
+**What Works Now:**
+- ✅ User registration with password hashing
+- ✅ User login with JWT token generation
+- ✅ Automatic token attachment to all API requests
+- ✅ Course browsing (public - no auth required)
+- ✅ Course enrollment (authenticated users only)
+- ✅ Curriculum viewing with sections and lessons
+- ✅ Progress tracking per lesson
+- ✅ Quiz taking with automatic grading
+- ✅ Quiz attempt history
+- ✅ Profile management
+
+**Running the Full Stack:**
+1. Backend: `cd backend && npm run dev` (http://localhost:3000)
+2. Frontend: `ng serve` (http://localhost:4200)
+3. Database: PostgreSQL must be running with `lms_db` database created
+
+---
+
+## Backend Implementation Guide (Reference)
+
+### Technology Stack
+
+**Recommended Stack:**
+- **Runtime:** Node.js with Express.js or NestJS
+- **Database:** PostgreSQL or MongoDB
+- **ORM:** TypeORM (PostgreSQL) or Mongoose (MongoDB)
+- **Authentication:** JWT (JSON Web Tokens)
+- **File Storage:** Local storage or cloud (AWS S3, Cloudinary)
+
+### Database Schema
+
+#### Users Table
+```sql
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  password_hash VARCHAR(255) NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  avatar_url VARCHAR(500),
+  role VARCHAR(50) DEFAULT 'student',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+#### Courses Table
+```sql
+CREATE TABLE courses (
+  id SERIAL PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  description TEXT,
+  instructor VARCHAR(255),
+  duration INTEGER,
+  price DECIMAL(10,2),
+  category VARCHAR(100),
+  level VARCHAR(50),
+  thumbnail_url VARCHAR(500),
+  banner_url VARCHAR(500),
+  enrollment_count INTEGER DEFAULT 0,
+  rating DECIMAL(3,2),
+  language VARCHAR(50),
+  requirements TEXT[],
+  learning_outcomes TEXT[],
+  published BOOLEAN DEFAULT false,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+#### Course Sections Table
+```sql
+CREATE TABLE course_sections (
+  id SERIAL PRIMARY KEY,
+  course_id INTEGER REFERENCES courses(id) ON DELETE CASCADE,
+  title VARCHAR(255) NOT NULL,
+  description TEXT,
+  order_number INTEGER NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+#### Lessons Table
+```sql
+CREATE TABLE lessons (
+  id SERIAL PRIMARY KEY,
+  section_id INTEGER REFERENCES course_sections(id) ON DELETE CASCADE,
+  title VARCHAR(255) NOT NULL,
+  description TEXT,
+  type VARCHAR(50) NOT NULL,
+  order_number INTEGER NOT NULL,
+  duration INTEGER,
+  content TEXT,
+  video_url VARCHAR(500),
+  quiz_id INTEGER,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+#### Quizzes Table
+```sql
+CREATE TABLE quizzes (
+  id SERIAL PRIMARY KEY,
+  course_id INTEGER REFERENCES courses(id) ON DELETE CASCADE,
+  lesson_id INTEGER REFERENCES lessons(id) ON DELETE SET NULL,
+  title VARCHAR(255) NOT NULL,
+  description TEXT,
+  passing_score INTEGER DEFAULT 70,
+  time_limit INTEGER,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+#### Quiz Questions Table
+```sql
+CREATE TABLE quiz_questions (
+  id SERIAL PRIMARY KEY,
+  quiz_id INTEGER REFERENCES quizzes(id) ON DELETE CASCADE,
+  question TEXT NOT NULL,
+  type VARCHAR(50) NOT NULL,
+  order_number INTEGER NOT NULL,
+  points INTEGER DEFAULT 1,
+  explanation TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+#### Quiz Options Table
+```sql
+CREATE TABLE quiz_options (
+  id SERIAL PRIMARY KEY,
+  question_id INTEGER REFERENCES quiz_questions(id) ON DELETE CASCADE,
+  text VARCHAR(500) NOT NULL,
+  is_correct BOOLEAN DEFAULT false,
+  order_number INTEGER NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+#### Enrollments Table
+```sql
+CREATE TABLE enrollments (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  course_id INTEGER REFERENCES courses(id) ON DELETE CASCADE,
+  status VARCHAR(50) DEFAULT 'active',
+  progress DECIMAL(5,2) DEFAULT 0,
+  enrolled_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  last_accessed_at TIMESTAMP,
+  completed_at TIMESTAMP,
+  certificate_url VARCHAR(500),
+  UNIQUE(user_id, course_id)
+);
+```
+
+#### User Progress Table
+```sql
+CREATE TABLE user_progress (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  enrollment_id INTEGER REFERENCES enrollments(id) ON DELETE CASCADE,
+  lesson_id INTEGER REFERENCES lessons(id) ON DELETE CASCADE,
+  completed BOOLEAN DEFAULT false,
+  time_spent INTEGER DEFAULT 0,
+  completed_at TIMESTAMP,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE(user_id, lesson_id)
+);
+```
+
+#### Quiz Attempts Table
+```sql
+CREATE TABLE quiz_attempts (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  enrollment_id INTEGER REFERENCES enrollments(id) ON DELETE CASCADE,
+  quiz_id INTEGER REFERENCES quizzes(id) ON DELETE CASCADE,
+  attempt_number INTEGER NOT NULL,
+  score INTEGER NOT NULL,
+  total_points INTEGER NOT NULL,
+  percentage DECIMAL(5,2) NOT NULL,
+  passed BOOLEAN NOT NULL,
+  started_at TIMESTAMP NOT NULL,
+  completed_at TIMESTAMP,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+#### User Answers Table
+```sql
+CREATE TABLE user_answers (
+  id SERIAL PRIMARY KEY,
+  attempt_id INTEGER REFERENCES quiz_attempts(id) ON DELETE CASCADE,
+  question_id INTEGER REFERENCES quiz_questions(id) ON DELETE CASCADE,
+  selected_option_ids INTEGER[] NOT NULL,
+  is_correct BOOLEAN NOT NULL,
+  points_earned INTEGER NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+### Backend API Endpoints
+
+#### Authentication Endpoints
+```
+POST   /api/auth/register       - Register new user
+POST   /api/auth/login          - Login user
+POST   /api/auth/logout         - Logout user
+GET    /api/auth/me             - Get current user
+PUT    /api/auth/profile        - Update user profile
+POST   /api/auth/change-password - Change password
+POST   /api/auth/forgot-password - Request password reset
+POST   /api/auth/reset-password - Reset password with token
+```
+
+#### Course Management Endpoints
+```
+GET    /api/courses             - Get all courses (with filters)
+GET    /api/courses/:id         - Get course by ID
+POST   /api/courses             - Create new course (auth required)
+PUT    /api/courses/:id         - Update course (auth required)
+DELETE /api/courses/:id         - Delete course (auth required)
+GET    /api/courses/:id/curriculum - Get full curriculum
+```
+
+#### Curriculum Management Endpoints
+```
+GET    /api/courses/:id/sections    - Get course sections
+POST   /api/sections                - Create section (auth required)
+PUT    /api/sections/:id            - Update section (auth required)
+DELETE /api/sections/:id            - Delete section (auth required)
+PUT    /api/sections/reorder        - Reorder sections (auth required)
+
+POST   /api/lessons                 - Create lesson (auth required)
+PUT    /api/lessons/:id             - Update lesson (auth required)
+DELETE /api/lessons/:id             - Delete lesson (auth required)
+PUT    /api/lessons/reorder         - Reorder lessons (auth required)
+```
+
+#### Enrollment Endpoints
+```
+POST   /api/enrollments            - Enroll in course (auth required)
+GET    /api/enrollments/my-courses - Get user's enrollments (auth required)
+GET    /api/enrollments/:id        - Get enrollment details (auth required)
+PUT    /api/enrollments/:id/status - Update enrollment status (auth required)
+GET    /api/enrollments/course/:courseId/students - Get course enrollments (admin)
+```
+
+#### Progress Tracking Endpoints
+```
+GET    /api/progress/enrollment/:id    - Get progress for enrollment (auth required)
+POST   /api/progress/lesson/complete   - Mark lesson complete (auth required)
+PUT    /api/progress/:id/time          - Update time spent (auth required)
+GET    /api/progress/stats             - Get user progress stats (auth required)
+```
+
+#### Quiz Endpoints
+```
+GET    /api/quizzes/:id                    - Get quiz by ID (auth required)
+GET    /api/courses/:id/quizzes            - Get course quizzes
+POST   /api/quizzes                        - Create quiz (auth required, instructor)
+PUT    /api/quizzes/:id                    - Update quiz (auth required, instructor)
+DELETE /api/quizzes/:id                    - Delete quiz (auth required, instructor)
+
+POST   /api/quiz-attempts/start            - Start quiz attempt (auth required)
+POST   /api/quiz-attempts/:id/submit       - Submit quiz attempt (auth required)
+GET    /api/quiz-attempts/quiz/:quizId/my  - Get user's attempts (auth required)
+GET    /api/quiz-attempts/:id              - Get attempt details (auth required)
+GET    /api/quiz-attempts/:id/review       - Get attempt with answers (auth required)
+```
+
+### Backend Implementation Steps
+
+#### Step 1: Project Setup
+```bash
+# Create backend directory
+mkdir backend
+cd backend
+
+# Initialize Node.js project
+npm init -y
+
+# Install dependencies
+npm install express cors dotenv bcrypt jsonwebtoken
+npm install pg typeorm reflect-metadata
+npm install --save-dev @types/node @types/express typescript ts-node nodemon
+
+# Initialize TypeScript
+npx tsc --init
+```
+
+#### Step 2: Project Structure
+```
+backend/
+├── src/
+│   ├── config/
+│   │   ├── database.ts
+│   │   └── jwt.ts
+│   ├── entities/
+│   │   ├── User.ts
+│   │   ├── Course.ts
+│   │   ├── CourseSection.ts
+│   │   ├── Lesson.ts
+│   │   ├── Quiz.ts
+│   │   ├── QuizQuestion.ts
+│   │   ├── QuizOption.ts
+│   │   ├── Enrollment.ts
+│   │   ├── UserProgress.ts
+│   │   ├── QuizAttempt.ts
+│   │   └── UserAnswer.ts
+│   ├── controllers/
+│   │   ├── authController.ts
+│   │   ├── courseController.ts
+│   │   ├── curriculumController.ts
+│   │   ├── enrollmentController.ts
+│   │   ├── progressController.ts
+│   │   └── quizController.ts
+│   ├── services/
+│   │   ├── authService.ts
+│   │   ├── courseService.ts
+│   │   ├── curriculumService.ts
+│   │   ├── enrollmentService.ts
+│   │   ├── progressService.ts
+│   │   └── quizService.ts
+│   ├── middleware/
+│   │   ├── auth.ts
+│   │   ├── errorHandler.ts
+│   │   └── validator.ts
+│   ├── routes/
+│   │   ├── authRoutes.ts
+│   │   ├── courseRoutes.ts
+│   │   ├── curriculumRoutes.ts
+│   │   ├── enrollmentRoutes.ts
+│   │   ├── progressRoutes.ts
+│   │   └── quizRoutes.ts
+│   ├── utils/
+│   │   ├── helpers.ts
+│   │   └── seedData.ts
+│   └── app.ts
+├── .env
+├── .gitignore
+├── package.json
+└── tsconfig.json
+```
+
+#### Step 3: Update Angular Services
+
+After backend is created, update Angular services to use real API:
+
+```typescript
+// Example: course.service.ts
+getCourses(): Observable<Course[]> {
+  return this.http.get<Course[]>(`${this.apiUrl}/courses`);
+}
+
+// Add authentication headers
+private getHeaders(): HttpHeaders {
+  const token = localStorage.getItem('token');
+  return new HttpHeaders({
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${token}`
+  });
+}
+```
+
+### Environment Variables
+
+Create `.env` file:
+```env
+# Server
+PORT=3000
+NODE_ENV=development
+
+# Database
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=lms_db
+DB_USER=postgres
+DB_PASSWORD=your_password
+
+# JWT
+JWT_SECRET=your-super-secret-jwt-key
+JWT_EXPIRES_IN=7d
+
+# CORS
+CORS_ORIGIN=http://localhost:4200
+```
+
+### Security Considerations
+
+1. **Password Hashing:** Use bcrypt with salt rounds >= 10
+2. **JWT Tokens:** Store securely, use short expiration times
+3. **Input Validation:** Validate all inputs on backend
+4. **SQL Injection:** Use parameterized queries (TypeORM handles this)
+5. **CORS:** Configure properly for your frontend domain
+6. **Rate Limiting:** Implement rate limiting for API endpoints
+7. **File Upload:** Validate file types and sizes
+
+### Testing Backend
+
+Create test data using seed script:
+```typescript
+// src/utils/seedData.ts
+export async function seedDatabase() {
+  // Create test users
+  // Create courses with curriculum
+  // Create quizzes
+  // Create sample enrollments
+}
+```
+
+### Deployment Considerations
+
+1. **Database:** Set up PostgreSQL on cloud (Heroku, AWS RDS, DigitalOcean)
+2. **Backend API:** Deploy to Heroku, AWS, DigitalOcean, or Vercel
+3. **Frontend:** Deploy to Netlify, Vercel, or AWS S3
+4. **Environment Variables:** Configure properly for production
+5. **HTTPS:** Ensure SSL certificates are in place
+6. **Monitoring:** Set up logging and error tracking
+
+---
+
+Now, proceed to implement the backend API following these comprehensive guidelines, then integrate it with the existing frontend.
