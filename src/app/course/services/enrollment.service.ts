@@ -60,4 +60,11 @@ export class EnrollmentService {
   calculateProgress(id: number): Observable<{ enrollmentId: number; progress: number }> {
     return this.http.post<{ enrollmentId: number; progress: number }>(`${this.apiUrl}/${id}/calculate-progress`, {});
   }
+
+  /**
+   * Update progress for an enrollment manually
+   */
+  updateProgress(id: number, progress: number): Observable<Enrollment> {
+    return this.http.put<Enrollment>(`${this.apiUrl}/${id}/progress`, { progress });
+  }
 }

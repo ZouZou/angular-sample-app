@@ -70,4 +70,11 @@ export class QuizService {
   getBestAttempt(userId: number, quizId: number): Observable<QuizAttempt | null> {
     return this.http.get<QuizAttempt>(`${this.apiUrl}/attempts/quiz/${quizId}/best`);
   }
+
+  /**
+   * Get a specific quiz attempt (alias for getAttemptDetails)
+   */
+  getAttempt(attemptId: number): Observable<QuizAttempt> {
+    return this.getAttemptDetails(attemptId);
+  }
 }

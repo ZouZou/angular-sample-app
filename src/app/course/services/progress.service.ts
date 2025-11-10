@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 import { UserProgress } from '../models/progress.interface';
 import { environment } from '../../../environments/environment';
 
@@ -48,5 +49,30 @@ export class ProgressService {
    */
   getProgressStats(userId: number): Observable<any> {
     return this.http.get(`${this.apiUrl}/stats`);
+  }
+
+  /**
+   * Get IDs of completed lessons for an enrollment
+   */
+  getCompletedLessonIds(enrollmentId: number): Observable<number[]> {
+    return this.http.get<UserProgress[]>(`${this.apiUrl}/enrollment/${enrollmentId}`)
+      .pipe(
+        map(progressList =>
+          progressList
+            .filter(p => p.completed)
+            .map(p => p.lessonId)
+        )
+      );
+  }
+
+  /**
+   * Check if a specific lesson is completed
+   */
+  isLessonCompleted(userId: number, enrollmentId: number, lessonId: number): Observable<boolean> {
+    return this.http.get<UserProgress>(`${this.apiUrl}/lesson/${lessonId}`)
+      .pipe(
+        map(progress => progress?.completed || false),
+        catchError(() => of(false))
+      );
   }
 }
