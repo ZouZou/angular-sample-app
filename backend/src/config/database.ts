@@ -42,6 +42,14 @@ export const initializeDatabase = async () => {
   try {
     await AppDataSource.initialize();
     console.log('Database connection established successfully');
+    console.log('Synchronize enabled:', AppDataSource.options.synchronize);
+
+    // Explicitly synchronize schema in development
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Synchronizing database schema...');
+      await AppDataSource.synchronize(false);
+      console.log('Database schema synchronized');
+    }
   } catch (error) {
     console.error('Error connecting to database:', error);
     process.exit(1);
