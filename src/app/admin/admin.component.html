@@ -218,8 +218,8 @@
             <mat-card-content>
               <p>{{ course.description | slice:0:100 }}{{ course.description.length > 100 ? '...' : '' }}</p>
               <div class="course-meta">
-                <span><mat-icon>people</mat-icon> {{ course.enrolledCount }} enrolled</span>
-                <span><mat-icon>star</mat-icon> {{ course.rating }} ({{ course.reviewCount }})</span>
+                <span><mat-icon>people</mat-icon> {{ course.enrollmentCount || 0 }} enrolled</span>
+                <span *ngIf="course.rating"><mat-icon>star</mat-icon> {{ course.rating }}</span>
               </div>
             </mat-card-content>
             <mat-card-actions>
