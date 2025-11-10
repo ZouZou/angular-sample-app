@@ -64,9 +64,16 @@ export class CourseListComponent implements OnInit {
     });
   }
 
-  navigateToDetail(courseId: number | undefined): void {
-    if (courseId) {
-      this.router.navigate(['/courses', courseId]);
+  navigateToDetail(eventOrId: Event | number | undefined, courseId?: number | undefined): void {
+    // Handle both card click (courseId only) and button click (event + courseId)
+    if (eventOrId instanceof Event) {
+      eventOrId.stopPropagation();
+      if (courseId) {
+        this.router.navigate(['/courses', courseId]);
+      }
+    } else if (typeof eventOrId === 'number') {
+      // Called from card click with just courseId
+      this.router.navigate(['/courses', eventOrId]);
     }
   }
 

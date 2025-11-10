@@ -85,7 +85,7 @@
       </mat-card-content>
 
       <mat-card-actions>
-        <button mat-button color="primary" (click)="navigateToDetail(course.id)">
+        <button mat-button color="primary" (click)="navigateToDetail($event, course.id)">
           <mat-icon>visibility</mat-icon>
           View
         </button>
