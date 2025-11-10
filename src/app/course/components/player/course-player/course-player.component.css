@@ -141,9 +141,20 @@
 }
 
 .sidebar.sidebar-collapsed {
-  width: 0;
-  margin-left: -380px;
-  border-right: none;
+  width: 60px;
+  min-width: 60px;
+  border-right: 1px solid #e0e0e0;
+}
+
+.sidebar.sidebar-collapsed .curriculum,
+.sidebar.sidebar-collapsed .sidebar-header .sidebar-title,
+.sidebar.sidebar-collapsed .sidebar-footer {
+  display: none;
+}
+
+.sidebar.sidebar-collapsed .sidebar-header {
+  justify-content: center;
+  padding: 18px 10px;
 }
 
 .sidebar-header {
@@ -238,10 +249,12 @@ mat-expansion-panel:last-child {
 }
 
 mat-panel-description {
-  display: flex;
+  display: flex !important;
   align-items: center;
-  justify-content: flex-end;
-  flex: 1;
+  justify-content: flex-end !important;
+  flex: 0 0 auto !important;
+  min-width: 100px;
+  margin-left: 16px !important;
 }
 
 .section-progress {
@@ -249,7 +262,7 @@ mat-panel-description {
   color: #4caf50;
   font-weight: 600;
   white-space: nowrap;
-  margin-left: auto;
+  flex-shrink: 0;
 }
 
 .section-progress-bar {
@@ -269,8 +282,9 @@ mat-panel-description {
   cursor: pointer;
   transition: all 0.2s ease;
   border-left: 3px solid transparent;
-  padding: 10px 16px !important;
+  padding: 8px 12px !important;
   min-height: auto !important;
+  height: auto !important;
 }
 
 .lesson-item:hover {
@@ -488,7 +502,8 @@ mat-panel-description {
   }
 
   .sidebar.sidebar-collapsed {
-    margin-left: -320px;
+    width: 60px;
+    min-width: 60px;
   }
 
   .course-title-section h2 {
@@ -533,7 +548,8 @@ mat-panel-description {
   }
 
   .sidebar.sidebar-collapsed {
-    margin-left: -280px;
+    width: 60px;
+    min-width: 60px;
   }
 
   .lesson-navigation {
