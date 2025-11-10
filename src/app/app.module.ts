@@ -30,7 +30,9 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MotorQuotationComponent } from './motor-quotation/motor-quotation.component';
+import { UserDashboardComponent } from './dashboard/user-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +41,7 @@ import { MotorQuotationComponent } from './motor-quotation/motor-quotation.compo
     UserComponent,
     AdminComponent,
     DashboardComponent,
+    UserDashboardComponent,
     NavigationComponent,
     AddressComponent,
     MotorQuotationComponent
@@ -66,7 +69,8 @@ import { MotorQuotationComponent } from './motor-quotation/motor-quotation.compo
     MatTabsModule,
     MatTableModule,
     MatTooltipModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatProgressBarModule
   ],
   providers: [
     {

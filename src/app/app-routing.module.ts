@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdminComponent } from './admin/admin.component';
+import { UserDashboardComponent } from './dashboard/user-dashboard.component';
 import { BlockitGuard } from './blockit.guard';
 import { NavigationComponent } from './navigation/navigation.component';
 import { UserComponent } from './user/user.component';
@@ -12,6 +13,11 @@ const routes: Routes = [
   {
     path: 'login',
     loadComponent: () => import('./auth/login/login.component').then(m => m.LoginComponent)
+  },
+  {
+    path: 'dashboard',
+    component: UserDashboardComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'User',
@@ -35,7 +41,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: '/courses',
+    redirectTo: '/dashboard',
     pathMatch: 'full'
   },
   {

@@ -100,12 +100,8 @@ export class LoginComponent implements OnInit {
     const user = this.authService.currentUserValue;
     if (!user) return;
 
-    // Redirect based on role
-    if (user.role === 'admin') {
-      this.router.navigate(['/admin']);
-    } else {
-      this.router.navigate(['/courses']);
-    }
+    // Redirect to dashboard for all users
+    this.router.navigate(['/dashboard']);
   }
 
   private markFormGroupTouched(formGroup: FormGroup): void {

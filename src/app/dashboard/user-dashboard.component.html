@@ -1,0 +1,163 @@
+<div class="dashboard-container">
+  <!-- Header -->
+  <div class="dashboard-header">
+    <div class="header-content">
+      <div class="welcome-section">
+        <h1>Welcome back, {{ currentUser?.name }}!</h1>
+        <p>Continue your learning journey</p>
+      </div>
+      <div class="header-actions">
+        <button mat-button routerLink="/courses">
+          <mat-icon>search</mat-icon>
+          Browse Courses
+        </button>
+        <button mat-button *ngIf="currentUser?.role === 'admin'" routerLink="/admin">
+          <mat-icon>admin_panel_settings</mat-icon>
+          Admin Dashboard
+        </button>
+        <button mat-button (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          Logout
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-container">
+    <mat-spinner></mat-spinner>
+    <p>Loading your courses...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error && !isLoading" class="error-container">
+    <mat-icon color="warn">error</mat-icon>
+    <p>{{ error }}</p>
+    <button mat-raised-button color="primary" (click)="loadDashboardData()">
+      Retry
+    </button>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!isLoading && !error && enrolledCourses.length === 0" class="empty-state">
+    <mat-icon>school</mat-icon>
+    <h2>You haven't enrolled in any courses yet</h2>
+    <p>Explore our course catalog and start learning today!</p>
+    <button mat-raised-button color="primary" routerLink="/courses">
+      <mat-icon>explore</mat-icon>
+      Browse Courses
+    </button>
+  </div>
+
+  <!-- Enrolled Courses -->
+  <div *ngIf="!isLoading && !error && enrolledCourses.length > 0" class="courses-section">
+    <h2>My Courses ({{ enrolledCourses.length }})</h2>
+
+    <div class="courses-grid">
+      <mat-card *ngFor="let data of enrolledCourses" class="course-card">
+        <!-- Course Thumbnail -->
+        <div class="course-thumbnail" [style.background-image]="'url(' + (data.course.thumbnailUrl || 'https://via.placeholder.com/400x250?text=Course') + ')'">
+          <div class="status-badge" [ngClass]="'status-' + data.enrollment.status">
+            {{ data.enrollment.status | titlecase }}
+          </div>
+        </div>
+
+        <mat-card-header>
+          <mat-card-title>{{ data.course.title }}</mat-card-title>
+          <mat-card-subtitle>{{ data.course.instructor }}</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <!-- Progress Section -->
+          <div class="progress-section">
+            <div class="progress-header">
+              <span class="progress-label">Progress</span>
+              <span class="progress-value">{{ data.enrollment.progress }}%</span>
+            </div>
+            <mat-progress-bar
+              [value]="data.enrollment.progress"
+              [color]="getProgressColor(data.enrollment.progress)"
+              mode="determinate">
+            </mat-progress-bar>
+          </div>
+
+          <!-- Quiz Scores Section -->
+          <div class="quiz-scores-section" *ngIf="data.quizAttempts.length > 0">
+            <div class="section-title">
+              <mat-icon>quiz</mat-icon>
+              <span>Quiz Performance</span>
+            </div>
+
+            <div class="quiz-stats">
+              <div class="quiz-stat">
+                <div class="stat-label">Completed</div>
+                <div class="stat-value">{{ data.completedQuizzes }}</div>
+              </div>
+
+              <div class="quiz-stat" *ngIf="data.bestScore !== undefined">
+                <div class="stat-label">Best Score</div>
+                <div class="stat-value" [style.color]="getScoreColor(data.bestScore)">
+                  {{ data.bestScore | number:'1.0-0' }}%
+                </div>
+              </div>
+
+              <div class="quiz-stat" *ngIf="data.averageScore !== undefined">
+                <div class="stat-label">Average Score</div>
+                <div class="stat-value" [style.color]="getScoreColor(data.averageScore)">
+                  {{ data.averageScore | number:'1.0-0' }}%
+                </div>
+              </div>
+            </div>
+
+            <!-- Recent Quiz Attempts -->
+            <div class="recent-attempts" *ngIf="data.quizAttempts.length > 0">
+              <div class="attempts-header">Recent Attempts</div>
+              <div class="attempt-item" *ngFor="let attempt of data.quizAttempts.slice(0, 3)">
+                <div class="attempt-info">
+                  <span class="attempt-score" [style.color]="getScoreColor(attempt.percentage)">
+                    {{ attempt.percentage }}%
+                  </span>
+                  <mat-icon class="attempt-icon" [style.color]="getScoreColor(attempt.percentage)">
+                    {{ attempt.passed ? 'check_circle' : 'cancel' }}
+                  </mat-icon>
+                </div>
+                <div class="attempt-date">
+                  {{ attempt.completedAt | date:'short' }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- No Quiz Data -->
+          <div class="no-quiz-data" *ngIf="data.quizAttempts.length === 0">
+            <mat-icon>quiz</mat-icon>
+            <span>No quiz attempts yet</span>
+          </div>
+
+          <!-- Enrollment Info -->
+          <div class="enrollment-info">
+            <div class="info-item">
+              <mat-icon>event</mat-icon>
+              <span>Enrolled: {{ data.enrollment.enrolledDate | date:'mediumDate' }}</span>
+            </div>
+            <div class="info-item" *ngIf="data.enrollment.lastAccessedDate">
+              <mat-icon>schedule</mat-icon>
+              <span>Last accessed: {{ data.enrollment.lastAccessedDate | date:'short' }}</span>
+            </div>
+          </div>
+        </mat-card-content>
+
+        <mat-card-actions>
+          <button mat-raised-button color="primary" (click)="continueLearning(data.course.id!)">
+            <mat-icon>play_circle</mat-icon>
+            {{ data.enrollment.progress > 0 ? 'Continue Learning' : 'Start Learning' }}
+          </button>
+          <button mat-button (click)="viewCourse(data.course.id!)">
+            <mat-icon>info</mat-icon>
+            View Details
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
+</div>
