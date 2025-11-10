@@ -138,6 +138,12 @@
   margin: 0 auto;
 }
 
+.main-content-area {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
 .main-content {
   padding: 24px;
 }
@@ -351,7 +357,6 @@ mat-card-header {
 
 /* Curriculum Styles */
 .curriculum-card {
-  margin-top: 24px;
   padding: 24px;
 }
 

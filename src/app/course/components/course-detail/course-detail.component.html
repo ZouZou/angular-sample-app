@@ -61,57 +61,59 @@
 
     <!-- Course Info Grid -->
     <div class="course-info-grid">
-      <!-- Main Content -->
-      <mat-card class="main-content">
-        <mat-card-header>
-          <mat-card-title>About This Course</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <p class="description">{{ course.description }}</p>
+      <!-- Main Content Area -->
+      <div class="main-content-area">
+        <!-- About This Course -->
+        <mat-card class="main-content">
+          <mat-card-header>
+            <mat-card-title>About This Course</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p class="description">{{ course.description }}</p>
 
-          <div class="course-stats">
-            <div class="stat-item">
-              <mat-icon>access_time</mat-icon>
-              <div>
-                <strong>{{ course.duration }} hours</strong>
-                <span>Total duration</span>
+            <div class="course-stats">
+              <div class="stat-item">
+                <mat-icon>access_time</mat-icon>
+                <div>
+                  <strong>{{ course.duration }} hours</strong>
+                  <span>Total duration</span>
+                </div>
+              </div>
+
+              <div class="stat-item">
+                <mat-icon>people</mat-icon>
+                <div>
+                  <strong>{{ course.enrollmentCount || 0 }}</strong>
+                  <span>Students enrolled</span>
+                </div>
+              </div>
+
+              <div class="stat-item" *ngIf="course.rating">
+                <mat-icon>star</mat-icon>
+                <div>
+                  <strong>{{ course.rating }} / 5</strong>
+                  <span>Course rating</span>
+                </div>
+              </div>
+
+              <div class="stat-item">
+                <mat-icon>category</mat-icon>
+                <div>
+                  <strong>{{ course.category }}</strong>
+                  <span>Category</span>
+                </div>
               </div>
             </div>
 
-            <div class="stat-item">
-              <mat-icon>people</mat-icon>
-              <div>
-                <strong>{{ course.enrollmentCount || 0 }}</strong>
-                <span>Students enrolled</span>
-              </div>
+            <div class="additional-info" *ngIf="course.createdDate">
+              <mat-icon>calendar_today</mat-icon>
+              <span>Created on {{ course.createdDate | date:'mediumDate' }}</span>
             </div>
+          </mat-card-content>
+        </mat-card>
 
-            <div class="stat-item" *ngIf="course.rating">
-              <mat-icon>star</mat-icon>
-              <div>
-                <strong>{{ course.rating }} / 5</strong>
-                <span>Course rating</span>
-              </div>
-            </div>
-
-            <div class="stat-item">
-              <mat-icon>category</mat-icon>
-              <div>
-                <strong>{{ course.category }}</strong>
-                <span>Category</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="additional-info" *ngIf="course.createdDate">
-            <mat-icon>calendar_today</mat-icon>
-            <span>Created on {{ course.createdDate | date:'mediumDate' }}</span>
-          </div>
-        </mat-card-content>
-      </mat-card>
-
-      <!-- Course Curriculum -->
-      <mat-card class="curriculum-card">
+        <!-- Course Curriculum -->
+        <mat-card class="curriculum-card">
         <mat-card-header>
           <mat-card-title>Course Curriculum</mat-card-title>
         </mat-card-header>
@@ -184,7 +186,8 @@
             <p>No curriculum available yet</p>
           </div>
         </mat-card-content>
-      </mat-card>
+        </mat-card>
+      </div>
 
       <!-- Sidebar -->
       <div class="sidebar">
