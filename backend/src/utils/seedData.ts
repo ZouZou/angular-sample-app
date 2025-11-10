@@ -27,21 +27,37 @@ const seedData = async () => {
     console.log('Creating sample users...');
     const userRepo = AppDataSource.getRepository(User);
 
+    const adminUser = userRepo.create({
+      name: 'Admin User',
+      email: 'admin@lms.com',
+      passwordHash: await bcrypt.hash('admin123', 10),
+      role: 'admin'
+    });
+    await userRepo.save(adminUser);
+
     const studentUser = userRepo.create({
-      name: 'John Doe',
-      email: 'student@example.com',
-      passwordHash: await bcrypt.hash('password123', 10),
+      name: 'John Student',
+      email: 'john@lms.com',
+      passwordHash: await bcrypt.hash('student123', 10),
       role: 'student'
     });
     await userRepo.save(studentUser);
 
     const instructorUser = userRepo.create({
-      name: 'Jane Smith',
-      email: 'instructor@example.com',
-      passwordHash: await bcrypt.hash('password123', 10),
+      name: 'Jane Instructor',
+      email: 'jane@lms.com',
+      passwordHash: await bcrypt.hash('instructor123', 10),
       role: 'instructor'
     });
     await userRepo.save(instructorUser);
+
+    const studentUser2 = userRepo.create({
+      name: 'Alice Student',
+      email: 'alice@lms.com',
+      passwordHash: await bcrypt.hash('student123', 10),
+      role: 'student'
+    });
+    await userRepo.save(studentUser2);
 
     console.log('Users created successfully');
 
@@ -324,7 +340,11 @@ const seedData = async () => {
 
     console.log('✅ Database seeded successfully!');
     console.log('\nSeeded data summary:');
-    console.log('- 2 users (student@example.com / instructor@example.com, password: password123)');
+    console.log('- 4 users:');
+    console.log('  • Admin: admin@lms.com / admin123');
+    console.log('  • Student: john@lms.com / student123');
+    console.log('  • Instructor: jane@lms.com / instructor123');
+    console.log('  • Student: alice@lms.com / student123');
     console.log('- 6 courses');
     console.log('- Multiple sections and lessons per course');
     console.log('- 1 sample quiz with questions');
