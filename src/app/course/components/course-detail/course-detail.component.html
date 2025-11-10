@@ -31,7 +31,7 @@
       <button mat-icon-button (click)="navigateToList()" class="back-button">
         <mat-icon>arrow_back</mat-icon>
       </button>
-      <div class="header-actions">
+      <div class="header-actions" *ngIf="isAdmin()">
         <button mat-button (click)="navigateToEdit()">
           <mat-icon>edit</mat-icon>
           Edit

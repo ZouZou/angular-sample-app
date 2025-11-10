@@ -143,4 +143,11 @@ export class CourseDetailComponent implements OnInit {
   isEnrolled(): boolean {
     return this.enrollment !== null;
   }
+
+  /**
+   * Check if current user is admin
+   */
+  isAdmin(): boolean {
+    return this.authService.isAdmin();
+  }
 }

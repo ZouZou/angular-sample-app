@@ -1,7 +1,7 @@
 <div class="course-list-container">
   <div class="header">
     <h1>Course Catalog</h1>
-    <button mat-raised-button color="primary" (click)="navigateToCreate()">
+    <button *ngIf="isAdmin()" mat-raised-button color="primary" (click)="navigateToCreate()">
       <mat-icon>add</mat-icon>
       New Course
     </button>
@@ -89,11 +89,11 @@
           <mat-icon>visibility</mat-icon>
           View
         </button>
-        <button mat-button color="accent" (click)="navigateToEdit($event, course.id)">
+        <button *ngIf="isAdmin()" mat-button color="accent" (click)="navigateToEdit($event, course.id)">
           <mat-icon>edit</mat-icon>
           Edit
         </button>
-        <button mat-button color="warn" (click)="deleteCourse($event, course.id)">
+        <button *ngIf="isAdmin()" mat-button color="warn" (click)="deleteCourse($event, course.id)">
           <mat-icon>delete</mat-icon>
           Delete
         </button>

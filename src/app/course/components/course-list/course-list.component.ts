@@ -4,6 +4,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { CourseService } from '../../services/course.service';
+import { AuthService } from '../../services/auth.service';
 import { Course } from '../../models/course.interface';
 
 @Component({
@@ -30,6 +31,7 @@ export class CourseListComponent implements OnInit {
 
   constructor(
     private courseService: CourseService,
+    private authService: AuthService,
     private router: Router,
     private breakpointObserver: BreakpointObserver
   ) {}
@@ -109,5 +111,12 @@ export class CourseListComponent implements OnInit {
       default:
         return '#9e9e9e';
     }
+  }
+
+  /**
+   * Check if current user is admin
+   */
+  isAdmin(): boolean {
+    return this.authService.isAdmin();
   }
 }

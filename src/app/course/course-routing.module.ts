@@ -7,6 +7,7 @@ import { CoursePlayerComponent } from './components/player/course-player/course-
 import { LessonViewerComponent } from './components/player/lesson-viewer/lesson-viewer.component';
 import { QuizPlayerComponent } from './components/quiz/quiz-player/quiz-player.component';
 import { QuizResultComponent } from './components/quiz/quiz-result/quiz-result.component';
+import { AdminGuard } from '../core/guards/admin.guard';
 
 const routes: Routes = [
   {
@@ -15,7 +16,8 @@ const routes: Routes = [
   },
   {
     path: 'new',
-    component: CourseFormComponent
+    component: CourseFormComponent,
+    canActivate: [AdminGuard]
   },
   {
     path: ':id',
@@ -23,7 +25,8 @@ const routes: Routes = [
   },
   {
     path: ':id/edit',
-    component: CourseFormComponent
+    component: CourseFormComponent,
+    canActivate: [AdminGuard]
   },
   {
     path: ':id/learn',
