@@ -232,6 +232,9 @@ mat-expansion-panel:last-child {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
 }
 
 .section-number {
@@ -243,9 +246,12 @@ mat-expansion-panel:last-child {
 }
 
 .section-title {
-  font-size: 0.9375rem;
+  font-size: 0.8125rem;
   font-weight: 500;
   color: #212121;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 mat-panel-description {
