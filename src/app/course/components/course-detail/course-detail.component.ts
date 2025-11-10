@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CourseService } from '../../services/course.service';
+import { CurriculumService } from '../../services/curriculum.service';
 import { EnrollmentService } from '../../services/enrollment.service';
 import { AuthService } from '../../services/auth.service';
 import { Course } from '../../models/course.interface';
 import { Enrollment } from '../../models/enrollment.interface';
+import { CourseSection } from '../../models/curriculum.interface';
 
 @Component({
   selector: 'app-course-detail',
@@ -15,12 +17,15 @@ import { Enrollment } from '../../models/enrollment.interface';
 export class CourseDetailComponent implements OnInit {
   course: Course | null = null;
   enrollment: Enrollment | null = null;
+  sections: CourseSection[] = [];
   isLoading = false;
   isEnrolling = false;
+  isLoadingCurriculum = false;
   error: string | null = null;
 
   constructor(
     private courseService: CourseService,
+    private curriculumService: CurriculumService,
     private enrollmentService: EnrollmentService,
     private authService: AuthService,
     private route: ActivatedRoute,
@@ -45,12 +50,32 @@ export class CourseDetailComponent implements OnInit {
       next: (course) => {
         this.course = course;
         this.checkEnrollment(id);
+        this.loadCurriculum(id);
         this.isLoading = false;
       },
       error: (error) => {
         console.error('Error loading course:', error);
         this.error = 'Failed to load course. The course may not exist.';
         this.isLoading = false;
+      }
+    });
+  }
+
+  loadCurriculum(courseId: number): void {
+    this.isLoadingCurriculum = true;
+
+    this.curriculumService.getCourseSections(courseId).subscribe({
+      next: (sections) => {
+        this.sections = sections.sort((a, b) => a.order - b.order);
+        // Sort lessons within each section
+        this.sections.forEach(section => {
+          section.lessons.sort((a, b) => a.order - b.order);
+        });
+        this.isLoadingCurriculum = false;
+      },
+      error: (error) => {
+        console.error('Error loading curriculum:', error);
+        this.isLoadingCurriculum = false;
       }
     });
   }
@@ -142,5 +167,47 @@ export class CourseDetailComponent implements OnInit {
 
   isEnrolled(): boolean {
     return this.enrollment !== null;
+  }
+
+  getTotalLessons(): number {
+    return this.sections.reduce((total, section) => total + section.lessons.length, 0);
+  }
+
+  getTotalDuration(): number {
+    let total = 0;
+    this.sections.forEach(section => {
+      section.lessons.forEach(lesson => {
+        total += lesson.duration || 0;
+      });
+    });
+    return total;
+  }
+
+  getLessonIcon(type: string): string {
+    switch (type) {
+      case 'video':
+        return 'play_circle_outline';
+      case 'text':
+        return 'article';
+      case 'quiz':
+        return 'quiz';
+      case 'assignment':
+        return 'assignment';
+      default:
+        return 'description';
+    }
+  }
+
+  formatDuration(minutes: number): string {
+    if (minutes < 60) {
+      return `${minutes} min`;
+    }
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    return mins > 0 ? `${hours}h ${mins}m` : `${hours}h`;
+  }
+
+  getSectionDuration(section: CourseSection): number {
+    return section.lessons.reduce((sum, lesson) => sum + (lesson.duration || 0), 0);
   }
 }
