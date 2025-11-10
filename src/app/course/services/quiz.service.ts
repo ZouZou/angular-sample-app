@@ -77,4 +77,31 @@ export class QuizService {
   getAttempt(attemptId: number): Observable<QuizAttempt> {
     return this.getAttemptDetails(attemptId);
   }
+
+  /**
+   * Get all quiz attempts (admin only)
+   */
+  getAllAttempts(): Observable<QuizAttempt[]> {
+    return of([...this.mockAttempts]).pipe(delay(300));
+  }
+
+  /**
+   * Get all attempts for a specific course (admin only)
+   */
+  getCourseAttempts(courseId: number): Observable<QuizAttempt[]> {
+    const courseQuizIds = this.mockQuizzes
+      .filter(q => q.courseId === courseId)
+      .map(q => q.id);
+
+    const attempts = this.mockAttempts.filter(a => courseQuizIds.includes(a.quizId));
+    return of(attempts).pipe(delay(300));
+  }
+
+  /**
+   * Get all attempts for a specific user across all quizzes (admin only)
+   */
+  getUserAllAttempts(userId: number): Observable<QuizAttempt[]> {
+    const attempts = this.mockAttempts.filter(a => a.userId === userId);
+    return of(attempts).pipe(delay(300));
+  }
 }

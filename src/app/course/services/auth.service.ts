@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
+import { delay } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { User } from '../models/user.interface';
 import { environment } from '../../../environments/environment';
@@ -13,6 +14,11 @@ interface LoginResponse {
 interface RegisterResponse {
   user: User;
   token: string;
+}
+
+export interface UserCredentials {
+  email: string;
+  password: string;
 }
 
 @Injectable({
