@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { delay } from 'rxjs/operators';
 import { Quiz, QuizAttempt, UserAnswer } from '../models/quiz.interface';
 import { environment } from '../../../environments/environment';
 
@@ -82,26 +83,20 @@ export class QuizService {
    * Get all quiz attempts (admin only)
    */
   getAllAttempts(): Observable<QuizAttempt[]> {
-    return of([...this.mockAttempts]).pipe(delay(300));
+    return this.http.get<QuizAttempt[]>(`${environment.apiUrl}/quiz-attempts`);
   }
 
   /**
    * Get all attempts for a specific course (admin only)
    */
   getCourseAttempts(courseId: number): Observable<QuizAttempt[]> {
-    const courseQuizIds = this.mockQuizzes
-      .filter(q => q.courseId === courseId)
-      .map(q => q.id);
-
-    const attempts = this.mockAttempts.filter(a => courseQuizIds.includes(a.quizId));
-    return of(attempts).pipe(delay(300));
+    return this.http.get<QuizAttempt[]>(`${environment.apiUrl}/quiz-attempts/course/${courseId}`);
   }
 
   /**
    * Get all attempts for a specific user across all quizzes (admin only)
    */
   getUserAllAttempts(userId: number): Observable<QuizAttempt[]> {
-    const attempts = this.mockAttempts.filter(a => a.userId === userId);
-    return of(attempts).pipe(delay(300));
+    return this.http.get<QuizAttempt[]>(`${environment.apiUrl}/quiz-attempts/user/${userId}`);
   }
 }

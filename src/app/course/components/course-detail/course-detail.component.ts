@@ -174,6 +174,8 @@ export class CourseDetailComponent implements OnInit {
    */
   isAdmin(): boolean {
     return this.authService.isAdmin();
+  }
+
   getTotalLessons(): number {
     return this.sections.reduce((total, section) => total + section.lessons.length, 0);
   }

@@ -154,4 +154,46 @@ export class AuthService {
   changePassword(currentPassword: string, newPassword: string): Observable<{ message: string }> {
     return this.http.post<{ message: string }>(`${this.apiUrl}/change-password`, { currentPassword, newPassword });
   }
+
+  /**
+   * Check if user has specific role
+   */
+  hasRole(role: User['role']): boolean {
+    return this.currentUserValue?.role === role;
+  }
+
+  /**
+   * Get all users (admin only)
+   */
+  getAllUsers(): Observable<User[]> {
+    return this.http.get<User[]>(`${environment.apiUrl}/users`);
+  }
+
+  /**
+   * Get user by ID (admin only)
+   */
+  getUserById(id: number): Observable<User> {
+    return this.http.get<User>(`${environment.apiUrl}/users/${id}`);
+  }
+
+  /**
+   * Create new user (admin only)
+   */
+  createUser(userData: { name: string; email: string; password: string; role: 'student' | 'instructor' | 'admin'; avatarUrl?: string }): Observable<User> {
+    return this.http.post<User>(`${environment.apiUrl}/users`, userData);
+  }
+
+  /**
+   * Update user (admin only)
+   */
+  updateUser(id: number, updates: Partial<User> & { password?: string }): Observable<User> {
+    return this.http.put<User>(`${environment.apiUrl}/users/${id}`, updates);
+  }
+
+  /**
+   * Delete user (admin only)
+   */
+  deleteUser(id: number): Observable<void> {
+    return this.http.delete<void>(`${environment.apiUrl}/users/${id}`);
+  }
 }
