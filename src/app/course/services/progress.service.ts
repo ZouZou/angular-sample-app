@@ -1,144 +1,78 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { delay, map } from 'rxjs/operators';
-import { HttpService } from '../../http.service';
+import { map, catchError } from 'rxjs/operators';
 import { UserProgress } from '../models/progress.interface';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProgressService {
-  private apiUrl = '/api/progress';
+  private apiUrl = `${environment.apiUrl}/progress`;
 
-  // Mock progress data
-  private mockProgress: UserProgress[] = [];
-  private progressIdCounter = 1;
-
-  constructor(private http: HttpService) { }
+  constructor(private http: HttpClient) { }
 
   /**
    * Get all progress records for an enrollment
    */
   getUserProgress(enrollmentId: number): Observable<UserProgress[]> {
-    // Uncomment for real API:
-    // return this.http.getRequest(`${this.apiUrl}/enrollment/${enrollmentId}`);
+    return this.http.get<UserProgress[]>(`${this.apiUrl}/enrollment/${enrollmentId}`);
+  }
 
-    const progress = this.mockProgress.filter(p => p.enrollmentId === enrollmentId);
-    return of(progress).pipe(delay(200));
+  /**
+   * Get progress for a specific lesson
+   */
+  getLessonProgress(userId: number, lessonId: number): Observable<UserProgress> {
+    return this.http.get<UserProgress>(`${this.apiUrl}/lesson/${lessonId}`);
   }
 
   /**
    * Mark a lesson as complete
    */
   markLessonComplete(userId: number, enrollmentId: number, lessonId: number): Observable<UserProgress> {
-    // Uncomment for real API:
-    // return this.http.postRequest(this.apiUrl, { userId, enrollmentId, lessonId, completed: true });
-
-    // Check if progress already exists
-    let progress = this.mockProgress.find(
-      p => p.userId === userId && p.enrollmentId === enrollmentId && p.lessonId === lessonId
-    );
-
-    if (progress) {
-      // Update existing progress
-      progress.completed = true;
-      progress.completedDate = new Date();
-    } else {
-      // Create new progress record
-      progress = {
-        id: this.progressIdCounter++,
-        userId,
-        enrollmentId,
-        lessonId,
-        completed: true,
-        completedDate: new Date(),
-        timeSpent: 0
-      };
-      this.mockProgress.push(progress);
-    }
-
-    return of(progress).pipe(delay(200));
-  }
-
-  /**
-   * Get progress for a specific lesson
-   */
-  getLessonProgress(userId: number, lessonId: number): Observable<UserProgress | null> {
-    // Uncomment for real API:
-    // return this.http.getRequest(`${this.apiUrl}/user/${userId}/lesson/${lessonId}`);
-
-    const progress = this.mockProgress.find(
-      p => p.userId === userId && p.lessonId === lessonId
-    );
-
-    return of(progress || null).pipe(delay(200));
+    return this.http.post<UserProgress>(`${this.apiUrl}/lesson/complete`, {
+      enrollmentId,
+      lessonId
+    });
   }
 
   /**
    * Track time spent on a lesson
    */
-  trackTimeSpent(progressId: number, minutes: number): Observable<void> {
-    // Uncomment for real API:
-    // return this.http.putRequest(`${this.apiUrl}/${progressId}/time`, { minutes });
-
-    const progress = this.mockProgress.find(p => p.id === progressId);
-    if (progress) {
-      progress.timeSpent = (progress.timeSpent || 0) + minutes;
-    }
-
-    return of(void 0).pipe(delay(100));
+  trackTimeSpent(progressId: number, minutes: number): Observable<UserProgress> {
+    return this.http.put<UserProgress>(`${this.apiUrl}/${progressId}/time`, { minutes });
   }
 
   /**
-   * Get completion percentage for an enrollment
+   * Get progress statistics for the current user
    */
-  getCompletionPercentage(enrollmentId: number, totalLessons: number): Observable<number> {
-    return this.getUserProgress(enrollmentId).pipe(
-      map(progressRecords => {
-        if (totalLessons === 0) return 0;
-        const completedCount = progressRecords.filter(p => p.completed).length;
-        return Math.round((completedCount / totalLessons) * 100);
-      })
-    );
+  getProgressStats(userId: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/stats`);
   }
 
   /**
-   * Check if a lesson is completed
-   */
-  isLessonCompleted(userId: number, enrollmentId: number, lessonId: number): Observable<boolean> {
-    const progress = this.mockProgress.find(
-      p => p.userId === userId && p.enrollmentId === enrollmentId && p.lessonId === lessonId
-    );
-
-    return of(progress ? progress.completed : false).pipe(delay(100));
-  }
-
-  /**
-   * Get completed lesson IDs for an enrollment
+   * Get IDs of completed lessons for an enrollment
    */
   getCompletedLessonIds(enrollmentId: number): Observable<number[]> {
-    return this.getUserProgress(enrollmentId).pipe(
-      map(progressRecords =>
-        progressRecords
-          .filter(p => p.completed)
-          .map(p => p.lessonId)
-      )
-    );
+    return this.http.get<UserProgress[]>(`${this.apiUrl}/enrollment/${enrollmentId}`)
+      .pipe(
+        map(progressList =>
+          progressList
+            .filter(p => p.completed)
+            .map(p => p.lessonId)
+        )
+      );
   }
 
   /**
-   * Reset progress for a lesson (mark as incomplete)
+   * Check if a specific lesson is completed
    */
-  resetLessonProgress(userId: number, enrollmentId: number, lessonId: number): Observable<void> {
-    const progress = this.mockProgress.find(
-      p => p.userId === userId && p.enrollmentId === enrollmentId && p.lessonId === lessonId
-    );
-
-    if (progress) {
-      progress.completed = false;
-      progress.completedDate = undefined;
-    }
-
-    return of(void 0).pipe(delay(200));
+  isLessonCompleted(userId: number, enrollmentId: number, lessonId: number): Observable<boolean> {
+    return this.http.get<UserProgress>(`${this.apiUrl}/lesson/${lessonId}`)
+      .pipe(
+        map(progress => progress?.completed || false),
+        catchError(() => of(false))
+      );
   }
 }

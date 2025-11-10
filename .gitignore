@@ -1,2 +1,9 @@
 node_modules
 .angular
+dist
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+backend/.env

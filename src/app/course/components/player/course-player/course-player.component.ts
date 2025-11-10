@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, combineLatest } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -25,6 +25,7 @@ export class CoursePlayerComponent implements OnInit, OnDestroy {
   completedLessonIds: number[] = [];
   isLoading = true;
   error: string | null = null;
+  sidebarCollapsed = false;
 
   private destroy$ = new Subject<void>();
   private courseId!: number;
@@ -39,6 +40,35 @@ export class CoursePlayerComponent implements OnInit, OnDestroy {
     private progressService: ProgressService,
     private authService: AuthService
   ) {}
+
+  // Keyboard navigation
+  @HostListener('window:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent): void {
+    // Only handle if not typing in an input/textarea
+    const target = event.target as HTMLElement;
+    if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
+      return;
+    }
+
+    switch (event.key) {
+      case 'ArrowRight':
+        event.preventDefault();
+        if (this.hasNextLesson()) {
+          this.goToNextLesson();
+        }
+        break;
+      case 'ArrowLeft':
+        event.preventDefault();
+        if (this.hasPreviousLesson()) {
+          this.goToPreviousLesson();
+        }
+        break;
+      case 'Escape':
+        event.preventDefault();
+        this.exitCourse();
+        break;
+    }
+  }
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
@@ -202,5 +232,55 @@ export class CoursePlayerComponent implements OnInit, OnDestroy {
     const allLessons = this.sections.flatMap(s => s.lessons);
     const currentIndex = allLessons.findIndex(l => l.id === this.currentLesson!.id);
     return currentIndex > 0;
+  }
+
+  toggleSidebar(): void {
+    this.sidebarCollapsed = !this.sidebarCollapsed;
+  }
+
+  isSectionExpanded(sectionIndex: number): boolean {
+    // Expand section if it contains the current lesson
+    if (!this.currentLesson) {
+      return sectionIndex === 0; // Expand first section by default
+    }
+    return this.sections[sectionIndex]?.lessons.some(l => l.id === this.currentLesson!.id) || false;
+  }
+
+  getSectionProgress(section: CourseSection): number {
+    const sectionLessonIds = section.lessons.map(l => l.id);
+    const completedInSection = sectionLessonIds.filter(id =>
+      id !== undefined && this.completedLessonIds.includes(id)
+    ).length;
+    return section.lessons.length > 0
+      ? Math.round((completedInSection / section.lessons.length) * 100)
+      : 0;
+  }
+
+  getLessonTypeLabel(type: string): string {
+    switch (type) {
+      case 'video':
+        return 'Video';
+      case 'text':
+        return 'Reading';
+      case 'quiz':
+        return 'Quiz';
+      case 'assignment':
+        return 'Assignment';
+      default:
+        return 'Lesson';
+    }
+  }
+
+  getTotalDuration(): number {
+    return this.sections.reduce((total, section) => {
+      return total + section.lessons.reduce((sum, lesson) => sum + (lesson.duration || 0), 0);
+    }, 0);
+  }
+
+  getCurrentLessonPosition(): string {
+    if (!this.currentLesson) return '';
+    const allLessons = this.sections.flatMap(s => s.lessons);
+    const currentIndex = allLessons.findIndex(l => l.id === this.currentLesson!.id);
+    return `Lesson ${currentIndex + 1} of ${allLessons.length}`;
   }
 }

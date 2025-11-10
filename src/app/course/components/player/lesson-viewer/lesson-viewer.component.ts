@@ -21,6 +21,7 @@ export class LessonViewerComponent implements OnInit, OnDestroy {
   isCompleted = false;
   error: string | null = null;
   safeVideoUrl: SafeResourceUrl | null = null;
+  lessonNotes = '';
 
   private destroy$ = new Subject<void>();
   private courseId!: number;

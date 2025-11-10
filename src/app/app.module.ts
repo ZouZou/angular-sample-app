@@ -5,7 +5,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { TruncatePipe } from './truncate.pipe';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { UserComponent } from './user/user.component';
 import { AdminComponent } from './admin/admin.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -25,7 +26,13 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MotorQuotationComponent } from './motor-quotation/motor-quotation.component';
+import { UserDashboardComponent } from './dashboard/user-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +41,7 @@ import { MotorQuotationComponent } from './motor-quotation/motor-quotation.compo
     UserComponent,
     AdminComponent,
     DashboardComponent,
+    UserDashboardComponent,
     NavigationComponent,
     AddressComponent,
     MotorQuotationComponent
@@ -57,9 +65,19 @@ import { MotorQuotationComponent } from './motor-quotation/motor-quotation.compo
     MatInputModule,
     MatSelectModule,
     MatRadioModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatTabsModule,
+    MatTableModule,
+    MatTooltipModule,
+    MatSnackBarModule,
+    MatProgressBarModule
   ],
   providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })

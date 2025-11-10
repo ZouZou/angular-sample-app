@@ -1,1 +1,292 @@
-<p>admin works!</p>
+<div class="admin-container">
+  <div class="admin-header">
+    <div class="header-content">
+      <h1>Admin Dashboard</h1>
+      <div class="user-info">
+        <span>Welcome, {{ currentUser?.name }}</span>
+        <button mat-button (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          Logout
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <mat-tab-group [(selectedIndex)]="selectedTab" class="admin-tabs">
+    <!-- User Management Tab -->
+    <mat-tab label="User Management">
+      <div class="tab-content">
+        <div class="section-header">
+          <h2>Manage Users</h2>
+          <button mat-raised-button color="primary" (click)="openUserForm()">
+            <mat-icon>person_add</mat-icon>
+            Create User
+          </button>
+        </div>
+
+        <div *ngIf="loadingUsers" class="loading-container">
+          <mat-spinner></mat-spinner>
+        </div>
+
+        <table mat-table [dataSource]="users" *ngIf="!loadingUsers" class="users-table">
+          <!-- ID Column -->
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef>ID</th>
+            <td mat-cell *matCellDef="let user">{{ user.id }}</td>
+          </ng-container>
+
+          <!-- Name Column -->
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>Name</th>
+            <td mat-cell *matCellDef="let user">
+              <div class="user-info-cell">
+                <img [src]="user.avatarUrl" [alt]="user.name" class="user-avatar">
+                <span>{{ user.name }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Email Column -->
+          <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef>Email</th>
+            <td mat-cell *matCellDef="let user">{{ user.email }}</td>
+          </ng-container>
+
+          <!-- Role Column -->
+          <ng-container matColumnDef="role">
+            <th mat-header-cell *matHeaderCellDef>Role</th>
+            <td mat-cell *matCellDef="let user">
+              <span class="role-badge" [ngClass]="getRoleBadgeClass(user.role)">
+                {{ user.role }}
+              </span>
+            </td>
+          </ng-container>
+
+          <!-- Actions Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let user">
+              <button mat-icon-button (click)="openUserForm(user)" matTooltip="Edit User">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button (click)="deleteUser(user)" matTooltip="Delete User"
+                      [disabled]="user.id === currentUser?.id">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedUserColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedUserColumns;"></tr>
+        </table>
+
+        <div *ngIf="!loadingUsers && users.length === 0" class="empty-state">
+          <mat-icon>people_outline</mat-icon>
+          <p>No users found</p>
+        </div>
+      </div>
+    </mat-tab>
+
+    <!-- Quiz Results Tab -->
+    <mat-tab label="Quiz Results">
+      <div class="tab-content">
+        <div class="section-header">
+          <h2>Quiz Attempts & Scores</h2>
+          <div class="filters">
+            <mat-form-field appearance="outline">
+              <mat-label>Filter by User</mat-label>
+              <mat-select [(value)]="selectedUserId" (selectionChange)="filterAttemptsByUser()">
+                <mat-option [value]="null">All Users</mat-option>
+                <mat-option *ngFor="let user of users" [value]="user.id">
+                  {{ user.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Filter by Course</mat-label>
+              <mat-select [(value)]="selectedCourseId" (selectionChange)="filterAttemptsByCourse()">
+                <mat-option [value]="null">All Courses</mat-option>
+                <mat-option *ngFor="let course of courses" [value]="course.id">
+                  {{ course.title }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div *ngIf="loadingAttempts" class="loading-container">
+          <mat-spinner></mat-spinner>
+        </div>
+
+        <table mat-table [dataSource]="quizAttempts" *ngIf="!loadingAttempts" class="attempts-table">
+          <!-- User Column -->
+          <ng-container matColumnDef="userName">
+            <th mat-header-cell *matHeaderCellDef>User</th>
+            <td mat-cell *matCellDef="let attempt">{{ attempt.userName }}</td>
+          </ng-container>
+
+          <!-- Course Column -->
+          <ng-container matColumnDef="courseTitle">
+            <th mat-header-cell *matHeaderCellDef>Course</th>
+            <td mat-cell *matCellDef="let attempt">{{ attempt.courseTitle }}</td>
+          </ng-container>
+
+          <!-- Quiz Column -->
+          <ng-container matColumnDef="quizTitle">
+            <th mat-header-cell *matHeaderCellDef>Quiz</th>
+            <td mat-cell *matCellDef="let attempt">{{ attempt.quizTitle }}</td>
+          </ng-container>
+
+          <!-- Score Column -->
+          <ng-container matColumnDef="score">
+            <th mat-header-cell *matHeaderCellDef>Score</th>
+            <td mat-cell *matCellDef="let attempt">{{ attempt.score }} / {{ attempt.totalPoints }}</td>
+          </ng-container>
+
+          <!-- Percentage Column -->
+          <ng-container matColumnDef="percentage">
+            <th mat-header-cell *matHeaderCellDef>Percentage</th>
+            <td mat-cell *matCellDef="let attempt">
+              <span [class.passed]="attempt.passed" [class.failed]="!attempt.passed">
+                {{ attempt.percentage }}%
+              </span>
+            </td>
+          </ng-container>
+
+          <!-- Passed Column -->
+          <ng-container matColumnDef="passed">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let attempt">
+              <mat-icon [class.passed]="attempt.passed" [class.failed]="!attempt.passed">
+                {{ attempt.passed ? 'check_circle' : 'cancel' }}
+              </mat-icon>
+            </td>
+          </ng-container>
+
+          <!-- Date Column -->
+          <ng-container matColumnDef="date">
+            <th mat-header-cell *matHeaderCellDef>Completed</th>
+            <td mat-cell *matCellDef="let attempt">
+              {{ attempt.completedAt | date:'short' }}
+            </td>
+          </ng-container>
+
+          <!-- Actions Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let attempt">
+              <button mat-icon-button (click)="viewAttemptDetails(attempt)" matTooltip="View Details">
+                <mat-icon>visibility</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedAttemptColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedAttemptColumns;"></tr>
+        </table>
+
+        <div *ngIf="!loadingAttempts && quizAttempts.length === 0" class="empty-state">
+          <mat-icon>quiz</mat-icon>
+          <p>No quiz attempts found</p>
+        </div>
+      </div>
+    </mat-tab>
+
+    <!-- Course Management Tab -->
+    <mat-tab label="Course Management">
+      <div class="tab-content">
+        <div class="section-header">
+          <h2>Manage Courses</h2>
+          <button mat-raised-button color="primary" (click)="createCourse()">
+            <mat-icon>add</mat-icon>
+            Create Course
+          </button>
+        </div>
+
+        <div *ngIf="loadingCourses" class="loading-container">
+          <mat-spinner></mat-spinner>
+        </div>
+
+        <div class="courses-grid" *ngIf="!loadingCourses">
+          <mat-card *ngFor="let course of courses" class="course-card">
+            <img mat-card-image [src]="course.thumbnailUrl" [alt]="course.title">
+            <mat-card-header>
+              <mat-card-title>{{ course.title }}</mat-card-title>
+              <mat-card-subtitle>{{ course.instructor }}</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <p>{{ course.description | slice:0:100 }}{{ course.description.length > 100 ? '...' : '' }}</p>
+              <div class="course-meta">
+                <span><mat-icon>people</mat-icon> {{ course.enrollmentCount || 0 }} enrolled</span>
+                <span *ngIf="course.rating"><mat-icon>star</mat-icon> {{ course.rating }}</span>
+              </div>
+            </mat-card-content>
+            <mat-card-actions>
+              <button mat-button (click)="editCourse(course)">
+                <mat-icon>edit</mat-icon>
+                Edit
+              </button>
+              <button mat-button [routerLink]="['/courses', course.id]">
+                <mat-icon>visibility</mat-icon>
+                View
+              </button>
+            </mat-card-actions>
+          </mat-card>
+        </div>
+
+        <div *ngIf="!loadingCourses && courses.length === 0" class="empty-state">
+          <mat-icon>school</mat-icon>
+          <p>No courses found</p>
+        </div>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>
+
+<!-- User Form Dialog -->
+<div class="dialog-overlay" *ngIf="showUserForm" (click)="closeUserForm()">
+  <div class="dialog-content" (click)="$event.stopPropagation()">
+    <div class="dialog-header">
+      <h2>{{ editingUser ? 'Edit User' : 'Create User' }}</h2>
+      <button mat-icon-button (click)="closeUserForm()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <div class="dialog-body">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Name</mat-label>
+        <input matInput [(ngModel)]="userForm.name" required>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" [(ngModel)]="userForm.email" required>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Password</mat-label>
+        <input matInput type="password" [(ngModel)]="userForm.password" [required]="!editingUser">
+        <mat-hint *ngIf="editingUser">Leave blank to keep current password</mat-hint>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Role</mat-label>
+        <mat-select [(ngModel)]="userForm.role" required>
+          <mat-option value="student">Student</mat-option>
+          <mat-option value="instructor">Instructor</mat-option>
+          <mat-option value="admin">Admin</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="dialog-actions">
+      <button mat-button (click)="closeUserForm()">Cancel</button>
+      <button mat-raised-button color="primary" (click)="saveUser()"
+              [disabled]="!userForm.name || !userForm.email || (!userForm.password && !editingUser)">
+        {{ editingUser ? 'Update' : 'Create' }}
+      </button>
+    </div>
+  </div>
+</div>

@@ -4,6 +4,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { CourseService } from '../../services/course.service';
+import { AuthService } from '../../services/auth.service';
 import { Course } from '../../models/course.interface';
 
 @Component({
@@ -30,6 +31,7 @@ export class CourseListComponent implements OnInit {
 
   constructor(
     private courseService: CourseService,
+    private authService: AuthService,
     private router: Router,
     private breakpointObserver: BreakpointObserver
   ) {}
@@ -64,9 +66,16 @@ export class CourseListComponent implements OnInit {
     });
   }
 
-  navigateToDetail(courseId: number | undefined): void {
-    if (courseId) {
-      this.router.navigate(['/courses', courseId]);
+  navigateToDetail(eventOrId: Event | number | undefined, courseId?: number | undefined): void {
+    // Handle both card click (courseId only) and button click (event + courseId)
+    if (eventOrId instanceof Event) {
+      eventOrId.stopPropagation();
+      if (courseId) {
+        this.router.navigate(['/courses', courseId]);
+      }
+    } else if (typeof eventOrId === 'number') {
+      // Called from card click with just courseId
+      this.router.navigate(['/courses', eventOrId]);
     }
   }
 
@@ -79,6 +88,14 @@ export class CourseListComponent implements OnInit {
 
   navigateToCreate(): void {
     this.router.navigate(['/courses', 'new']);
+  }
+
+  navigateToDashboard(): void {
+    this.router.navigate(['/dashboard']);
+  }
+
+  navigateToAdmin(): void {
+    this.router.navigate(['/admin']);
   }
 
   deleteCourse(event: Event, courseId: number | undefined): void {
@@ -109,5 +126,12 @@ export class CourseListComponent implements OnInit {
       default:
         return '#9e9e9e';
     }
+  }
+
+  /**
+   * Check if current user is admin
+   */
+  isAdmin(): boolean {
+    return this.authService.isAdmin();
   }
 }
