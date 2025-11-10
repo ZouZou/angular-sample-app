@@ -55,10 +55,6 @@
   color: #616161;
 }
 
-.sidebar-toggle {
-  display: none;
-}
-
 .course-title-section {
   display: flex;
   flex-direction: column;
@@ -493,10 +489,6 @@ mat-panel-description {
 
   .sidebar.sidebar-collapsed {
     margin-left: -320px;
-  }
-
-  .sidebar-toggle {
-    display: block;
   }
 
   .course-title-section h2 {
