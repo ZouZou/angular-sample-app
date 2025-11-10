@@ -24,16 +24,21 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', message: 'LMS Backend API is running' });
 });
 
+// Import routes
+import authRoutes from './routes/authRoutes';
+import courseRoutes from './routes/courseRoutes';
+import curriculumRoutes from './routes/curriculumRoutes';
+import enrollmentRoutes from './routes/enrollmentRoutes';
+import progressRoutes from './routes/progressRoutes';
+import quizRoutes from './routes/quizRoutes';
+
 // API Routes
-// TODO: Import and use routes
-// app.use('/api/auth', authRoutes);
-// app.use('/api/courses', courseRoutes);
-// app.use('/api/sections', curriculumRoutes);
-// app.use('/api/lessons', curriculumRoutes);
-// app.use('/api/enrollments', enrollmentRoutes);
-// app.use('/api/progress', progressRoutes);
-// app.use('/api/quizzes', quizRoutes);
-// app.use('/api/quiz-attempts', quizRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/courses', courseRoutes);
+app.use('/api', curriculumRoutes); // Includes /api/courses/:id/sections and /api/sections, /api/lessons
+app.use('/api/enrollments', enrollmentRoutes);
+app.use('/api/progress', progressRoutes);
+app.use('/api/quizzes', quizRoutes);
 
 // Error handling middleware (must be last)
 app.use(errorHandler);
