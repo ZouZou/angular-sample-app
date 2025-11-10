@@ -44,7 +44,7 @@
     </div>
 
     <!-- Course Banner -->
-    <div class="course-banner" [style.background-image]="'url(' + (course.thumbnailUrl || 'https://via.placeholder.com/1200x400?text=Course+Image') + ')'">
+    <div class="course-banner" [style.background-image]="'url(' + (course.bannerUrl || course.thumbnailUrl || 'https://via.placeholder.com/1200x400?text=Course+Image') + ')'">
       <div class="banner-overlay">
         <div class="banner-content">
           <span class="level-badge" [style.background-color]="getLevelColor(course.level)">
