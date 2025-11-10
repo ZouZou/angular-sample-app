@@ -244,12 +244,16 @@ mat-expansion-panel:last-child {
 mat-panel-description {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
+  flex: 1;
 }
 
 .section-progress {
   font-size: 0.75rem;
   color: #4caf50;
   font-weight: 600;
+  white-space: nowrap;
+  margin-left: auto;
 }
 
 .section-progress-bar {
@@ -269,8 +273,8 @@ mat-panel-description {
   cursor: pointer;
   transition: all 0.2s ease;
   border-left: 3px solid transparent;
-  padding: 12px 16px !important;
-  min-height: 72px !important;
+  padding: 10px 16px !important;
+  min-height: auto !important;
 }
 
 .lesson-item:hover {
