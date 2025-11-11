@@ -522,7 +522,7 @@ OpenEdge programs use these file extensions:
 
 ### The Simplest Program
 
-\`\`\`progress
+\`\`\`
 /* hello.p - My first OpenEdge program */
 DISPLAY "Hello, World!".
 \`\`\`
@@ -553,19 +553,19 @@ DISPLAY "Hello, World!".
 ### Try It Yourself! 🎯
 
 **Exercise 1:** Display your name
-\`\`\`progress
+\`\`\`
 DISPLAY "My name is [Your Name]".
 \`\`\`
 
 **Exercise 2:** Multiple lines
-\`\`\`progress
+\`\`\`
 DISPLAY "Welcome to OpenEdge 4GL!".
 DISPLAY "This is my first program.".
 DISPLAY "I'm learning to code!".
 \`\`\`
 
 **Exercise 3:** Display with formatting
-\`\`\`progress
+\`\`\`
 DISPLAY "Name:    John Doe".
 DISPLAY "Company: Acme Corp".
 DISPLAY "Year:    2025".
@@ -587,7 +587,7 @@ Variables are named containers that store data. Like labeled boxes for your info
 
 **Every variable MUST be defined before use:**
 
-\`\`\`progress
+\`\`\`
 DEFINE VARIABLE myName AS CHARACTER NO-UNDO.
 DEFINE VARIABLE myAge AS INTEGER NO-UNDO.
 DEFINE VARIABLE myHeight AS DECIMAL NO-UNDO.
@@ -616,7 +616,7 @@ DEFINE VARIABLE isStudent AS LOGICAL NO-UNDO.
 
 In OpenEdge, \`?\` represents **unknown or null**:
 
-\`\`\`progress
+\`\`\`
 DEFINE VARIABLE unknownValue AS CHARACTER NO-UNDO.
 /* unknownValue is automatically ? */
 
@@ -631,7 +631,7 @@ unknownValue = ?.
 
 ### Assigning Values
 
-\`\`\`progress
+\`\`\`
 DEFINE VARIABLE name AS CHARACTER NO-UNDO.
 DEFINE VARIABLE age AS INTEGER NO-UNDO.
 
@@ -647,7 +647,7 @@ age = 30.
 
 ### Complete Example
 
-\`\`\`progress
+\`\`\`
 /* student-info.p */
 
 /* Define variables */
@@ -696,7 +696,7 @@ DISPLAY
 
 The \`UPDATE\` statement lets users enter data:
 
-\`\`\`progress
+\`\`\`
 DEFINE VARIABLE userName AS CHARACTER NO-UNDO.
 DEFINE VARIABLE userAge AS INTEGER NO-UNDO.
 
@@ -712,7 +712,7 @@ DISPLAY
 
 Labels make your interface clearer:
 
-\`\`\`progress
+\`\`\`
 UPDATE 
     userName LABEL "Full Name"
     userAge LABEL "Age"
@@ -723,7 +723,7 @@ UPDATE
 
 Frames control how data is displayed:
 
-\`\`\`progress
+\`\`\`
 DEFINE VARIABLE productName AS CHARACTER NO-UNDO.
 DEFINE VARIABLE productPrice AS DECIMAL NO-UNDO.
 DEFINE VARIABLE productQty AS INTEGER NO-UNDO.
@@ -751,7 +751,7 @@ DISPLAY
 
 Show alerts and get user confirmation:
 
-\`\`\`progress
+\`\`\`
 /* Simple message */
 MESSAGE "Processing complete!" 
     VIEW-AS ALERT-BOX INFORMATION.
@@ -780,7 +780,7 @@ MESSAGE "This action cannot be undone!"
 
 ### Complete Interactive Calculator
 
-\`\`\`progress
+\`\`\`
 /* simple-calc.p */
 
 DEFINE VARIABLE num1 AS DECIMAL NO-UNDO.
@@ -925,7 +925,7 @@ IF NOT errorOccurred THEN
 
 Make decisions in your code:
 
-\`\`\`progress
+\`\`\`
 DEFINE VARIABLE temperature AS INTEGER NO-UNDO.
 DEFINE VARIABLE advice AS CHARACTER NO-UNDO.
 
@@ -958,7 +958,7 @@ DISPLAY advice.
 
 Combine multiple conditions:
 
-\`\`\`progress
+\`\`\`
 DEFINE VARIABLE age AS INTEGER NO-UNDO.
 DEFINE VARIABLE hasLicense AS LOGICAL NO-UNDO.
 DEFINE VARIABLE hasInsurance AS LOGICAL NO-UNDO.
@@ -984,7 +984,7 @@ IF NOT hasInsurance THEN
 
 Better than multiple IF-ELSE for many options:
 
-\`\`\`progress
+\`\`\`
 DEFINE VARIABLE dayOfWeek AS INTEGER NO-UNDO.
 DEFINE VARIABLE dayName AS CHARACTER NO-UNDO.
 
@@ -1005,7 +1005,7 @@ DISPLAY dayName.
 
 ### Complex Conditions
 
-\`\`\`progress
+\`\`\`
 DEFINE VARIABLE score AS INTEGER NO-UNDO.
 DEFINE VARIABLE attendance AS INTEGER NO-UNDO.
 DEFINE VARIABLE grade AS CHARACTER NO-UNDO.
@@ -1030,7 +1030,7 @@ DISPLAY "Final Grade:" grade.
 
 ### Nested IF Statements
 
-\`\`\`progress
+\`\`\`
 DEFINE VARIABLE income AS DECIMAL NO-UNDO.
 DEFINE VARIABLE dependents AS INTEGER NO-UNDO.
 DEFINE VARIABLE taxRate AS DECIMAL NO-UNDO.
@@ -1070,7 +1070,7 @@ DISPLAY "Income:" income FORMAT "$>>>,>>9.99"
 
 Repeats while condition is TRUE:
 
-\`\`\`progress
+\`\`\`
 DEFINE VARIABLE counter AS INTEGER NO-UNDO.
 
 counter = 1.
@@ -1085,7 +1085,7 @@ END.
 
 Count from one number to another:
 
-\`\`\`progress
+\`\`\`
 DEFINE VARIABLE i AS INTEGER NO-UNDO.
 
 /* Count from 1 to 10 */
@@ -1113,7 +1113,7 @@ END.
 
 Most flexible - repeats indefinitely until LEAVE:
 
-\`\`\`progress
+\`\`\`
 DEFINE VARIABLE userInput AS CHARACTER NO-UNDO.
 DEFINE VARIABLE keepGoing AS LOGICAL NO-UNDO.
 
@@ -1143,7 +1143,7 @@ END.
 
 Skip to next iteration:
 
-\`\`\`progress
+\`\`\`
 DEFINE VARIABLE i AS INTEGER NO-UNDO.
 
 /* Display only odd numbers */
@@ -1157,7 +1157,7 @@ END.
 
 ### Nested Loops
 
-\`\`\`progress
+\`\`\`
 DEFINE VARIABLE row AS INTEGER NO-UNDO.
 DEFINE VARIABLE col AS INTEGER NO-UNDO.
 
@@ -1173,7 +1173,7 @@ END.
 ### Practical Loop Examples
 
 **Example 1: Sum of Numbers**
-\`\`\`progress
+\`\`\`
 DEFINE VARIABLE i AS INTEGER NO-UNDO.
 DEFINE VARIABLE sum AS INTEGER NO-UNDO.
 
@@ -1188,7 +1188,7 @@ DISPLAY "Sum of 1 to 100:" sum.
 \`\`\`
 
 **Example 2: Factorial Calculator**
-\`\`\`progress
+\`\`\`
 DEFINE VARIABLE number AS INTEGER NO-UNDO.
 DEFINE VARIABLE factorial AS INTEGER NO-UNDO.
 DEFINE VARIABLE i AS INTEGER NO-UNDO.
@@ -1205,7 +1205,7 @@ DISPLAY "Factorial of" number "is" factorial.
 \`\`\`
 
 **Example 3: FizzBuzz**
-\`\`\`progress
+\`\`\`
 DEFINE VARIABLE i AS INTEGER NO-UNDO.
 DEFINE VARIABLE output AS CHARACTER NO-UNDO.
 
@@ -1331,7 +1331,7 @@ OpenEdge has a **built-in database** - no separate setup! The database consists 
 
 ### Database Connection
 
-\`\`\`progress
+\`\`\`
 /* Connect to sports2000 demo database */
 CONNECT "-db sports2000 -H localhost -S 9999" NO-ERROR.
 
@@ -1344,7 +1344,7 @@ IF ERROR-STATUS:ERROR THEN
 
 Display all records from a table:
 
-\`\`\`progress
+\`\`\`
 /* Display all customers */
 FOR EACH Customer NO-LOCK:
     DISPLAY 
@@ -1366,7 +1366,7 @@ END.
 
 Find specific records:
 
-\`\`\`progress
+\`\`\`
 /* Find customers in California */
 FOR EACH Customer NO-LOCK
     WHERE Customer.State = "CA":
@@ -1380,7 +1380,7 @@ END.
 
 ### Multiple Conditions
 
-\`\`\`progress
+\`\`\`
 /* High-value California customers */
 FOR EACH Customer NO-LOCK
     WHERE Customer.State = "CA"
@@ -1402,7 +1402,7 @@ END.
 
 ### FIND - Get One Specific Record
 
-\`\`\`progress
+\`\`\`
 DEFINE VARIABLE searchNum AS INTEGER NO-UNDO.
 
 searchNum = 1.
@@ -1426,7 +1426,7 @@ ELSE
 
 ### Sorting Results
 
-\`\`\`progress
+\`\`\`
 /* Sort by name */
 FOR EACH Customer NO-LOCK
     BY Customer.Name:
@@ -1454,7 +1454,7 @@ END.
 
 ### Creating Records
 
-\`\`\`progress
+\`\`\`
 /* Create new customer */
 CREATE Customer.
 ASSIGN
@@ -1470,7 +1470,7 @@ MESSAGE "Customer created successfully!"
 
 ### Updating Records
 
-\`\`\`progress
+\`\`\`
 /* Find and update a customer */
 FIND FIRST Customer EXCLUSIVE-LOCK
     WHERE Customer.CustNum = 1
@@ -1486,7 +1486,7 @@ ELSE
 
 ### Deleting Records
 
-\`\`\`progress
+\`\`\`
 /* Find and delete */
 FIND FIRST Customer EXCLUSIVE-LOCK
     WHERE Customer.CustNum = 999
@@ -1500,7 +1500,7 @@ END.
 
 ### Counting Records
 
-\`\`\`progress
+\`\`\`
 DEFINE VARIABLE customerCount AS INTEGER NO-UNDO.
 
 /* Count all customers */
@@ -1522,7 +1522,7 @@ DISPLAY "California customers:" customerCount.
 
 ### Calculating Totals
 
-\`\`\`progress
+\`\`\`
 DEFINE VARIABLE totalBalance AS DECIMAL NO-UNDO.
 
 FOR EACH Customer NO-LOCK:
@@ -1555,7 +1555,7 @@ This prevents data corruption.
 
 ### Transaction Blocks
 
-\`\`\`progress
+\`\`\`
 DO TRANSACTION:
     
     /* Deduct from Account A */
@@ -1577,7 +1577,7 @@ END. /* Transaction commits here if successful */
 
 If an error occurs, \`UNDO\` reverses all changes:
 
-\`\`\`progress
+\`\`\`
 DO TRANSACTION:
     
     CREATE Customer.
@@ -1597,7 +1597,7 @@ END.
 
 ### NO-ERROR and Error Checking
 
-\`\`\`progress
+\`\`\`
 /* NO-ERROR prevents automatic error display */
 FIND FIRST Customer EXCLUSIVE-LOCK
     WHERE Customer.CustNum = 999
@@ -1625,7 +1625,7 @@ ASSIGN Customer.Name = "Updated Name".
 
 Based on the official ABL documentation:
 
-\`\`\`progress
+\`\`\`
 DO TRANSACTION ON ERROR UNDO, THROW:
     
     /* Try to find and update */
@@ -1646,7 +1646,7 @@ END.
 
 ### Complete Error Handling Example
 
-\`\`\`progress
+\`\`\`
 /* safe-update.p */
 
 DEFINE VARIABLE custNum AS INTEGER NO-UNDO.
@@ -1701,7 +1701,7 @@ IF updateOK THEN
 
 For procedures and functions (from ABL documentation):
 
-\`\`\`progress
+\`\`\`
 PROCEDURE updateCustomer:
     /* Enable routine-level error handling */
     ROUTINE-LEVEL ON ERROR UNDO, THROW.
@@ -1721,7 +1721,7 @@ END PROCEDURE.
 
 Code that ALWAYS runs (success or error):
 
-\`\`\`progress
+\`\`\`
 DEFINE VARIABLE fileHandle AS HANDLE NO-UNDO.
 
 DO:
@@ -1850,7 +1850,7 @@ END.
 
 Procedures within the same file:
 
-\`\`\`progress
+\`\`\`
 /* main-program.p */
 
 /* Main logic */
@@ -1882,7 +1882,7 @@ END PROCEDURE.
 
 Based on ABL documentation:
 
-\`\`\`progress
+\`\`\`
 /* INPUT - Pass data TO procedure */
 DEFINE INPUT PARAMETER customerName AS CHARACTER NO-UNDO.
 
@@ -1895,7 +1895,7 @@ DEFINE INPUT-OUTPUT PARAMETER counter AS INTEGER NO-UNDO.
 
 ### Complete Procedure Example
 
-\`\`\`progress
+\`\`\`
 /* order-processor.p */
 
 DEFINE VARIABLE custNum AS INTEGER NO-UNDO.
@@ -1974,7 +1974,7 @@ END PROCEDURE.
 
 Call procedures from other files:
 
-\`\`\`progress
+\`\`\`
 /* In main.p */
 RUN utilities/validation.p 
     (INPUT userName, OUTPUT isValid).
@@ -1983,7 +1983,7 @@ IF isValid THEN
     DISPLAY "Username is valid!".
 \`\`\`
 
-\`\`\`progress
+\`\`\`
 /* In utilities/validation.p */
 DEFINE INPUT PARAMETER inputName AS CHARACTER NO-UNDO.
 DEFINE OUTPUT PARAMETER valid AS LOGICAL NO-UNDO.
@@ -2000,7 +2000,7 @@ IF NOT valid THEN
 
 Functions return a single value:
 
-\`\`\`progress
+\`\`\`
 /* Function definition */
 FUNCTION calculateDiscount RETURNS DECIMAL
     (INPUT basePrice AS DECIMAL,
@@ -2027,7 +2027,7 @@ DISPLAY
 
 ### Multiple Functions Example
 
-\`\`\`progress
+\`\`\`
 /* math-utils.p */
 
 DEFINE VARIABLE radius AS DECIMAL NO-UNDO.
@@ -2080,7 +2080,7 @@ END FUNCTION.
         title: 'Building Data Entry Forms',
         content: `### Simple Form
 
-\`\`\`progress
+\`\`\`
 /* customer-form.p */
 
 DEFINE VARIABLE custNum AS INTEGER NO-UNDO.
@@ -2124,7 +2124,7 @@ END.
 
 ### Form with Browse (List)
 
-\`\`\`progress
+\`\`\`
 /* customer-browse.p */
 
 /* Define browse frame */
@@ -2146,7 +2146,7 @@ WAIT-FOR CLOSE OF CURRENT-WINDOW.
 
 ### Complete CRUD Form
 
-\`\`\`progress
+\`\`\`
 /* customer-manager.p */
 
 DEFINE VARIABLE operation AS CHARACTER NO-UNDO.
@@ -2345,7 +2345,7 @@ Object-Oriented Programming organizes code into **classes** (blueprints) and **o
 
 ### Defining a Simple Class
 
-\`\`\`progress
+\`\`\`
 /* Customer.cls */
 
 CLASS Customer:
@@ -2388,7 +2388,7 @@ END CLASS.
 
 ### Using a Class
 
-\`\`\`progress
+\`\`\`
 /* test-customer.p */
 
 USING Progress.Lang.*.
@@ -2413,7 +2413,7 @@ DELETE OBJECT myCustomer.
 
 ### Inheritance
 
-\`\`\`progress
+\`\`\`
 /* PremiumCustomer.cls */
 
 CLASS PremiumCustomer INHERITS Customer:
@@ -2451,7 +2451,7 @@ END CLASS.
         title: 'Reports and Queries',
         content: `### Simple Report
 
-\`\`\`progress
+\`\`\`
 /* sales-report.p */
 
 DEFINE VARIABLE totalSales AS DECIMAL NO-UNDO.
@@ -2491,7 +2491,7 @@ DISPLAY
 
 ### Grouped Report
 
-\`\`\`progress
+\`\`\`
 /* sales-by-customer.p */
 
 DEFINE VARIABLE custTotal AS DECIMAL NO-UNDO.
@@ -2536,7 +2536,7 @@ END.
 
 OpenEdge can create and consume REST services:
 
-\`\`\`progress
+\`\`\`
 /* Simple REST service example */
 
 DEFINE VARIABLE httpClient AS HANDLE NO-UNDO.
@@ -2555,7 +2555,7 @@ DELETE OBJECT httpClient.
 
 ### JSON Handling
 
-\`\`\`progress
+\`\`\`
 USING Progress.Json.ObjectModel.*.
 
 DEFINE VARIABLE jsonParser AS JsonParser NO-UNDO.
@@ -2782,7 +2782,7 @@ Enterprise development standards
 
 Variables defined in a block are only visible within that block:
 
-\`\`\`progress
+\`\`\`
 /* block-scope-demo.p */
 
 DEFINE VARIABLE outerVar AS CHARACTER NO-UNDO.
@@ -2807,7 +2807,7 @@ DISPLAY outerVar. /* Still accessible */
 
 Variables defined at the top of a procedure are visible throughout that procedure and its internal procedures:
 
-\`\`\`progress
+\`\`\`
 /* procedure-scope.p */
 
 /* Main procedure scope */
@@ -2831,7 +2831,7 @@ END PROCEDURE.
 
 Variables defined inside internal procedures are **local** to that procedure:
 
-\`\`\`progress
+\`\`\`
 /* internal-proc-scope.p */
 
 DEFINE VARIABLE mainVar AS CHARACTER NO-UNDO.
@@ -2866,7 +2866,7 @@ END PROCEDURE.
 
 Parameters are visible only within the procedure that defines them:
 
-\`\`\`progress
+\`\`\`
 /* parameter-scope.p */
 
 DEFINE VARIABLE result AS INTEGER NO-UNDO.
@@ -2898,7 +2898,7 @@ END PROCEDURE.
 
 External procedures have their own separate scope:
 
-\`\`\`progress
+\`\`\`
 /* main.p */
 DEFINE VARIABLE mainValue AS INTEGER NO-UNDO.
 mainValue = 50.
@@ -2907,7 +2907,7 @@ RUN external.p (INPUT mainValue, OUTPUT mainValue).
 DISPLAY "After external call:" mainValue.
 \`\`\`
 
-\`\`\`progress
+\`\`\`
 /* external.p */
 DEFINE INPUT PARAMETER inputVal AS INTEGER NO-UNDO.
 DEFINE OUTPUT PARAMETER outputVal AS INTEGER NO-UNDO.
@@ -2947,7 +2947,7 @@ Include files (\`.i\` extension) contain reusable code that can be inserted into
 
 ### 2.1 Basic Include File
 
-\`\`\`progress
+\`\`\`
 /* common-defs.i - Include file */
 
 DEFINE VARIABLE companyName AS CHARACTER NO-UNDO INITIAL "Acme Corp".
@@ -2957,7 +2957,7 @@ DEFINE VARIABLE taxRate AS DECIMAL NO-UNDO INITIAL 0.08.
 
 ### 2.2 Using Include Files
 
-\`\`\`progress
+\`\`\`
 /* invoice.p */
 
 /* Include the file using curly braces */
@@ -2974,7 +2974,7 @@ DISPLAY
 
 Include files can accept parameters for customization:
 
-\`\`\`progress
+\`\`\`
 /* field-define.i */
 
 /* &1 = field name, &2 = field label, &3 = data type */
@@ -2983,7 +2983,7 @@ DEFINE VARIABLE {1} AS {3} NO-UNDO LABEL "{2}".
 
 **Using parametrized include:**
 
-\`\`\`progress
+\`\`\`
 /* customer-form.p */
 
 /* Creates: DEFINE VARIABLE custName AS CHARACTER NO-UNDO LABEL "Customer Name" */
@@ -2997,7 +2997,7 @@ UPDATE custName custBalance.
 
 ### 2.4 Advanced Include with Named Parameters
 
-\`\`\`progress
+\`\`\`
 /* form-header.i */
 
 /* Parameters: &TITLE, &DATE_DISPLAY */
@@ -3011,7 +3011,7 @@ DISPLAY
 
 **Using named parameters:**
 
-\`\`\`progress
+\`\`\`
 /* report.p */
 
 {form-header.i &TITLE="Sales Report" &DATE_DISPLAY=TODAY}
@@ -3023,7 +3023,7 @@ DISPLAY
 
 **Common pattern for temp-table definitions:**
 
-\`\`\`progress
+\`\`\`
 /* tt-customer.i */
 
 DEFINE TEMP-TABLE ttCustomer NO-UNDO
@@ -3038,7 +3038,7 @@ DEFINE TEMP-TABLE ttCustomer NO-UNDO
 
 **Using in multiple programs:**
 
-\`\`\`progress
+\`\`\`
 /* program1.p */
 {tt-customer.i}
 
@@ -3052,7 +3052,7 @@ FOR EACH ttCustomer:
 END.
 \`\`\`
 
-\`\`\`progress
+\`\`\`
 /* program2.p */
 {tt-customer.i}
 
@@ -3068,7 +3068,7 @@ END PROCEDURE.
 
 **Problem:** Multiple includes with same variable names
 
-\`\`\`progress
+\`\`\`
 /* config1.i */
 DEFINE VARIABLE setting AS CHARACTER NO-UNDO.
 
@@ -3077,7 +3077,7 @@ DEFINE VARIABLE setting AS CHARACTER NO-UNDO. /* CONFLICT! */
 \`\`\`
 
 **Solution 1: Use Different Variable Names**
-\`\`\`progress
+\`\`\`
 /* config1.i */
 DEFINE VARIABLE config1_setting AS CHARACTER NO-UNDO.
 
@@ -3086,7 +3086,7 @@ DEFINE VARIABLE config2_setting AS CHARACTER NO-UNDO.
 \`\`\`
 
 **Solution 2: Use Conditional Preprocessor**
-\`\`\`progress
+\`\`\`
 /* settings.i */
 &IF DEFINED(settings-included) = 0 &THEN
 &GLOBAL-DEFINE settings-included
@@ -3108,7 +3108,7 @@ DEFINE VARIABLE appSetting AS CHARACTER NO-UNDO.
    - Keep includes declarative
 
 3. **Document parameters**
-   \`\`\`progress
+   \`\`\`
    /* my-include.i 
     * Parameters:
     *   &TABLE_NAME - Name of the temp-table
@@ -3117,7 +3117,7 @@ DEFINE VARIABLE appSetting AS CHARACTER NO-UNDO.
    \`\`\`
 
 4. **Use unique prefixes**
-   \`\`\`progress
+   \`\`\`
    /* app-constants.i */
    DEFINE VARIABLE APP_NAME AS CHARACTER NO-UNDO INITIAL "MyApp".
    DEFINE VARIABLE APP_VERSION AS CHARACTER NO-UNDO INITIAL "1.0".
@@ -3137,7 +3137,7 @@ DEFINE VARIABLE appSetting AS CHARACTER NO-UNDO.
 
 ### 3.1 Basic Temp-Table Definition
 
-\`\`\`progress
+\`\`\`
 /* Define temp-table structure */
 DEFINE TEMP-TABLE ttEmployee NO-UNDO
     FIELD EmpNum AS INTEGER
@@ -3178,7 +3178,7 @@ END.
 
 ### 3.2 Temp-Table with LIKE (Copy Database Structure)
 
-\`\`\`progress
+\`\`\`
 /* Create temp-table based on database table */
 DEFINE TEMP-TABLE ttCustomer LIKE Customer.
 
@@ -3199,7 +3199,7 @@ END.
 
 Indexes improve query performance:
 
-\`\`\`progress
+\`\`\`
 DEFINE TEMP-TABLE ttProduct NO-UNDO
     FIELD ProductID AS INTEGER
     FIELD ProductName AS CHARACTER
@@ -3220,7 +3220,7 @@ DEFINE TEMP-TABLE ttProduct NO-UNDO
 
 ### 3.4 Passing Temp-Tables as Parameters
 
-\`\`\`progress
+\`\`\`
 /* main.p */
 
 DEFINE TEMP-TABLE ttOrder NO-UNDO
@@ -3265,7 +3265,7 @@ END PROCEDURE.
 
 ### 3.5 Temp-Table with BEFORE-TABLE (Change Tracking)
 
-\`\`\`progress
+\`\`\`
 DEFINE TEMP-TABLE ttCustomer NO-UNDO
     FIELD CustNum AS INTEGER
     FIELD Name AS CHARACTER
@@ -3305,7 +3305,7 @@ END.
 
 Create temp-tables at runtime:
 
-\`\`\`progress
+\`\`\`
 DEFINE VARIABLE hTable AS HANDLE NO-UNDO.
 DEFINE VARIABLE hField AS HANDLE NO-UNDO.
 DEFINE VARIABLE hBuffer AS HANDLE NO-UNDO.
@@ -3347,7 +3347,7 @@ DELETE OBJECT hTable.
 
 Store multiple values in a single field:
 
-\`\`\`progress
+\`\`\`
 DEFINE TEMP-TABLE ttSales NO-UNDO
     FIELD SalesRep AS CHARACTER
     FIELD MonthlySales AS DECIMAL EXTENT 12  /* Array for 12 months */
@@ -3387,7 +3387,7 @@ END.
 
 ### 4.1 Basic DataSet Definition
 
-\`\`\`progress
+\`\`\`
 /* Define temp-tables */
 DEFINE TEMP-TABLE ttCustomer NO-UNDO
     FIELD CustNum AS INTEGER
@@ -3411,7 +3411,7 @@ DEFINE DATASET dsCustomerOrders FOR ttCustomer, ttOrder
 
 ### 4.2 Working with DataSets
 
-\`\`\`progress
+\`\`\`
 /* Load data into dataset */
 FOR EACH Customer NO-LOCK WHERE Customer.State = "CA":
     CREATE ttCustomer.
@@ -3439,7 +3439,7 @@ END.
 
 ### 4.3 DataSet with Multiple Relationships
 
-\`\`\`progress
+\`\`\`
 /* Complex dataset structure */
 DEFINE TEMP-TABLE ttCustomer NO-UNDO
     FIELD CustNum AS INTEGER
@@ -3488,7 +3488,7 @@ DEFINE DATASET dsOrderSystem FOR
 
 Automatically populate related temp-tables:
 
-\`\`\`progress
+\`\`\`
 DEFINE DATASET dsCustomerOrders FOR ttCustomer, ttOrder
     DATA-RELATION relCustOrders FOR ttCustomer, ttOrder
         RELATION-FIELDS(CustNum, CustNum).
@@ -3509,7 +3509,7 @@ END.
 
 ### 4.5 Passing DataSets as Parameters
 
-\`\`\`progress
+\`\`\`
 /* main.p */
 
 DEFINE TEMP-TABLE ttCustomer NO-UNDO
@@ -3550,7 +3550,7 @@ END PROCEDURE.
 
 ### 4.6 DataSet with Nested Data
 
-\`\`\`progress
+\`\`\`
 DEFINE DATASET dsNested FOR ttParent, ttChild
     DATA-RELATION rel FOR ttParent, ttChild
         RELATION-FIELDS(ParentID, ParentID)
@@ -3573,7 +3573,7 @@ DEFINE DATASET dsNested FOR ttParent, ttChild
 
 ### 4.7 DataSet Change Tracking
 
-\`\`\`progress
+\`\`\`
 /* Enable tracking for entire dataset */
 DATASET dsCustomerOrders:TRACKING-CHANGES = TRUE.
 
@@ -3610,7 +3610,7 @@ END.
 
 **NEW SHARED** creates a temp-table that can be shared with called procedures:
 
-\`\`\`progress
+\`\`\`
 /* main.p */
 
 /* Define NEW SHARED - visible to this procedure and children */
@@ -3634,7 +3634,7 @@ FOR EACH ttEmployee:
 END.
 \`\`\`
 
-\`\`\`progress
+\`\`\`
 /* employee-utils.p */
 
 /* Define SHARED - accesses the temp-table from calling procedure */
@@ -3655,7 +3655,7 @@ END.
 
 **NEW GLOBAL SHARED** creates a temp-table visible to the entire ABL session:
 
-\`\`\`progress
+\`\`\`
 /* startup.p */
 
 /* Define at session level */
@@ -3676,7 +3676,7 @@ ASSIGN
     gttConfig.ConfigValue = "1.0".
 \`\`\`
 
-\`\`\`progress
+\`\`\`
 /* any-program.p - Run later in session */
 
 /* Access global temp-table */
@@ -3690,7 +3690,7 @@ IF AVAILABLE gttConfig THEN
 
 ### 5.3 Scope Lifetime Comparison
 
-\`\`\`progress
+\`\`\`
 /* Scope Lifetime Chart:
 
 ┌──────────────────────────────────────────────────────┐
@@ -3707,7 +3707,7 @@ IF AVAILABLE gttConfig THEN
 
 Regular variables can also be GLOBAL SHARED:
 
-\`\`\`progress
+\`\`\`
 /* config.p */
 
 /* Define global variables */
@@ -3722,7 +3722,7 @@ ASSIGN
     gSessionDate = TODAY.
 \`\`\`
 
-\`\`\`progress
+\`\`\`
 /* report.p */
 
 /* Access global variables */
@@ -3740,7 +3740,7 @@ DISPLAY
 
 ### 5.5 Shared Variables in Procedure Chain
 
-\`\`\`progress
+\`\`\`
 /* level1.p */
 
 DEFINE NEW SHARED VARIABLE sharedVar AS INTEGER NO-UNDO.
@@ -3751,7 +3751,7 @@ RUN level2.p.
 DISPLAY "After level2:" sharedVar. /* Shows 30 */
 \`\`\`
 
-\`\`\`progress
+\`\`\`
 /* level2.p */
 
 DEFINE SHARED VARIABLE sharedVar AS INTEGER NO-UNDO.
@@ -3762,7 +3762,7 @@ RUN level3.p.
 DISPLAY "After level3:" sharedVar. /* Shows 30 */
 \`\`\`
 
-\`\`\`progress
+\`\`\`
 /* level3.p */
 
 DEFINE SHARED VARIABLE sharedVar AS INTEGER NO-UNDO.
@@ -3773,7 +3773,7 @@ DISPLAY "In level3:" sharedVar.
 
 ### 5.6 Global Shared DataSets
 
-\`\`\`progress
+\`\`\`
 /* data-manager.p */
 
 DEFINE NEW GLOBAL SHARED TEMP-TABLE gttCustomer NO-UNDO
@@ -3792,7 +3792,7 @@ DEFINE NEW GLOBAL SHARED DATASET gdsData FOR gttCustomer, gttOrder
 RUN loadInitialData.
 \`\`\`
 
-\`\`\`progress
+\`\`\`
 /* report-generator.p */
 
 DEFINE SHARED TEMP-TABLE gttCustomer.
@@ -3810,7 +3810,7 @@ END.
 
 ### 5.7 Warning: Risks of Global Variables
 
-\`\`\`progress
+\`\`\`
 /*
 ⚠️  CAUTION WITH GLOBAL VARIABLES:
 
@@ -3840,7 +3840,7 @@ END.
 
 ### 6.1 NO-UNDO (Always Use for Local Variables)
 
-\`\`\`progress
+\`\`\`
 /* NO-UNDO means variable won't be tracked in transactions */
 DEFINE VARIABLE localVar AS INTEGER NO-UNDO.
 
@@ -3852,7 +3852,7 @@ DEFINE VARIABLE txnVar AS INTEGER. /* Slower, uses more memory */
 
 ### 6.2 Block-Level DO Scope
 
-\`\`\`progress
+\`\`\`
 DEFINE VARIABLE outerCount AS INTEGER NO-UNDO.
 
 DO:
@@ -3867,7 +3867,7 @@ DISPLAY outerCount. /* OK */
 
 ### 6.3 Function and Method Scope
 
-\`\`\`progress
+\`\`\`
 FUNCTION calculateBonus RETURNS DECIMAL
     (INPUT salary AS DECIMAL):
     
@@ -3887,7 +3887,7 @@ END FUNCTION.
 
 ### 6.4 FOR EACH Block Scope
 
-\`\`\`progress
+\`\`\`
 /* Variables defined in FOR EACH are local to the loop */
 FOR EACH Customer NO-LOCK:
     DEFINE VARIABLE orderCount AS INTEGER NO-UNDO.
@@ -3905,7 +3905,7 @@ END.
 
 ### 6.5 Static Variables in Classes
 
-\`\`\`progress
+\`\`\`
 CLASS Employee:
     
     /* Static - shared across all instances */
@@ -3936,7 +3936,7 @@ END CLASS.
 
 ### 6.6 PRIVATE and PROTECTED in Classes
 
-\`\`\`progress
+\`\`\`
 CLASS BankAccount:
     
     /* Private - only accessible within this class */
@@ -3964,7 +3964,7 @@ END CLASS.
 
 When same name exists at multiple levels, innermost scope wins:
 
-\`\`\`progress
+\`\`\`
 DEFINE VARIABLE myVar AS CHARACTER NO-UNDO.
 myVar = "Outer".
 
@@ -4062,7 +4062,7 @@ DISPLAY myVar. /* Shows "Outer" */
 
 ## 7.6 Example: Good Structure
 
-\`\`\`progress
+\`\`\`
 /* order-processor.p
  * Processes customer orders
  * Dependencies: customer-tt.i, order-utils.p
@@ -4445,7 +4445,7 @@ Remember:
 ### Common Patterns
 
 **Safe Database Read:**
-\`\`\`progress
+\`\`\`
 FIND FIRST TableName NO-LOCK
     WHERE TableName.KeyField = value
     NO-ERROR.
@@ -4456,7 +4456,7 @@ ELSE
 \`\`\`
 
 **Safe Database Update:**
-\`\`\`progress
+\`\`\`
 DO TRANSACTION ON ERROR UNDO, THROW:
     FIND FIRST TableName EXCLUSIVE-LOCK
         WHERE TableName.KeyField = value
@@ -4471,7 +4471,7 @@ END.
 \`\`\`
 
 **Temp-Table Definition:**
-\`\`\`progress
+\`\`\`
 DEFINE TEMP-TABLE ttName NO-UNDO
     FIELD Field1 AS DataType
     FIELD Field2 AS DataType
@@ -4480,14 +4480,14 @@ DEFINE TEMP-TABLE ttName NO-UNDO
 \`\`\`
 
 **DataSet Definition:**
-\`\`\`progress
+\`\`\`
 DEFINE DATASET dsName FOR ttTable1, ttTable2
     DATA-RELATION rel FOR ttTable1, ttTable2
         RELATION-FIELDS(KeyField, KeyField).
 \`\`\`
 
 **Include File Usage:**
-\`\`\`progress
+\`\`\`
 {include-file.i}
 {include-file.i &Param1="value1" &Param2="value2"}
 \`\`\`
