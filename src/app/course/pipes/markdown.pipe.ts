@@ -8,16 +8,30 @@ export class MarkdownPipe implements PipeTransform {
   transform(value: string): string {
     if (!value) return '';
 
-    // Split content into paragraphs first (by double newlines)
-    const paragraphs = value.split(/\n\n+/);
+    // First, extract and preserve code blocks to prevent them from being split
+    const codeBlocks: string[] = [];
+    const placeholder = '___CODE_BLOCK_PLACEHOLDER___';
+
+    // Replace code blocks with placeholders
+    let processedValue = value.replace(/```[\s\S]*?```/g, (match) => {
+      codeBlocks.push(match);
+      return `\n\n${placeholder}${codeBlocks.length - 1}\n\n`;
+    });
+
+    // Now split content into paragraphs (by double newlines)
+    const paragraphs = processedValue.split(/\n\n+/);
     const htmlBlocks: string[] = [];
 
     for (let para of paragraphs) {
       let html = para;
 
-      // Code blocks with triple backticks - do this FIRST before other replacements
-      // This matches triple backticks specifically (not single or double)
-      if (html.match(/```/)) {
+      // Check if this is a code block placeholder
+      const placeholderMatch = html.match(/^___CODE_BLOCK_PLACEHOLDER___(\d+)$/);
+      if (placeholderMatch) {
+        const index = parseInt(placeholderMatch[1]);
+        html = codeBlocks[index];
+
+        // Process the code block
         html = html.replace(/```(\w+)?\s*\n?([\s\S]*?)```/gim, (match, lang, code) => {
           const language = lang || 'plaintext';
           const displayLang = language === 'progress' ? 'OpenEdge 4GL' : language.toUpperCase();
