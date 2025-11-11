@@ -39,18 +39,32 @@ export class QuizPlayerComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    const courseIdParam = this.route.parent?.snapshot.paramMap.get('id');
-    const quizIdParam = this.route.snapshot.paramMap.get('quizId');
     this.userId = this.authService.currentUserId || 1;
 
-    if (courseIdParam && quizIdParam) {
+    // Get course ID from parent route (only once, as it doesn't change)
+    const courseIdParam = this.route.parent?.snapshot.paramMap.get('id');
+    if (courseIdParam) {
       this.courseId = parseInt(courseIdParam, 10);
-      this.quizId = parseInt(quizIdParam, 10);
-      this.loadQuiz();
     } else {
-      this.error = 'Invalid quiz ID';
+      this.error = 'Invalid course ID';
       this.isLoading = false;
+      return;
     }
+
+    // Subscribe to route parameter changes to handle quiz navigation
+    this.route.paramMap
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(params => {
+        const quizIdParam = params.get('quizId');
+
+        if (quizIdParam) {
+          this.quizId = parseInt(quizIdParam, 10);
+          this.loadQuiz();
+        } else {
+          this.error = 'Invalid quiz ID';
+          this.isLoading = false;
+        }
+      });
   }
 
   ngOnDestroy(): void {

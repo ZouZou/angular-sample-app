@@ -40,18 +40,32 @@ export class LessonViewerComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    const courseIdParam = this.route.parent?.snapshot.paramMap.get('id');
-    const lessonIdParam = this.route.snapshot.paramMap.get('lessonId');
     this.userId = this.authService.currentUserId || 1;
 
-    if (courseIdParam && lessonIdParam) {
+    // Get course ID from parent route (only once, as it doesn't change)
+    const courseIdParam = this.route.parent?.snapshot.paramMap.get('id');
+    if (courseIdParam) {
       this.courseId = parseInt(courseIdParam, 10);
-      this.lessonId = parseInt(lessonIdParam, 10);
-      this.loadLesson();
     } else {
-      this.error = 'Invalid lesson ID';
+      this.error = 'Invalid course ID';
       this.isLoading = false;
+      return;
     }
+
+    // Subscribe to route parameter changes to handle lesson navigation
+    this.route.paramMap
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(params => {
+        const lessonIdParam = params.get('lessonId');
+
+        if (lessonIdParam) {
+          this.lessonId = parseInt(lessonIdParam, 10);
+          this.loadLesson();
+        } else {
+          this.error = 'Invalid lesson ID';
+          this.isLoading = false;
+        }
+      });
   }
 
   ngOnDestroy(): void {
