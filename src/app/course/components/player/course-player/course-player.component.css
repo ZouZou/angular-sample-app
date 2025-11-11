@@ -308,7 +308,17 @@ mat-panel-description {
   border-radius: 2px;
 }
 
+/* Lessons list - override Angular Material defaults */
 .lesson-list {
+  padding: 0 !important;
+}
+
+/* Override Angular Material's mat-list-item padding */
+.lesson-list .mat-mdc-list-item {
+  padding: 0 !important;
+}
+
+.lesson-list .mat-mdc-list-item-unscoped-content {
   padding: 0 !important;
 }
 
@@ -319,6 +329,15 @@ mat-panel-description {
   padding: 8px 12px !important;
   min-height: auto !important;
   height: auto !important;
+}
+
+/* Remove default Material list item spacing */
+.lesson-item .mdc-list-item__content {
+  padding: 0 !important;
+}
+
+.lesson-item .mat-mdc-list-item-content {
+  padding: 0 !important;
 }
 
 .lesson-item:hover {
