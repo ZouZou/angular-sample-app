@@ -16,31 +16,33 @@
   <div *ngIf="!isLoading && !error && course" class="player-content">
     <!-- Top Navigation Bar -->
     <div class="top-nav-bar">
-      <div class="nav-left">
-        <button mat-icon-button (click)="exitCourse()" class="exit-button" matTooltip="Exit course">
-          <mat-icon>close</mat-icon>
-        </button>
-        <button mat-icon-button (click)="toggleSidebar()" class="sidebar-toggle" matTooltip="Toggle sidebar">
-          <mat-icon>menu</mat-icon>
-        </button>
-        <div class="course-title-section">
-          <h2>{{ course.title }}</h2>
-          <span class="current-lesson-breadcrumb" *ngIf="currentLesson">
-            <mat-icon>play_circle</mat-icon>
-            {{ currentLesson.title }}
-          </span>
+      <div class="header-content">
+        <div class="nav-left">
+          <button mat-icon-button (click)="toggleSidebar()" class="sidebar-toggle" matTooltip="Toggle sidebar">
+            <mat-icon>menu</mat-icon>
+          </button>
+          <div class="course-info">
+            <h2>{{ course.title }}</h2>
+            <span class="current-lesson-breadcrumb" *ngIf="currentLesson">
+              <mat-icon>play_circle</mat-icon>
+              {{ currentLesson.title }}
+            </span>
+          </div>
         </div>
-      </div>
-      <div class="nav-right">
-        <div class="progress-indicator">
-          <span class="progress-text">{{ getCompletedLessons() }} / {{ getTotalLessons() }}</span>
-          <mat-progress-bar
-            mode="determinate"
-            [value]="getProgressPercentage()"
-            class="mini-progress-bar">
-          </mat-progress-bar>
+        <div class="nav-right">
+          <div class="progress-indicator">
+            <span class="progress-text">{{ getCompletedLessons() }} / {{ getTotalLessons() }} lessons</span>
+            <mat-progress-bar
+              mode="determinate"
+              [value]="getProgressPercentage()"
+              class="mini-progress-bar">
+            </mat-progress-bar>
+          </div>
+          <button mat-button (click)="exitCourse()" class="exit-button">
+            <mat-icon>close</mat-icon>
+            Exit Course
+          </button>
         </div>
-        <span class="completion-percentage">{{ getProgressPercentage() }}%</span>
       </div>
     </div>
 
