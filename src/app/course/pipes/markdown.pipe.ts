@@ -15,13 +15,14 @@ export class MarkdownPipe implements PipeTransform {
     for (let para of paragraphs) {
       let html = para;
 
-      // Code blocks with language support - do this FIRST before other replacements
+      // Code blocks with triple backticks - do this FIRST before other replacements
+      // This matches triple backticks specifically (not single or double)
       if (html.match(/```/)) {
-        html = html.replace(/```(\w+)?\n?([\s\S]*?)```/gim, (match, lang, code) => {
+        html = html.replace(/```(\w+)?\s*\n?([\s\S]*?)```/gim, (match, lang, code) => {
           const language = lang || 'plaintext';
           const displayLang = language === 'progress' ? 'OpenEdge 4GL' : language.toUpperCase();
-          // Escape HTML in code
-          const escapedCode = code
+          // Escape HTML in code and trim leading/trailing whitespace
+          const escapedCode = code.trim()
             .replace(/&/g, '&amp;')
             .replace(/</g, '&lt;')
             .replace(/>/g, '&gt;')
@@ -136,8 +137,12 @@ export class MarkdownPipe implements PipeTransform {
   private processInlineMarkdown(text: string): string {
     let html = text;
 
-    // Inline code - do this first before other replacements
-    html = html.replace(/`([^`]+)`/g, '<code class="inline-code">$1</code>');
+    // Inline code - single backticks only (not triple backticks)
+    // Use negative lookahead/lookbehind to avoid matching triple backticks
+    html = html.replace(/(?<!`)(`[^`\n]+`)(?!`)/g, '<code class="inline-code">$1</code>');
+
+    // Remove the backticks from the inline code after wrapping
+    html = html.replace(/<code class="inline-code">`([^`]+)`<\/code>/g, '<code class="inline-code">$1</code>');
 
     // Bold
     html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
