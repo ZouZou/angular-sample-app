@@ -414,8 +414,6 @@ IF NOT errorOccurred THEN
         WITH FRAME resultFrame.
 ```
 
----
-
 ## 🎯 Quiz 1: Foundations (Lessons 1-3)
 
 Test your understanding of the basics!
@@ -460,6 +458,8 @@ D) READ
 1. Asks for the user's first name, last name, and birth year
 2. Calculates their age (assuming current year is 2025)
 3. Displays a personalized greeting with their full name and age
+
+---
 
 ---
 
@@ -767,8 +767,6 @@ DO i = 1 TO 100:
 END.
 ```
 
----
-
 ## 🎯 Quiz 2: Control Flow (Lessons 4-5)
 
 **Question 1:** What statement exits a REPEAT loop immediately?
@@ -817,6 +815,8 @@ D) 5
 1. Asks the user for a number (1-12)
 2. Displays the multiplication table for that number (1 through 10)
 3. Handles invalid input gracefully
+
+---
 
 ---
 
@@ -1242,8 +1242,6 @@ DO:
 END.
 ```
 
----
-
 ## 🎯 Quiz 3: Database and Transactions (Lessons 6-7)
 
 **Question 1:** What keyword makes a FOR EACH loop read-only?
@@ -1289,6 +1287,8 @@ D) Pauses execution
 4. Allows updating their balance
 5. Uses proper transaction and error handling
 6. Confirms success or shows appropriate error messages
+
+---
 
 ---
 
@@ -1706,8 +1706,6 @@ PROCEDURE deleteCustomer:
 END PROCEDURE.
 ```
 
----
-
 ## 🎯 Quiz 4: Procedures and Forms (Lessons 8-9)
 
 **Question 1:** What keyword defines a parameter that returns data FROM a procedure?
@@ -1739,6 +1737,8 @@ D) Displays data to user
 2. A procedure that validates a phone number (must be 10 digits)
 3. A function that formats a phone number (xxx-xxx-xxxx)
 4. A main program that gets user input and uses all three
+
+---
 
 ---
 

@@ -1,0 +1,1300 @@
+[
+  {
+    "number": 1,
+    "title": "FOUNDATIONS",
+    "lessons": [
+      {
+        "number": 1,
+        "title": "Your First OpenEdge Program",
+        "content_start": 108,
+        "content": [
+          "OpenEdge programs use these file extensions:\n",
+          "- `.p` - Procedure files (main programs)\n",
+          "- `.w` - Window files (GUI programs)\n",
+          "- `.i` - Include files (reusable code)\n",
+          "- `.r` - Compiled \"r-code\" files\n",
+          "**Line-by-line explanation:**\n",
+          "1. `/* ... */` - Comments (not executed)\n",
+          "2. `DISPLAY` - Built-in command to show output\n",
+          "3. `\"Hello, World!\"` - Text string to display\n",
+          "4. `.` - Statement terminator (CRITICAL - every statement ends with a period!)\n",
+          "1. **Statements end with periods (.)**\n",
+          "   - NOT semicolons like other languages\n",
+          "   - Forgetting the period = syntax error\n",
+          "2. **Keywords are NOT case-sensitive**\n",
+          "   - `DISPLAY`, `display`, `DiSpLaY` all work\n",
+          "   - Convention: UPPERCASE for keywords\n",
+          "3. **Comments**\n",
+          "   - Block: `/* comment */`\n",
+          "   - Line: `// comment`\n",
+          "4. **Whitespace doesn't matter**\n",
+          "   - Use it for readability\n",
+          "**Exercise 1:** Display your name\n",
+          "**Exercise 2:** Multiple lines\n",
+          "**Exercise 3:** Display with formatting\n",
+          "---\n"
+        ]
+      },
+      {
+        "number": 2,
+        "title": "Variables and Data Types",
+        "content_start": 171,
+        "content": [
+          "Variables are named containers that store data. Like labeled boxes for your information.\n",
+          "**Every variable MUST be defined before use:**\n",
+          "**Syntax breakdown:**\n",
+          "- `DEFINE VARIABLE` - Declares a variable\n",
+          "- `myName` - Variable name (your choice, no spaces)\n",
+          "- `AS CHARACTER` - Data type\n",
+          "- `NO-UNDO` - Don't track in transaction log (use for local variables)\n",
+          "| Data Type | Description | Example Values | Max Size |\n",
+          "|-----------|-------------|----------------|----------|\n",
+          "| **CHARACTER** | Text strings | \"Hello\", \"ABC123\" | 32,000+ chars |\n",
+          "| **INTEGER** | Whole numbers | 42, -10, 0 | -2,147,483,648 to 2,147,483,647 |\n",
+          "| **DECIMAL** | Numbers with decimals | 3.14, 99.99 | Very large range |\n",
+          "| **LOGICAL** | True/False | TRUE, FALSE, ? | 3 values |\n",
+          "| **DATE** | Calendar dates | 12/25/2025 | Dates |\n",
+          "| **DATETIME** | Date + time | 12/25/2025 14:30 | Date & time |\n",
+          "| **INT64** | Large integers | 9223372036854775807 | Very large |\n",
+          "In OpenEdge, `?` represents **unknown or null**:\n",
+          "**Important:** `?` is different from NULL in other languages - you CAN use = and <> with it!\n",
+          "- Start with a letter or underscore\n",
+          "- Can contain letters, numbers, underscores\n",
+          "- NO spaces\n",
+          "- NOT case-sensitive (myName = MyName = MYNAME)\n",
+          "- Avoid keywords (DEFINE, DISPLAY, etc.)\n",
+          "**Good names:** customerName, orderTotal, isActive, temp_value  \n",
+          "**Bad names:** 123name, my name, FOR, class\n",
+          "---\n"
+        ]
+      },
+      {
+        "number": 3,
+        "title": "User Input and Interaction",
+        "content_start": 280,
+        "content": [
+          "The `UPDATE` statement lets users enter data:\n",
+          "Labels make your interface clearer:\n",
+          "Frames control how data is displayed:\n",
+          "Show alerts and get user confirmation:\n",
+          "Test your understanding of the basics!\n",
+          "**Coding Challenge:** Write a program that:\n",
+          "1. Asks for the user's first name, last name, and birth year\n",
+          "2. Calculates their age (assuming current year is 2025)\n",
+          "3. Displays a personalized greeting with their full name and age\n",
+          "---\n",
+          "---\n"
+        ]
+      }
+    ],
+    "quiz": {
+      "title": "Foundations (Lessons 1-3)",
+      "content_start": 416,
+      "questions": [
+        {
+          "number": 1,
+          "text": "What symbol ends EVERY statement in OpenEdge 4GL?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Semicolon (;)"
+            },
+            {
+              "letter": "B",
+              "text": "Period (.)"
+            },
+            {
+              "letter": "C",
+              "text": "Colon (:)"
+            },
+            {
+              "letter": "D",
+              "text": "Exclamation mark (!)"
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "text": "Which keyword displays output to the screen?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "PRINT"
+            },
+            {
+              "letter": "B",
+              "text": "OUTPUT"
+            },
+            {
+              "letter": "C",
+              "text": "DISPLAY"
+            },
+            {
+              "letter": "D",
+              "text": "SHOW"
+            }
+          ]
+        },
+        {
+          "number": 3,
+          "text": "What does `NO-UNDO` mean when defining a variable?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "The variable cannot be changed"
+            },
+            {
+              "letter": "B",
+              "text": "The variable won't track transaction changes (more efficient)"
+            },
+            {
+              "letter": "C",
+              "text": "The variable is read-only"
+            },
+            {
+              "letter": "D",
+              "text": "The variable must be initialized"
+            }
+          ]
+        },
+        {
+          "number": 4,
+          "text": "What is the correct way to define an integer variable named \"count\"?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "`INTEGER count NO-UNDO.`"
+            },
+            {
+              "letter": "B",
+              "text": "`DEFINE count AS INTEGER NO-UNDO.`"
+            },
+            {
+              "letter": "C",
+              "text": "`DEFINE VARIABLE count AS INTEGER NO-UNDO.`"
+            },
+            {
+              "letter": "D",
+              "text": "`VAR count: INTEGER NO-UNDO.`"
+            }
+          ]
+        },
+        {
+          "number": 5,
+          "text": "What does `?` represent in OpenEdge?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "A question to the user"
+            },
+            {
+              "letter": "B",
+              "text": "An error state"
+            },
+            {
+              "letter": "C",
+              "text": "An unknown/null value"
+            },
+            {
+              "letter": "D",
+              "text": "A comment marker"
+            }
+          ]
+        },
+        {
+          "number": 6,
+          "text": "Which statement gets input from the user?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "INPUT"
+            },
+            {
+              "letter": "B",
+              "text": "GET"
+            },
+            {
+              "letter": "C",
+              "text": "UPDATE"
+            },
+            {
+              "letter": "D",
+              "text": "READ"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "number": 2,
+    "title": "CONTROL FLOW",
+    "lessons": [
+      {
+        "number": 4,
+        "title": "Control Structures",
+        "content_start": 467,
+        "content": [
+          "Make decisions in your code:\n",
+          "| Operator | Meaning | Example |\n",
+          "|----------|---------|---------|\n",
+          "| `=` or `EQ` | Equal to | `age = 25` |\n",
+          "| `<>` or `NE` | Not equal | `status <> \"closed\"` |\n",
+          "| `>` or `GT` | Greater than | `price > 100` |\n",
+          "| `<` or `LT` | Less than | `count < 10` |\n",
+          "| `>=` or `GE` | Greater or equal | `score >= 90` |\n",
+          "| `<=` or `LE` | Less or equal | `age <= 65` |\n",
+          "Combine multiple conditions:\n",
+          "Better than multiple IF-ELSE for many options:\n",
+          "---\n"
+        ]
+      },
+      {
+        "number": 5,
+        "title": "Loops and Iteration",
+        "content_start": 608,
+        "content": [
+          "Repeats while condition is TRUE:\n",
+          "Count from one number to another:\n",
+          "Most flexible - repeats indefinitely until LEAVE:\n",
+          "Skip to next iteration:\n",
+          "**Example 1: Sum of Numbers**\n",
+          "**Example 2: Factorial Calculator**\n",
+          "**Example 3: FizzBuzz**\n",
+          "**Coding Challenge:** Write a program that:\n",
+          "1. Asks the user for a number (1-12)\n",
+          "2. Displays the multiplication table for that number (1 through 10)\n",
+          "3. Handles invalid input gracefully\n",
+          "---\n",
+          "---\n"
+        ]
+      }
+    ],
+    "quiz": {
+      "title": "Control Flow (Lessons 4-5)",
+      "content_start": 769,
+      "questions": [
+        {
+          "number": 1,
+          "text": "What statement exits a REPEAT loop immediately?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "EXIT"
+            },
+            {
+              "letter": "B",
+              "text": "BREAK"
+            },
+            {
+              "letter": "C",
+              "text": "LEAVE"
+            },
+            {
+              "letter": "D",
+              "text": "QUIT"
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "text": "How do you check if a variable is NOT equal to 10?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "`variable != 10`"
+            },
+            {
+              "letter": "B",
+              "text": "`variable <> 10` or `variable NE 10`"
+            },
+            {
+              "letter": "C",
+              "text": "`variable NOT 10`"
+            },
+            {
+              "letter": "D",
+              "text": "`variable !== 10`"
+            }
+          ]
+        },
+        {
+          "number": 3,
+          "text": "What will this code display?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "1"
+            },
+            {
+              "letter": "B",
+              "text": "1 2 3"
+            },
+            {
+              "letter": "C",
+              "text": "1 2"
+            },
+            {
+              "letter": "D",
+              "text": "1 2 3 4"
+            }
+          ]
+        },
+        {
+          "number": 4,
+          "text": "Which operator combines two conditions where BOTH must be true?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "OR"
+            },
+            {
+              "letter": "B",
+              "text": "AND"
+            },
+            {
+              "letter": "C",
+              "text": "NOT"
+            },
+            {
+              "letter": "D",
+              "text": "THEN"
+            }
+          ]
+        },
+        {
+          "number": 5,
+          "text": "What does NEXT do in a loop?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Exits the loop"
+            },
+            {
+              "letter": "B",
+              "text": "Skips to the next iteration"
+            },
+            {
+              "letter": "C",
+              "text": "Pauses the loop"
+            },
+            {
+              "letter": "D",
+              "text": "Repeats the current iteration"
+            }
+          ]
+        },
+        {
+          "number": 6,
+          "text": "What is `i MODULO 2` when i = 5?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "0"
+            },
+            {
+              "letter": "B",
+              "text": "1"
+            },
+            {
+              "letter": "C",
+              "text": "2"
+            },
+            {
+              "letter": "D",
+              "text": "5"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "number": 3,
+    "title": "DATABASE OPERATIONS",
+    "lessons": [
+      {
+        "number": 6,
+        "title": "Working with the Database",
+        "content_start": 824,
+        "content": [
+          "OpenEdge has a **built-in database** - no separate setup! The database consists of:\n",
+          "- **Tables**: Store structured data (like Customer, Order, Product)\n",
+          "- **Fields**: Columns in tables (Name, Price, Date)\n",
+          "- **Records**: Rows of data (individual entries)\n",
+          "- **Indexes**: Speed up searches\n",
+          "Display all records from a table:\n",
+          "**Lock Types:**\n",
+          "- `NO-LOCK` - Read-only (fastest, safest for reading)\n",
+          "- `EXCLUSIVE-LOCK` - Lock for editing (one user at a time)\n",
+          "- `SHARE-LOCK` - Multiple readers, blocks writers\n",
+          "**ALWAYS use NO-LOCK when just reading data!**\n",
+          "Find specific records:\n",
+          "**Important:** Always check `AVAILABLE TableName` after FIND!\n",
+          "---\n"
+        ]
+      },
+      {
+        "number": 7,
+        "title": "Transactions and Error Handling",
+        "content_start": 1040,
+        "content": [
+          "A **transaction** is a group of database operations that either:\n",
+          "- **All succeed together**, OR\n",
+          "- **All fail together** (rollback)\n",
+          "This prevents data corruption.\n",
+          "**Example:** Transferring money between accounts:\n",
+          "- Deduct from Account A\n",
+          "- Add to Account B\n",
+          "- Both must happen, or neither should!\n",
+          "If an error occurs, `UNDO` reverses all changes:\n",
+          "Based on the official ABL documentation:\n",
+          "For procedures and functions (from ABL documentation):\n",
+          "Code that ALWAYS runs (success or error):\n",
+          "**Coding Challenge:** Create a program that:\n",
+          "1. Prompts for a customer number\n",
+          "2. Finds that customer in the database\n",
+          "3. Displays their current information\n",
+          "4. Allows updating their balance\n",
+          "5. Uses proper transaction and error handling\n",
+          "6. Confirms success or shows appropriate error messages\n",
+          "---\n",
+          "---\n"
+        ]
+      }
+    ],
+    "quiz": {
+      "title": "Database and Transactions (Lessons 6-7)",
+      "content_start": 1244,
+      "questions": [
+        {
+          "number": 1,
+          "text": "What keyword makes a FOR EACH loop read-only?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "READ-ONLY"
+            },
+            {
+              "letter": "B",
+              "text": "NO-LOCK"
+            },
+            {
+              "letter": "C",
+              "text": "CONST"
+            },
+            {
+              "letter": "D",
+              "text": "READONLY"
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "text": "What happens when you use UNDO in a transaction?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "The program stops"
+            },
+            {
+              "letter": "B",
+              "text": "All changes are reversed"
+            },
+            {
+              "letter": "C",
+              "text": "Only the last change is reversed"
+            },
+            {
+              "letter": "D",
+              "text": "An error message appears"
+            }
+          ]
+        },
+        {
+          "number": 3,
+          "text": "How do you check if a FIND successfully found a record?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "`IF FOUND THEN`"
+            },
+            {
+              "letter": "B",
+              "text": "`IF AVAILABLE TableName THEN`"
+            },
+            {
+              "letter": "C",
+              "text": "`IF EXISTS THEN`"
+            },
+            {
+              "letter": "D",
+              "text": "`IF RECORD-FOUND THEN`"
+            }
+          ]
+        },
+        {
+          "number": 4,
+          "text": "Which lock type should you use when reading data?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "EXCLUSIVE-LOCK"
+            },
+            {
+              "letter": "B",
+              "text": "NO-LOCK"
+            },
+            {
+              "letter": "C",
+              "text": "SHARE-LOCK"
+            },
+            {
+              "letter": "D",
+              "text": "READ-LOCK"
+            }
+          ]
+        },
+        {
+          "number": 5,
+          "text": "What does NO-ERROR do?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Prevents all errors"
+            },
+            {
+              "letter": "B",
+              "text": "Suppresses automatic error messages"
+            },
+            {
+              "letter": "C",
+              "text": "Fixes errors automatically"
+            },
+            {
+              "letter": "D",
+              "text": "Logs errors to a file"
+            }
+          ]
+        },
+        {
+          "number": 6,
+          "text": "What does LEAVE do in a transaction?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Commits the transaction"
+            },
+            {
+              "letter": "B",
+              "text": "Exits the transaction block"
+            },
+            {
+              "letter": "C",
+              "text": "Rolls back changes"
+            },
+            {
+              "letter": "D",
+              "text": "Pauses execution"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "number": 4,
+    "title": "MODULAR PROGRAMMING",
+    "lessons": [
+      {
+        "number": 8,
+        "title": "Procedures and Functions",
+        "content_start": 1296,
+        "content": [
+          "- **Reusability**: Write once, use many times\n",
+          "- **Organization**: Break large programs into manageable pieces\n",
+          "- **Maintainability**: Fix bugs in one place\n",
+          "- **Readability**: Make code easier to understand\n",
+          "Procedures within the same file:\n",
+          "Based on ABL documentation:\n",
+          "Call procedures from other files:\n",
+          "Functions return a single value:\n",
+          "1. **Single Responsibility**: Each procedure/function does ONE thing well\n",
+          "2. **Clear Names**: Use descriptive names (calculateTax, validateEmail)\n",
+          "3. **Document Parameters**: Comment what each parameter does\n",
+          "4. **Error Handling**: Handle errors within procedures\n",
+          "5. **Return Values**: Functions for calculations, procedures for operations\n",
+          "---\n"
+        ]
+      },
+      {
+        "number": 9,
+        "title": "Building Data Entry Forms",
+        "content_start": 1531,
+        "content": [
+          "**Coding Challenge:** Create a program with:\n",
+          "1. A procedure that validates an email address (must contain @)\n",
+          "2. A procedure that validates a phone number (must be 10 digits)\n",
+          "3. A function that formats a phone number (xxx-xxx-xxxx)\n",
+          "4. A main program that gets user input and uses all three\n",
+          "---\n",
+          "---\n"
+        ]
+      }
+    ],
+    "quiz": {
+      "title": "Procedures and Forms (Lessons 8-9)",
+      "content_start": 1708,
+      "questions": [
+        {
+          "number": 1,
+          "text": "What keyword defines a parameter that returns data FROM a procedure?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "RETURN"
+            },
+            {
+              "letter": "B",
+              "text": "OUTPUT"
+            },
+            {
+              "letter": "C",
+              "text": "EXPORT"
+            },
+            {
+              "letter": "D",
+              "text": "OUT"
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "text": "How do you call an internal procedure named \"calculateTotal\"?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "`CALL calculateTotal.`"
+            },
+            {
+              "letter": "B",
+              "text": "`RUN calculateTotal.`"
+            },
+            {
+              "letter": "C",
+              "text": "`EXECUTE calculateTotal.`"
+            },
+            {
+              "letter": "D",
+              "text": "`calculateTotal().`"
+            }
+          ]
+        },
+        {
+          "number": 3,
+          "text": "What's the difference between a procedure and a function?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Procedures are faster"
+            },
+            {
+              "letter": "B",
+              "text": "Functions return a single value, procedures can have multiple outputs"
+            },
+            {
+              "letter": "C",
+              "text": "Functions can't have parameters"
+            },
+            {
+              "letter": "D",
+              "text": "There is no difference"
+            }
+          ]
+        },
+        {
+          "number": 4,
+          "text": "What does INPUT-OUTPUT parameter do?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Only receives data"
+            },
+            {
+              "letter": "B",
+              "text": "Only returns data"
+            },
+            {
+              "letter": "C",
+              "text": "Receives data and can modify it"
+            },
+            {
+              "letter": "D",
+              "text": "Displays data to user"
+            }
+          ]
+        },
+        {
+          "number": 1,
+          "text": "What keyword creates a new object instance?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "CREATE"
+            },
+            {
+              "letter": "B",
+              "text": "NEW"
+            },
+            {
+              "letter": "C",
+              "text": "INSTANCE"
+            },
+            {
+              "letter": "D",
+              "text": "MAKE"
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "text": "What is inheritance?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Copying code between files"
+            },
+            {
+              "letter": "B",
+              "text": "A class extending another class"
+            },
+            {
+              "letter": "C",
+              "text": "Sharing variables"
+            },
+            {
+              "letter": "D",
+              "text": "Importing libraries"
+            }
+          ]
+        },
+        {
+          "number": 3,
+          "text": "How do you access a property in an object?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "object.property"
+            },
+            {
+              "letter": "B",
+              "text": "object->property"
+            },
+            {
+              "letter": "C",
+              "text": "object:property"
+            },
+            {
+              "letter": "D",
+              "text": "object::property"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "number": 5,
+    "title": "ADVANCED CONCEPTS",
+    "lessons": [
+      {
+        "number": 10,
+        "title": "Object-Oriented Programming",
+        "content_start": 1746,
+        "content": [
+          "Object-Oriented Programming organizes code into **classes** (blueprints) and **objects** (instances).\n",
+          "**Key Concepts:**\n",
+          "- **Class**: Template for creating objects\n",
+          "- **Object**: Instance of a class\n",
+          "- **Properties**: Data in a class\n",
+          "- **Methods**: Functions in a class\n",
+          "- **Inheritance**: Classes inheriting from other classes\n",
+          "---\n"
+        ]
+      },
+      {
+        "number": 11,
+        "title": "Reports and Queries",
+        "content_start": 1859,
+        "content": [
+          "---\n"
+        ]
+      },
+      {
+        "number": 12,
+        "title": "Web Services and Modern Integration",
+        "content_start": 1938,
+        "content": [
+          "OpenEdge can create and consume REST services:\n",
+          "---\n",
+          "**Coding Challenge:** Create a simple class hierarchy:\n",
+          "1. Base class: BankAccount (properties: accountNumber, balance)\n",
+          "2. Derived class: SavingsAccount (adds: interestRate)\n",
+          "3. Methods: deposit, withdraw, displayInfo\n",
+          "4. Test program that creates both types of accounts\n",
+          "---\n",
+          "**1. Customer Management System**\n",
+          "- Add/edit/delete customers\n",
+          "- Search and filter\n",
+          "- Generate reports\n",
+          "- Transaction handling\n",
+          "**2. Inventory Tracker**\n",
+          "- Track products and quantities\n",
+          "- Alert on low stock\n",
+          "- Calculate values\n",
+          "- Order management\n",
+          "**3. Order Processing System**\n",
+          "- Create orders with line items\n",
+          "- Calculate totals and taxes\n",
+          "- Track order status\n",
+          "- Customer integration\n",
+          "**Official Documentation:**\n",
+          "- Progress OpenEdge Documentation: https://docs.progress.com\n",
+          "- ABL Reference Guide (used in this tutorial!)\n",
+          "- Progress Community Forums\n",
+          "**Learning Paths:**\n",
+          "- Progress Education Community (free courses)\n",
+          "- OpenEdge Developer Certification\n",
+          "- Advanced OpenEdge topics\n",
+          "**Advanced Topics:**\n",
+          "- PASOE (Progress Application Server)\n",
+          "- Mobile development\n",
+          "- Cloud deployment\n",
+          "- Performance optimization\n",
+          "- Security best practices\n",
+          "---\n",
+          "Track your journey:\n",
+          "✅ **Phase 1 - Foundations**\n",
+          "- Lesson 1: Basic syntax ✅\n",
+          "- Lesson 2: Variables and data types ✅\n",
+          "- Lesson 3: User input ✅\n",
+          "✅ **Phase 2 - Control Flow**\n",
+          "- Lesson 4: Control structures ✅\n",
+          "- Lesson 5: Loops ✅\n",
+          "✅ **Phase 3 - Database**\n",
+          "- Lesson 6: Database operations ✅\n",
+          "- Lesson 7: Transactions and error handling ✅\n",
+          "✅ **Phase 4 - Modular Programming**\n",
+          "- Lesson 8: Procedures and functions ✅\n",
+          "- Lesson 9: Data entry forms ✅\n",
+          "✅ **Phase 5 - Advanced**\n",
+          "- Lesson 10: OOP ✅\n",
+          "- Lesson 11: Reports ✅\n",
+          "- Lesson 12: Web services ✅\n",
+          "---\n",
+          "**What would you like to do next?**\n",
+          "1. **Review Lessons** - Go through any lesson again\n",
+          "2. **Practice Quizzes** - Test your knowledge\n",
+          "3. **Build Projects** - Create real applications\n",
+          "4. **Ask Questions** - Get help on specific topics\n",
+          "5. **Advanced Topics** - Dive deeper into specialized areas\n",
+          "Let me know how I can help you master OpenEdge 4GL! 🚀\n",
+          "---\n",
+          "---\n",
+          "**Congratulations on completing the core modules!** You now have a solid foundation in OpenEdge 4GL.\n",
+          "This advanced module covers professional-level concepts that separate junior developers from senior developers. These topics are essential for building enterprise-grade applications.\n",
+          "Understanding how variables work at different scope levels\n",
+          "Reusable code patterns and file management\n",
+          "High-performance data structures\n",
+          "Managing related data collections\n",
+          "Session-wide data management\n",
+          "Advanced scope control and class variables\n",
+          "Enterprise development standards\n",
+          "---\n"
+        ]
+      },
+      {
+        "number": 13,
+        "title": "Variable Scopes and Visibility - Deep Dive",
+        "content_start": 2128,
+        "content": [
+          "---\n",
+          "1. [Variable Scopes and Visibility](#variable-scopes)\n",
+          "2. [Include Files (.i)](#include-files)\n",
+          "3. [Temp-Tables](#temp-tables)\n",
+          "4. [DataSets (ProDataSets)](#datasets)\n",
+          "5. [Shared Temp-Tables and Global Variables](#shared-and-global)\n",
+          "6. [Scoped Variable Definitions](#scoped-definitions)\n",
+          "7. [Best Practices](#best-practices)\n",
+          "---\n"
+        ]
+      },
+      {
+        "number": 1,
+        "title": "Variable Scopes and Visibility",
+        "content_start": 2146,
+        "content": [
+          "**Scope** determines where a variable can be accessed in your program. OpenEdge has several scope levels:\n",
+          "Variables defined in a block are only visible within that block:\n",
+          "Variables defined at the top of a procedure are visible throughout that procedure and its internal procedures:\n",
+          "Variables defined inside internal procedures are **local** to that procedure:\n",
+          "Parameters are visible only within the procedure that defines them:\n",
+          "External procedures have their own separate scope:\n",
+          "---\n"
+        ]
+      },
+      {
+        "number": 2,
+        "title": "Include Files (.i)",
+        "content_start": 2309,
+        "content": [
+          "Include files (`.i` extension) contain reusable code that can be inserted into multiple programs at compile time.\n",
+          "Include files can accept parameters for customization:\n",
+          "**Using parametrized include:**\n",
+          "**Using named parameters:**\n",
+          "**Common pattern for temp-table definitions:**\n",
+          "**Using in multiple programs:**\n",
+          "**Problem:** Multiple includes with same variable names\n",
+          "**Solution 1: Use Different Variable Names**\n",
+          "**Solution 2: Use Conditional Preprocessor**\n",
+          "1. **Use for common definitions only**\n",
+          "   - Constants\n",
+          "   - Temp-table definitions\n",
+          "   - Common variable sets\n",
+          "2. **Avoid logic in includes**\n",
+          "   - Don't put procedures in includes\n",
+          "   - Keep includes declarative\n",
+          "3. **Document parameters**\n",
+          "4. **Use unique prefixes**\n",
+          "---\n"
+        ]
+      },
+      {
+        "number": 3,
+        "title": "Temp-Tables",
+        "content_start": 2495,
+        "content": [
+          "**Temp-tables** (temporary tables) are in-memory data structures similar to database tables, but they exist only during program execution.\n",
+          "Indexes improve query performance:\n",
+          "Create temp-tables at runtime:\n",
+          "Store multiple values in a single field:\n",
+          "---\n"
+        ]
+      },
+      {
+        "number": 4,
+        "title": "DataSets (ProDataSets)",
+        "content_start": 2741,
+        "content": [
+          "**DataSets** (ProDataSets) are collections of related temp-tables with defined relationships, similar to a relational database structure in memory.\n",
+          "Automatically populate related temp-tables:\n",
+          "---\n"
+        ]
+      },
+      {
+        "number": 5,
+        "title": "Shared Temp-Tables and Global Variables",
+        "content_start": 2960,
+        "content": [
+          "**NEW SHARED** creates a temp-table that can be shared with called procedures:\n",
+          "**NEW GLOBAL SHARED** creates a temp-table visible to the entire ABL session:\n",
+          "Regular variables can also be GLOBAL SHARED:\n",
+          "---\n"
+        ]
+      },
+      {
+        "number": 6,
+        "title": "Scoped Variable Definitions",
+        "content_start": 3188,
+        "content": [
+          "When same name exists at multiple levels, innermost scope wins:\n",
+          "---\n"
+        ]
+      },
+      {
+        "number": 7,
+        "title": "Best Practices",
+        "content_start": 3333,
+        "content": [
+          "✅ **DO:**\n",
+          "- Use most restrictive scope possible\n",
+          "- Use NO-UNDO for all local variables\n",
+          "- Define variables close to where used\n",
+          "- Use descriptive names to avoid conflicts\n",
+          "- Document shared variables clearly\n",
+          "❌ **DON'T:**\n",
+          "- Use GLOBAL SHARED unless absolutely necessary\n",
+          "- Define variables at procedure level if only used in internal proc\n",
+          "- Use same variable names at different scope levels\n",
+          "- Forget NO-UNDO (causes performance issues)\n",
+          "✅ **DO:**\n",
+          "- Use for common definitions only\n",
+          "- Include guards to prevent double-inclusion\n",
+          "- Document parameters clearly\n",
+          "- Keep includes declarative (no logic)\n",
+          "- Version control include files\n",
+          "❌ **DON'T:**\n",
+          "- Put procedures in includes\n",
+          "- Circular includes\n",
+          "- Overuse - prefer parameters\n",
+          "- Duplicate variable names across includes\n",
+          "✅ **DO:**\n",
+          "- Always define indexes for lookup fields\n",
+          "- Use NO-UNDO in definition\n",
+          "- Use LIKE for database-based temp-tables\n",
+          "- Document temp-table purpose\n",
+          "- Clean up when done (especially dynamic)\n",
+          "❌ **DON'T:**\n",
+          "- Forget indexes (kills performance)\n",
+          "- Leave large temp-tables in memory\n",
+          "- Use temp-tables as global variables\n",
+          "- Ignore buffer management\n",
+          "✅ **DO:**\n",
+          "- Use for related data structures\n",
+          "- Define relationships clearly\n",
+          "- Enable tracking when needed\n",
+          "- Document dataset structure\n",
+          "- Use FILL for automatic population\n",
+          "❌ **DON'T:**\n",
+          "- Use for simple single-table operations\n",
+          "- Forget to define indexes on relation fields\n",
+          "- Leave tracking on when not needed\n",
+          "- Nest too deeply (performance)\n",
+          "✅ **DO:**\n",
+          "- Document why sharing is needed\n",
+          "- Use descriptive global names (g prefix)\n",
+          "- Minimize global variable count\n",
+          "- Consider alternatives first\n",
+          "- Clean up when done\n",
+          "❌ **DON'T:**\n",
+          "- Default to global variables\n",
+          "- Use for simple data passing\n",
+          "- Forget thread-safety concerns\n",
+          "- Leave unused global variables\n",
+          "---\n",
+          "| **Concept** | **Keyword** | **Scope** | **Use Case** |\n",
+          "|-------------|-------------|-----------|--------------|\n",
+          "| Local Variable | `DEFINE VARIABLE` | Block/Procedure | Most common |\n",
+          "| Shared Variable | `DEFINE NEW SHARED` | Procedure chain | Pass to children |\n",
+          "| Global Variable | `DEFINE NEW GLOBAL SHARED` | Session | Rare, session-wide data |\n",
+          "| Temp-Table | `DEFINE TEMP-TABLE` | Procedure | In-memory data |\n",
+          "| Shared TT | `DEFINE NEW SHARED TEMP-TABLE` | Procedure chain | Share with children |\n",
+          "| Global TT | `DEFINE NEW GLOBAL SHARED TEMP-TABLE` | Session | Session-wide data |\n",
+          "| DataSet | `DEFINE DATASET` | Procedure | Related temp-tables |\n",
+          "| Include File | `{file.i}` | Compile-time | Reusable definitions |\n",
+          "| Static Class Var | `DEFINE STATIC` | Class/Session | Shared across instances |\n",
+          "| Private Class Var | `DEFINE PRIVATE` | Class | Internal only |\n",
+          "| Protected Class Var | `DEFINE PROTECTED` | Class hierarchy | Subclass access |\n",
+          "---\n",
+          "Create a program with three levels of variable scope and demonstrate which variables are visible where.\n",
+          "Create an include file for a temp-table definition and use it in two different programs.\n",
+          "Build a temp-table with at least 3 indexes and populate it with sample data.\n",
+          "Create a dataset with 3 related temp-tables (e.g., Customer -> Order -> OrderLine).\n",
+          "Implement a configuration system using GLOBAL SHARED variables.\n",
+          "---\n",
+          "1. **Scope matters** - Use the most restrictive scope needed\n",
+          "2. **NO-UNDO always** - For local variables, performance matters\n",
+          "3. **Include files** - Great for definitions, bad for logic\n",
+          "4. **Temp-tables** - Powerful in-memory data structures\n",
+          "5. **DataSets** - Perfect for related data collections\n",
+          "6. **Global carefully** - Use sparingly, document thoroughly\n",
+          "7. **Shared vs Parameters** - Prefer explicit parameters when possible\n",
+          "---\n",
+          "You now have comprehensive knowledge of:\n",
+          "- ✅ Variable scoping at all levels\n",
+          "- ✅ Include file usage and best practices\n",
+          "- ✅ Temp-table creation and manipulation\n",
+          "- ✅ DataSet relationships and operations\n",
+          "- ✅ Shared and global scope management\n",
+          "- ✅ Scoped variable definitions\n",
+          "Ready to apply this knowledge? Try building a complete application using temp-tables, datasets, and proper scoping!\n",
+          "---\n",
+          "Build a complete application integrating everything you've learned.\n",
+          "- Customer table with SHARED temp-table\n",
+          "- Order and OrderLine tables  \n",
+          "- Product inventory with DataSet\n",
+          "- Transaction logging\n",
+          "- Customer CRUD with proper scoping\n",
+          "- Order entry with temp-tables\n",
+          "- Inventory management\n",
+          "- Transaction handling with full error recovery\n",
+          "- Include files for common definitions\n",
+          "- Shared temp-tables across modules\n",
+          "- DataSets for complex queries\n",
+          "- Comprehensive error handling\n",
+          "- Customer summary reports\n",
+          "- Sales analysis with datasets\n",
+          "- Inventory status reports\n",
+          "- Audit trail reports\n",
+          "1. Complete working application\n",
+          "2. Include files for reusable code\n",
+          "3. Documentation of scope decisions\n",
+          "4. Error handling strategy document\n",
+          "5. Test plan with results\n",
+          "- ✅ Proper variable scoping throughout\n",
+          "- ✅ Effective use of include files\n",
+          "- ✅ Temp-tables for performance\n",
+          "- ✅ DataSets for related data\n",
+          "- ✅ Appropriate use of shared vs. local\n",
+          "- ✅ Robust error handling\n",
+          "- ✅ Professional code organization\n",
+          "- ✅ Complete documentation\n",
+          "---\n",
+          "**Section A: Foundations (20 questions)**\n",
+          "Covers Modules 1-2: Basic syntax, variables, control flow, loops\n",
+          "**Section B: Database Operations (20 questions)**  \n",
+          "Covers Module 3: Reading, writing, transactions, error handling\n",
+          "**Section C: Modular Programming (15 questions)**\n",
+          "Covers Module 4: Procedures, functions, forms\n",
+          "**Section D: Advanced Concepts (15 questions)**\n",
+          "Covers Module 5: OOP, reports, web services  \n",
+          "**Section E: Professional Topics (30 questions)**\n",
+          "Covers Module 6: Scopes, includes, temp-tables, datasets, best practices\n",
+          "**Total: 100 questions**\n",
+          "**Passing Score: 70% (70/100)**\n",
+          "**Certificate Levels:**\n",
+          "- 90-100: **OpenEdge Expert** ⭐⭐⭐\n",
+          "- 80-89: **OpenEdge Professional** ⭐⭐\n",
+          "- 70-79: **OpenEdge Practitioner** ⭐\n",
+          "---\n",
+          "- [Progress OpenEdge Documentation](https://docs.progress.com)\n",
+          "- [ABL Language Reference](https://docs.progress.com/bundle/abl-reference)\n",
+          "- [Progress Community Forums](https://community.progress.com)\n",
+          "- sports2000 (demo database included with OpenEdge)\n",
+          "- Sample business databases from Progress\n",
+          "- Progress OpenEdge Developer Certification\n",
+          "- Progress Education Community courses\n",
+          "- \"OpenEdge Development: Progress 4GL Handbook\" by John Sadd\n",
+          "- Progress OpenEdge official documentation\n",
+          "- ProgressTalk.com forums\n",
+          "- Stack Overflow (openedge, progress-4gl tags)\n",
+          "- Progress Community Portal\n",
+          "---\n",
+          "**Module 1: Foundations**\n",
+          "- Basic syntax and program structure\n",
+          "- Variables and all data types\n",
+          "- User input and interaction\n",
+          "- Understanding the \"?\" value\n",
+          "**Module 2: Control Flow**\n",
+          "- IF-THEN-ELSE decision making\n",
+          "- CASE statements for multiple conditions\n",
+          "- All loop types (DO WHILE, DO...TO, REPEAT)\n",
+          "- Loop control with LEAVE and NEXT\n",
+          "**Module 3: Database Mastery**\n",
+          "- FOR EACH for reading records\n",
+          "- FIND for specific records\n",
+          "- Create, Update, Delete operations\n",
+          "- Proper locking strategies\n",
+          "- Transactions and UNDO\n",
+          "- Modern error handling with CATCH\n",
+          "**Module 4: Modular Programming**\n",
+          "- Internal and external procedures\n",
+          "- User-defined functions\n",
+          "- Parameter types (INPUT, OUTPUT, INPUT-OUTPUT)\n",
+          "- Building data entry forms\n",
+          "- Complete CRUD applications\n",
+          "**Module 5: Advanced Structures**\n",
+          "- Object-oriented programming basics\n",
+          "- Class definitions and inheritance\n",
+          "- Complex reporting and queries\n",
+          "- Web services and REST APIs\n",
+          "- JSON handling\n",
+          "**Module 6: Professional Topics**\n",
+          "- Variable scope at all levels (block, procedure, session)\n",
+          "- Include files for code reuse\n",
+          "- Temp-tables for in-memory data\n",
+          "- DataSets for related data structures\n",
+          "- Shared and global variables\n",
+          "- Scoped definitions (PRIVATE, PROTECTED, STATIC)\n",
+          "- Enterprise best practices\n",
+          "---\n",
+          "1. **OpenEdge Application Developer**\n",
+          "   - Build and maintain business applications\n",
+          "   - Enhance existing systems\n",
+          "   - Typical salary: $70,000-$110,000\n",
+          "2. **OpenEdge Database Administrator**\n",
+          "   - Manage databases and performance\n",
+          "   - Backup and recovery\n",
+          "   - Typical salary: $75,000-$120,000\n",
+          "3. **OpenEdge Architect**\n",
+          "   - Design enterprise solutions\n",
+          "   - Lead development teams\n",
+          "   - Typical salary: $100,000-$150,000+\n",
+          "- **Advanced OpenEdge Courses**: PASOE, Mobile, Cloud\n",
+          "- **Specialized Topics**: Performance tuning, Security\n",
+          "- **Integration**: Web services, REST APIs, External systems\n",
+          "- **Modern UI**: Build responsive interfaces\n",
+          "- Contribute to open-source OpenEdge projects\n",
+          "- Answer questions on ProgressTalk\n",
+          "- Share your knowledge and experiences\n",
+          "- Network with other developers\n",
+          "---\n",
+          "This course was designed with the Interactive Tutor methodology to provide:\n",
+          "- Progressive complexity\n",
+          "- Multi-modal learning (explanations, examples, practice, assessments)\n",
+          "- Adaptive teaching based on quiz performance\n",
+          "- Real-world applications\n",
+          "- Comprehensive coverage\n",
+          "If you need clarification on any topic:\n",
+          "1. Review the relevant lesson\n",
+          "2. Try the practice exercises again\n",
+          "3. Check the quiz explanations\n",
+          "4. Consult the official documentation\n",
+          "5. Ask in OpenEdge communities\n",
+          "Completed the course? Great! Share your achievement:\n",
+          "- LinkedIn profile update\n",
+          "- Progress Community profile\n",
+          "- Connect with other OpenEdge developers\n",
+          "- Consider mentoring new learners\n",
+          "---\n",
+          "**You've completed the comprehensive OpenEdge 4GL course!**\n",
+          "You now have:\n",
+          "✅ Solid understanding of OpenEdge 4GL fundamentals\n",
+          "✅ Database operation expertise\n",
+          "✅ Ability to build complete applications\n",
+          "✅ Knowledge of advanced professional topics\n",
+          "✅ Best practices for enterprise development\n",
+          "✅ Foundation for specialized topics\n",
+          "**You're ready to:**\n",
+          "- Build production-quality applications\n",
+          "- Maintain existing enterprise systems\n",
+          "- Join development teams confidently\n",
+          "- Continue learning advanced topics\n",
+          "- Pursue OpenEdge certification\n",
+          "OpenEdge 4GL is a powerful language that has stood the test of time. The skills you've learned here will serve you well in building robust, business-critical applications. \n",
+          "Remember:\n",
+          "- Practice regularly to solidify your knowledge\n",
+          "- Build real projects to gain experience\n",
+          "- Stay connected with the community\n",
+          "- Keep learning and growing\n",
+          "- Share your knowledge with others\n",
+          "**Thank you for choosing this course. Best of luck in your OpenEdge development journey!** 🚀\n",
+          "---\n",
+          "**Safe Database Read:**\n",
+          "**Safe Database Update:**\n",
+          "**Temp-Table Definition:**\n",
+          "**DataSet Definition:**\n",
+          "**Include File Usage:**\n",
+          "**Development Environment:**\n",
+          "- F2: Check syntax\n",
+          "- F3: Compile\n",
+          "- F5: Run\n",
+          "- F9: Toggle breakpoint\n",
+          "- Ctrl+Space: Auto-complete\n",
+          "- `main.p` - Main program\n",
+          "- `utils.p` - Utility procedures\n",
+          "- `customer-crud.p` - Customer CRUD operations\n",
+          "- `definitions.i` - Common definitions\n",
+          "- `tt-customer.i` - Temp-table definitions\n",
+          "- `Customer.cls` - Customer class\n",
+          "---\n",
+          "*Course Version: 2.0*  \n",
+          "*Last Updated: November 2025*  \n",
+          "*Based on OpenEdge 12.x*\n",
+          "**End of Course** 🎓\n"
+        ]
+      }
+    ],
+    "quiz": null
+  }
+]
