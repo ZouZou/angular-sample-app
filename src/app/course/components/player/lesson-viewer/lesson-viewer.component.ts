@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -13,7 +13,8 @@ import { Lesson } from '../../../models/curriculum.interface';
   selector: 'app-lesson-viewer',
   templateUrl: './lesson-viewer.component.html',
   styleUrls: ['./lesson-viewer.component.css'],
-  standalone: false
+  standalone: false,
+  encapsulation: ViewEncapsulation.None
 })
 export class LessonViewerComponent implements OnInit, OnDestroy {
   lesson: Lesson | null = null;
