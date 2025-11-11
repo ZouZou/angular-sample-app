@@ -30,43 +30,57 @@
 
 /* Enhanced Top Navigation Bar */
 .top-nav-bar {
-  background-color: #ffffff;
-  border-bottom: 1px solid #e0e0e0;
-  padding: 12px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 24px;
   position: sticky;
   top: 0;
   z-index: 1000;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.header-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
 }
 
 .nav-left {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
   flex: 1;
   min-width: 0;
 }
 
-.exit-button,
 .sidebar-toggle {
-  color: #616161;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
 }
 
-.course-title-section {
+.sidebar-toggle:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.course-info {
   display: flex;
   flex-direction: column;
   min-width: 0;
   flex: 1;
 }
 
-.course-title-section h2 {
+.course-info h2 {
   margin: 0;
-  font-size: 1.125rem;
+  font-size: 1.5rem;
   font-weight: 600;
-  color: #212121;
+  color: white;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -76,19 +90,20 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 0.8125rem;
-  color: #757575;
-  margin-top: 2px;
+  font-size: 0.875rem;
+  color: white;
+  opacity: 0.9;
+  margin-top: 4px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .current-lesson-breadcrumb mat-icon {
-  font-size: 14px;
-  width: 14px;
-  height: 14px;
-  color: #1976d2;
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  color: white;
 }
 
 .nav-right {
@@ -100,27 +115,40 @@
 .progress-indicator {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  min-width: 150px;
+  gap: 6px;
+  min-width: 180px;
 }
 
 .progress-text {
-  font-size: 0.75rem;
-  color: #616161;
+  font-size: 0.875rem;
+  color: white;
   font-weight: 500;
+  opacity: 0.95;
 }
 
 .mini-progress-bar {
-  height: 6px;
-  border-radius: 3px;
+  height: 8px;
+  border-radius: 4px;
+  background-color: rgba(255, 255, 255, 0.2);
 }
 
-.completion-percentage {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #1976d2;
-  min-width: 45px;
-  text-align: right;
+.mini-progress-bar::ng-deep .mat-mdc-progress-bar-fill::after {
+  background-color: white !important;
+}
+
+.exit-button {
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.exit-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
 }
 
 .player-main {
@@ -512,35 +540,56 @@ mat-panel-description {
     min-width: 60px;
   }
 
-  .course-title-section h2 {
-    font-size: 1rem;
+  .course-info h2 {
+    font-size: 1.25rem;
   }
 
   .nav-button {
     min-width: 140px;
     padding: 0 16px;
   }
+
+  .progress-indicator {
+    min-width: 150px;
+  }
 }
 
 @media (max-width: 768px) {
   .top-nav-bar {
-    padding: 10px 12px;
+    padding: 20px 16px;
+  }
+
+  .header-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .nav-left {
+    width: 100%;
   }
 
   .nav-right {
-    gap: 8px;
+    width: 100%;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .course-info h2 {
+    font-size: 1.125rem;
   }
 
   .progress-indicator {
-    min-width: 100px;
-  }
-
-  .completion-percentage {
-    font-size: 0.875rem;
+    min-width: 120px;
+    flex: 1;
   }
 
   .current-lesson-breadcrumb {
     display: none;
+  }
+
+  .exit-button {
+    white-space: nowrap;
   }
 
   .sidebar {
@@ -581,12 +630,12 @@ mat-panel-description {
 }
 
 @media (max-width: 480px) {
-  .course-title-section h2 {
-    font-size: 0.875rem;
+  .course-info h2 {
+    font-size: 1rem;
   }
 
   .progress-text {
-    font-size: 0.6875rem;
+    font-size: 0.75rem;
   }
 
   .nav-button {
@@ -595,6 +644,10 @@ mat-panel-description {
   }
 
   .nav-button span:not(.mat-button-wrapper) {
+    display: none;
+  }
+
+  .exit-button span {
     display: none;
   }
 }
