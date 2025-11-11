@@ -222,31 +222,47 @@
   border: 1px solid #e0e0e0;
 }
 
+/* Code Block Wrapper - Enhanced visual separation */
+.text-content .code-block-wrapper {
+  margin: 32px 0;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  border: 1px solid #e0e0e0;
+  background-color: #1e1e1e;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.text-content .code-block-wrapper:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.text-content .code-block-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.text-content .code-language-label {
+  color: white;
+  font-weight: 700;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
 .text-content pre.code-block {
   background-color: #1e1e1e;
   color: #d4d4d4;
-  padding: 20px;
-  border-radius: 8px;
+  padding: 24px;
+  margin: 0;
   overflow-x: auto;
-  margin: 24px 0;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  position: relative;
-}
-
-.text-content pre.code-block::before {
-  content: attr(class);
-  position: absolute;
-  top: 8px;
-  right: 12px;
-  font-size: 0.7rem;
-  color: #888;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.text-content pre.code-block.language-progress::before {
-  content: 'OpenEdge 4GL';
-  color: #4fc3f7;
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .text-content pre.code-block code {

@@ -12,8 +12,10 @@ export class MarkdownPipe implements PipeTransform {
     let html = value;
 
     // Code blocks with language support - do this FIRST before other replacements
+    // Wrap code blocks in a container div for better separation
     html = html.replace(/```(\w+)?\n([\s\S]*?)```/gim, (match, lang, code) => {
       const language = lang || 'plaintext';
+      const displayLang = language === 'progress' ? 'OpenEdge 4GL' : language.toUpperCase();
       // Escape HTML in code
       const escapedCode = code
         .replace(/&/g, '&amp;')
@@ -21,7 +23,7 @@ export class MarkdownPipe implements PipeTransform {
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#039;');
-      return `<pre class="code-block language-${language}"><code>${escapedCode}</code></pre>`;
+      return `<div class="code-block-wrapper"><div class="code-block-header"><span class="code-language-label">${displayLang}</span></div><pre class="code-block language-${language}"><code>${escapedCode}</code></pre></div>`;
     });
 
     // Inline code - do this before other replacements

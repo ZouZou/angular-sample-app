@@ -824,58 +824,7 @@ IF NOT errorOccurred THEN
     DISPLAY 
         num1 operation num2 "=" result FORMAT ">>>,>>9.99"
         WITH FRAME resultFrame.
-\`\`\`
-
----
-
-## 🎯 Quiz 1: Foundations (Lessons 1-3)
-
-Test your understanding of the basics!
-
-**Question 1:** What symbol ends EVERY statement in OpenEdge 4GL?
-A) Semicolon (;)  
-B) Period (.)  
-C) Colon (:)  
-D) Exclamation mark (!)  
-
-**Question 2:** Which keyword displays output to the screen?
-A) PRINT  
-B) OUTPUT  
-C) DISPLAY  
-D) SHOW  
-
-**Question 3:** What does \`NO-UNDO\` mean when defining a variable?
-A) The variable cannot be changed  
-B) The variable won't track transaction changes (more efficient)  
-C) The variable is read-only  
-D) The variable must be initialized  
-
-**Question 4:** What is the correct way to define an integer variable named "count"?
-A) \`INTEGER count NO-UNDO.\`  
-B) \`DEFINE count AS INTEGER NO-UNDO.\`  
-C) \`DEFINE VARIABLE count AS INTEGER NO-UNDO.\`  
-D) \`VAR count: INTEGER NO-UNDO.\`  
-
-**Question 5:** What does \`?\` represent in OpenEdge?
-A) A question to the user  
-B) An error state  
-C) An unknown/null value  
-D) A comment marker  
-
-**Question 6:** Which statement gets input from the user?
-A) INPUT  
-B) GET  
-C) UPDATE  
-D) READ  
-
-**Coding Challenge:** Write a program that:
-1. Asks for the user's first name, last name, and birth year
-2. Calculates their age (assuming current year is 2025)
-3. Displays a personalized greeting with their full name and age
-
----
-
-# PHASE 2: CONTROL FLOW`,
+\`\`\``,
         type: 'text',
         duration: 28,
         order: 3
@@ -891,6 +840,19 @@ D) READ
       timeLimit: 15
     });
     await quizRepo.save(openEdgeQuiz1);
+
+    // Add quiz lesson to section
+    await lessonRepo.save(
+      lessonRepo.create({
+        sectionId: openEdgeSection1.id,
+        title: 'Foundations Quiz',
+        description: 'Test your knowledge of OpenEdge 4GL fundamentals',
+        type: 'quiz',
+        duration: 15,
+        order: 4,
+        quizId: openEdgeQuiz1.id
+      })
+    );
 
     const oeQ1_1 = questionRepo.create({ quizId: openEdgeQuiz1.id, question: 'What symbol ends every statement in OpenEdge 4GL?', type: 'multiple-choice', points: 10, order: 1 });
     await questionRepo.save(oeQ1_1);
@@ -1261,62 +1223,7 @@ DO i = 1 TO 100:
     
     DISPLAY output.
 END.
-\`\`\`
-
----
-
-## 🎯 Quiz 2: Control Flow (Lessons 4-5)
-
-**Question 1:** What statement exits a REPEAT loop immediately?
-A) EXIT  
-B) BREAK  
-C) LEAVE  
-D) QUIT  
-
-**Question 2:** How do you check if a variable is NOT equal to 10?
-A) \`variable != 10\`  
-B) \`variable <> 10\` or \`variable NE 10\`  
-C) \`variable NOT 10\`  
-D) \`variable !== 10\`  
-
-**Question 3:** What will this code display?
-\`\`\`progress
-DEFINE VARIABLE x AS INTEGER NO-UNDO.
-DO x = 1 TO 3:
-    DISPLAY x.
-END.
-\`\`\`
-A) 1  
-B) 1 2 3  
-C) 1 2  
-D) 1 2 3 4  
-
-**Question 4:** Which operator combines two conditions where BOTH must be true?
-A) OR  
-B) AND  
-C) NOT  
-D) THEN  
-
-**Question 5:** What does NEXT do in a loop?
-A) Exits the loop  
-B) Skips to the next iteration  
-C) Pauses the loop  
-D) Repeats the current iteration  
-
-**Question 6:** What is \`i MODULO 2\` when i = 5?
-A) 0  
-B) 1  
-C) 2  
-D) 5  
-
-**Coding Challenge:** Write a program that:
-1. Asks the user for a number (1-12)
-2. Displays the multiplication table for that number (1 through 10)
-3. Handles invalid input gracefully
-
----
-
-# PHASE 3: DATABASE OPERATIONS`,
+\`\`\``,
         type: 'text',
         duration: 35,
         order: 2
@@ -1332,6 +1239,19 @@ D) 5
       timeLimit: 15
     });
     await quizRepo.save(openEdgeQuiz2);
+
+    // Add quiz lesson to section
+    await lessonRepo.save(
+      lessonRepo.create({
+        sectionId: openEdgeSection2.id,
+        title: 'Control Flow Quiz',
+        description: 'Test your knowledge of conditional statements and loops',
+        type: 'quiz',
+        duration: 15,
+        order: 3,
+        quizId: openEdgeQuiz2.id
+      })
+    );
 
     const oeQ2_1 = questionRepo.create({ quizId: openEdgeQuiz2.id, question: 'Which statement is used to exit a REPEAT loop?', type: 'multiple-choice', points: 10, order: 1 });
     await questionRepo.save(oeQ2_1);
@@ -1822,56 +1742,6 @@ DO:
 END.
 \`\`\`
 
----
-
-## 🎯 Quiz 3: Database and Transactions (Lessons 6-7)
-
-**Question 1:** What keyword makes a FOR EACH loop read-only?
-A) READ-ONLY  
-B) NO-LOCK  
-C) CONST  
-D) READONLY  
-
-**Question 2:** What happens when you use UNDO in a transaction?
-A) The program stops  
-B) All changes are reversed  
-C) Only the last change is reversed  
-D) An error message appears  
-
-**Question 3:** How do you check if a FIND successfully found a record?
-A) \`IF FOUND THEN\`  
-B) \`IF AVAILABLE TableName THEN\`  
-C) \`IF EXISTS THEN\`  
-D) \`IF RECORD-FOUND THEN\`  
-
-**Question 4:** Which lock type should you use when reading data?
-A) EXCLUSIVE-LOCK  
-B) NO-LOCK  
-C) SHARE-LOCK  
-D) READ-LOCK  
-
-**Question 5:** What does NO-ERROR do?
-A) Prevents all errors  
-B) Suppresses automatic error messages  
-C) Fixes errors automatically  
-D) Logs errors to a file  
-
-**Question 6:** What does LEAVE do in a transaction?
-A) Commits the transaction  
-B) Exits the transaction block  
-C) Rolls back changes  
-D) Pauses execution  
-
-**Coding Challenge:** Create a program that:
-1. Prompts for a customer number
-2. Finds that customer in the database
-3. Displays their current information
-4. Allows updating their balance
-5. Uses proper transaction and error handling
-6. Confirms success or shows appropriate error messages
-
----
-
 # PHASE 4: MODULAR PROGRAMMING`,
         type: 'text',
         duration: 38,
@@ -1888,6 +1758,19 @@ D) Pauses execution
       timeLimit: 15
     });
     await quizRepo.save(openEdgeQuiz3);
+
+    // Add quiz lesson to section
+    await lessonRepo.save(
+      lessonRepo.create({
+        sectionId: openEdgeSection3.id,
+        title: 'Database and Transactions Quiz',
+        description: 'Test your knowledge of database operations and transactions',
+        type: 'quiz',
+        duration: 15,
+        order: 3,
+        quizId: openEdgeQuiz3.id
+      })
+    );
 
     const oeQ3_1 = questionRepo.create({ quizId: openEdgeQuiz3.id, question: 'Which lock type should you use for read-only operations?', type: 'multiple-choice', points: 10, order: 1 });
     await questionRepo.save(oeQ3_1);
@@ -2370,42 +2253,6 @@ PROCEDURE deleteCustomer:
 END PROCEDURE.
 \`\`\`
 
----
-
-## 🎯 Quiz 4: Procedures and Forms (Lessons 8-9)
-
-**Question 1:** What keyword defines a parameter that returns data FROM a procedure?
-A) RETURN  
-B) OUTPUT  
-C) EXPORT  
-D) OUT  
-
-**Question 2:** How do you call an internal procedure named "calculateTotal"?
-A) \`CALL calculateTotal.\`  
-B) \`RUN calculateTotal.\`  
-C) \`EXECUTE calculateTotal.\`  
-D) \`calculateTotal().\`  
-
-**Question 3:** What's the difference between a procedure and a function?
-A) Procedures are faster  
-B) Functions return a single value, procedures can have multiple outputs  
-C) Functions can't have parameters  
-D) There is no difference  
-
-**Question 4:** What does INPUT-OUTPUT parameter do?
-A) Only receives data  
-B) Only returns data  
-C) Receives data and can modify it  
-D) Displays data to user  
-
-**Coding Challenge:** Create a program with:
-1. A procedure that validates an email address (must contain @)
-2. A procedure that validates a phone number (must be 10 digits)
-3. A function that formats a phone number (xxx-xxx-xxxx)
-4. A main program that gets user input and uses all three
-
----
-
 # PHASE 5: ADVANCED CONCEPTS`,
         type: 'text',
         duration: 45,
@@ -2422,6 +2269,19 @@ D) Displays data to user
       timeLimit: 12
     });
     await quizRepo.save(openEdgeQuiz4);
+
+    // Add quiz lesson to section
+    await lessonRepo.save(
+      lessonRepo.create({
+        sectionId: openEdgeSection4.id,
+        title: 'Procedures and Forms Quiz',
+        description: 'Test your understanding of procedures, functions, and building data entry forms',
+        type: 'quiz',
+        duration: 12,
+        order: 3,
+        quizId: openEdgeQuiz4.id
+      })
+    );
 
     const oeQ4_1 = questionRepo.create({ quizId: openEdgeQuiz4.id, question: 'Which keyword defines a parameter that returns a value from a procedure?', type: 'multiple-choice', points: 10, order: 1 });
     await questionRepo.save(oeQ4_1);
