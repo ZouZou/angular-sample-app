@@ -1,9 +1,15 @@
 <div class="admin-container">
   <div class="admin-header">
     <div class="header-content">
-      <h1>Admin Dashboard</h1>
-      <div class="user-info">
-        <span>Welcome, {{ currentUser?.name }}</span>
+      <div class="welcome-section">
+        <h1>Admin Dashboard</h1>
+        <p>Manage users, courses, and quiz results</p>
+      </div>
+      <div class="header-actions">
+        <button mat-button routerLink="/dashboard">
+          <mat-icon>dashboard</mat-icon>
+          Back to Dashboard
+        </button>
         <button mat-button (click)="logout()">
           <mat-icon>logout</mat-icon>
           Logout

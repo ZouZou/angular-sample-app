@@ -3,36 +3,49 @@
   background: #f5f5f5
 
 .admin-header
-  background: white
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1)
-  padding: 16px 24px
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)
+  color: white
+  padding: 40px 24px
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1)
 
   .header-content
+    max-width: 1400px
+    margin: 0 auto
     display: flex
     justify-content: space-between
     align-items: center
-    max-width: 1400px
-    margin: 0 auto
+    flex-wrap: wrap
+    gap: 20px
 
-    h1
-      margin: 0
-      font-size: 28px
-      font-weight: 600
-      color: #333
+    .welcome-section
+      h1
+        margin: 0 0 8px 0
+        font-size: 32px
+        font-weight: 600
+        color: white
 
-    .user-info
+      p
+        margin: 0
+        font-size: 16px
+        opacity: 0.9
+        color: white
+
+    .header-actions
       display: flex
-      align-items: center
-      gap: 16px
-
-      span
-        color: #666
-        font-size: 14px
+      gap: 12px
 
       button
-        display: flex
-        align-items: center
-        gap: 8px
+        color: white
+        border: 1px solid rgba(255, 255, 255, 0.3)
+        background: rgba(255, 255, 255, 0.1)
+        backdrop-filter: blur(10px)
+
+        &:hover
+          background: rgba(255, 255, 255, 0.2)
+          border-color: rgba(255, 255, 255, 0.5)
+
+        mat-icon
+          margin-right: 8px
 
 .admin-tabs
   max-width: 1400px
@@ -221,7 +234,14 @@
     .header-content
       flex-direction: column
       align-items: flex-start
-      gap: 16px
+
+    .header-actions
+      width: 100%
+      flex-direction: column
+
+      button
+        width: 100%
+        justify-content: center
 
   .section-header
     flex-direction: column
