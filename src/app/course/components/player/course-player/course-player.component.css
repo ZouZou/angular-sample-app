@@ -357,6 +357,21 @@ mat-panel-description {
   opacity: 1;
 }
 
+/* New minimal padding style for course content list items */
+.course-content-list-item {
+  padding: 0 8px !important;
+  min-height: auto !important;
+  height: auto !important;
+}
+
+.course-content-list-item .mdc-list-item__content {
+  padding: 0 !important;
+}
+
+.course-content-list-item .mat-mdc-list-item-content {
+  padding: 0 !important;
+}
+
 .lesson-icon-wrapper {
   display: flex;
   align-items: center;

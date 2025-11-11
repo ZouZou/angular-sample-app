@@ -86,7 +86,7 @@
                   (click)="selectLesson(lesson)"
                   [class.active]="currentLesson?.id === lesson.id"
                   [class.completed]="isLessonCompleted(lesson.id)"
-                  class="lesson-item">
+                  class="lesson-item course-content-list-item">
                   <div class="lesson-icon-wrapper" matListItemIcon>
                     <mat-icon [class.completed-icon]="isLessonCompleted(lesson.id)">
                       {{ isLessonCompleted(lesson.id) ? 'check_circle' : getLessonIcon(lesson.type) }}
