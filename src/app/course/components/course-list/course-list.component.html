@@ -1,69 +1,80 @@
 <div class="course-list-container">
-  <div class="header">
-    <h1>Course Catalog</h1>
-    <div class="header-actions">
-      <button mat-button (click)="navigateToDashboard()">
-        <mat-icon>dashboard</mat-icon>
-        Dashboard
-      </button>
-      <button *ngIf="isAdmin()" mat-button (click)="navigateToAdmin()">
-        <mat-icon>admin_panel_settings</mat-icon>
-        Admin Dashboard
-      </button>
-      <button *ngIf="isAdmin()" mat-raised-button color="primary" (click)="navigateToCreate()">
-        <mat-icon>add</mat-icon>
-        New Course
-      </button>
-    </div>
-  </div>
-
-  <!-- Filters -->
-  <div class="filters">
-    <mat-form-field appearance="outline">
-      <mat-label>Category</mat-label>
-      <mat-select [(value)]="selectedCategory" (selectionChange)="applyFilters()">
-        <mat-option *ngFor="let category of categories" [value]="category">
-          {{ category }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-      <mat-label>Level</mat-label>
-      <mat-select [(value)]="selectedLevel" (selectionChange)="applyFilters()">
-        <mat-option *ngFor="let level of levels" [value]="level">
-          {{ level }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
-
-  <!-- Loading State -->
-  <div *ngIf="isLoading" class="loading">
-    <mat-spinner></mat-spinner>
-    <p>Loading courses...</p>
-  </div>
-
-  <!-- Error State -->
-  <div *ngIf="error" class="error">
-    <mat-icon color="warn">error</mat-icon>
-    <p>{{ error }}</p>
-    <button mat-raised-button color="primary" (click)="loadCourses()">Retry</button>
-  </div>
-
-  <!-- Course Grid -->
-  <div *ngIf="!isLoading && !error" class="course-grid">
-    <div *ngIf="filteredCourses.length === 0" class="no-courses">
-      <mat-icon>school</mat-icon>
-      <p>No courses found matching your criteria.</p>
-    </div>
-
-    <mat-card *ngFor="let course of filteredCourses" class="course-card" (click)="navigateToDetail(course.id)">
-      <div class="card-image" [style.background-image]="'url(' + (course.thumbnailUrl || 'https://via.placeholder.com/300x200?text=Course') + ')'">
-        <span class="level-badge" [style.background-color]="getLevelColor(course.level)">
-          {{ course.level }}
-        </span>
+  <!-- Header -->
+  <div class="course-list-header">
+    <div class="header-content">
+      <div class="welcome-section">
+        <h1>Course Catalog</h1>
+        <p>Explore our collection of courses and start learning</p>
       </div>
+      <div class="header-actions">
+        <button mat-button (click)="navigateToDashboard()">
+          <mat-icon>dashboard</mat-icon>
+          Dashboard
+        </button>
+        <button *ngIf="isAdmin()" mat-button (click)="navigateToAdmin()">
+          <mat-icon>admin_panel_settings</mat-icon>
+          Admin Dashboard
+        </button>
+        <button *ngIf="isAdmin()" mat-raised-button color="primary" (click)="navigateToCreate()">
+          <mat-icon>add</mat-icon>
+          New Course
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content Section -->
+  <div class="content-section">
+    <!-- Filters -->
+    <div class="filters">
+      <mat-form-field appearance="outline">
+        <mat-label>Category</mat-label>
+        <mat-select [(value)]="selectedCategory" (selectionChange)="applyFilters()">
+          <mat-option *ngFor="let category of categories" [value]="category">
+            {{ category }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Level</mat-label>
+        <mat-select [(value)]="selectedLevel" (selectionChange)="applyFilters()">
+          <mat-option *ngFor="let level of levels" [value]="level">
+            {{ level }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="loading-container">
+      <mat-spinner></mat-spinner>
+      <p>Loading courses...</p>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error && !isLoading" class="error-container">
+      <mat-icon color="warn">error</mat-icon>
+      <p>{{ error }}</p>
+      <button mat-raised-button color="primary" (click)="loadCourses()">Retry</button>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!isLoading && !error && filteredCourses.length === 0" class="empty-state">
+      <mat-icon>school</mat-icon>
+      <h2>No courses found</h2>
+      <p>No courses found matching your criteria. Try adjusting your filters.</p>
+    </div>
+
+    <!-- Course Grid -->
+    <div *ngIf="!isLoading && !error && filteredCourses.length > 0" class="courses-grid">
+      <mat-card *ngFor="let course of filteredCourses" class="course-card" (click)="navigateToDetail(course.id)">
+        <!-- Course Thumbnail -->
+        <div class="course-thumbnail" [style.background-image]="'url(' + (course.thumbnailUrl || 'https://via.placeholder.com/400x250?text=Course') + ')'">
+          <div class="level-badge" [style.background-color]="getLevelColor(course.level)">
+            {{ course.level }}
+          </div>
+        </div>
 
       <mat-card-header>
         <mat-card-title>{{ course.title }}</mat-card-title>
@@ -108,6 +119,7 @@
           Delete
         </button>
       </mat-card-actions>
-    </mat-card>
+      </mat-card>
+    </div>
   </div>
 </div>
