@@ -113,6 +113,192 @@
         </button>
       </mat-card-actions>
     </mat-card>
+
+    <!-- Curriculum Management (only in edit mode) -->
+    <mat-card *ngIf="courseId" class="curriculum-card">
+      <mat-card-header>
+        <mat-card-title>Course Curriculum</mat-card-title>
+        <button mat-raised-button color="accent" (click)="startAddSection()" *ngIf="!editingSection">
+          <mat-icon>add</mat-icon>
+          Add Section
+        </button>
+      </mat-card-header>
+
+      <mat-card-content>
+        <!-- Loading State -->
+        <div *ngIf="isLoadingCurriculum" class="loading-curriculum">
+          <mat-spinner diameter="40"></mat-spinner>
+          <p>Loading curriculum...</p>
+        </div>
+
+        <!-- Add/Edit Section Form -->
+        <div *ngIf="editingSection" class="section-form">
+          <h3>{{ editingSection.id ? 'Edit Section' : 'Add New Section' }}</h3>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Section Title</mat-label>
+            <input matInput [(ngModel)]="sectionForm.title" placeholder="e.g., Introduction to Angular">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Section Description (Optional)</mat-label>
+            <textarea matInput [(ngModel)]="sectionForm.description" rows="2"
+                      placeholder="Brief description of this section"></textarea>
+          </mat-form-field>
+
+          <div class="form-actions">
+            <button mat-button (click)="cancelEditSection()">Cancel</button>
+            <button mat-raised-button color="primary" (click)="saveSection()"
+                    [disabled]="!sectionForm.title.trim()">
+              <mat-icon>save</mat-icon>
+              {{ editingSection.id ? 'Update' : 'Create' }} Section
+            </button>
+          </div>
+        </div>
+
+        <!-- Sections List -->
+        <div *ngIf="!isLoadingCurriculum && sections.length === 0 && !editingSection" class="empty-state">
+          <mat-icon>playlist_add</mat-icon>
+          <p>No curriculum added yet. Click "Add Section" to get started.</p>
+        </div>
+
+        <mat-accordion *ngIf="sections.length > 0" multi>
+          <mat-expansion-panel *ngFor="let section of sections; let i = index" class="section-panel">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <mat-icon class="section-icon">folder</mat-icon>
+                <span class="section-title">{{ section.order }}. {{ section.title }}</span>
+                <span class="lesson-count">({{ section.lessons?.length || 0 }} lessons)</span>
+              </mat-panel-title>
+              <mat-panel-description>
+                {{ section.description }}
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <!-- Section Content -->
+            <div class="section-content">
+              <!-- Section Actions -->
+              <div class="section-actions">
+                <button mat-icon-button (click)="startEditSection(section)" matTooltip="Edit section">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button (click)="moveSectionUp(section)" [disabled]="i === 0" matTooltip="Move up">
+                  <mat-icon>arrow_upward</mat-icon>
+                </button>
+                <button mat-icon-button (click)="moveSectionDown(section)" [disabled]="i === sections.length - 1" matTooltip="Move down">
+                  <mat-icon>arrow_downward</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" (click)="deleteSection(section)" matTooltip="Delete section">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+
+              <!-- Add/Edit Lesson Form -->
+              <div *ngIf="editingLesson?.section.id === section.id" class="lesson-form">
+                <h4>{{ editingLesson.lesson?.id ? 'Edit Lesson' : 'Add New Lesson' }}</h4>
+
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Lesson Title</mat-label>
+                  <input matInput [(ngModel)]="lessonForm.title" placeholder="e.g., Introduction to Components">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Lesson Type</mat-label>
+                  <mat-select [(ngModel)]="lessonForm.type">
+                    <mat-option *ngFor="let type of lessonTypes" [value]="type">
+                      <mat-icon>{{ getLessonTypeIcon(type) }}</mat-icon>
+                      {{ type | titlecase }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Description (Optional)</mat-label>
+                  <textarea matInput [(ngModel)]="lessonForm.description" rows="2"></textarea>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Duration (minutes)</mat-label>
+                  <input matInput type="number" [(ngModel)]="lessonForm.duration" min="0">
+                </mat-form-field>
+
+                <!-- Type-specific fields -->
+                <mat-form-field appearance="outline" class="full-width" *ngIf="lessonForm.type === 'video'">
+                  <mat-label>Video URL</mat-label>
+                  <input matInput [(ngModel)]="lessonForm.videoUrl" placeholder="https://www.youtube.com/embed/...">
+                  <mat-hint>Use YouTube embed URL format</mat-hint>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="full-width" *ngIf="lessonForm.type === 'text' || lessonForm.type === 'assignment'">
+                  <mat-label>Content (HTML)</mat-label>
+                  <textarea matInput [(ngModel)]="lessonForm.content" rows="6"
+                            placeholder="<p>Your content here...</p>"></textarea>
+                  <mat-hint>You can use HTML formatting</mat-hint>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="full-width" *ngIf="lessonForm.type === 'quiz'">
+                  <mat-label>Quiz ID</mat-label>
+                  <input matInput type="number" [(ngModel)]="lessonForm.quizId" placeholder="Enter quiz ID">
+                  <mat-hint>Create the quiz first, then enter its ID here</mat-hint>
+                </mat-form-field>
+
+                <div class="form-actions">
+                  <button mat-button (click)="cancelEditLesson()">Cancel</button>
+                  <button mat-raised-button color="primary" (click)="saveLesson()"
+                          [disabled]="!lessonForm.title?.trim()">
+                    <mat-icon>save</mat-icon>
+                    {{ editingLesson.lesson?.id ? 'Update' : 'Create' }} Lesson
+                  </button>
+                </div>
+              </div>
+
+              <!-- Lessons List -->
+              <div class="lessons-list">
+                <div *ngIf="!section.lessons || section.lessons.length === 0" class="empty-lessons">
+                  <p>No lessons in this section yet.</p>
+                </div>
+
+                <div *ngFor="let lesson of section.lessons; let j = index" class="lesson-item">
+                  <div class="lesson-info">
+                    <mat-icon class="lesson-icon">{{ getLessonTypeIcon(lesson.type) }}</mat-icon>
+                    <div class="lesson-details">
+                      <div class="lesson-title">{{ lesson.order }}. {{ lesson.title }}</div>
+                      <div class="lesson-meta">
+                        <span class="lesson-type">{{ lesson.type | titlecase }}</span>
+                        <span *ngIf="lesson.duration" class="lesson-duration">{{ lesson.duration }} min</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="lesson-actions">
+                    <button mat-icon-button (click)="startEditLesson(section, lesson)" matTooltip="Edit lesson">
+                      <mat-icon>edit</mat-icon>
+                    </button>
+                    <button mat-icon-button (click)="moveLessonUp(section, lesson)" [disabled]="j === 0" matTooltip="Move up">
+                      <mat-icon>arrow_upward</mat-icon>
+                    </button>
+                    <button mat-icon-button (click)="moveLessonDown(section, lesson)"
+                            [disabled]="j === section.lessons.length - 1" matTooltip="Move down">
+                      <mat-icon>arrow_downward</mat-icon>
+                    </button>
+                    <button mat-icon-button color="warn" (click)="deleteLesson(section, lesson)" matTooltip="Delete lesson">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Add Lesson Button -->
+              <button mat-stroked-button color="primary" (click)="startAddLesson(section)"
+                      *ngIf="!editingLesson" class="add-lesson-btn">
+                <mat-icon>add</mat-icon>
+                Add Lesson
+              </button>
+            </div>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </mat-card-content>
+    </mat-card>
   </form>
 
   <!-- Form Debug Info (only in development) -->
