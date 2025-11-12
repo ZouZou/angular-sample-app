@@ -137,12 +137,12 @@
 
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Section Title</mat-label>
-            <input matInput [(ngModel)]="sectionForm.title" placeholder="e.g., Introduction to Angular">
+            <input matInput [(ngModel)]="sectionForm.title" [ngModelOptions]="{standalone: true}" placeholder="e.g., Introduction to Angular">
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Section Description (Optional)</mat-label>
-            <textarea matInput [(ngModel)]="sectionForm.description" rows="2"
+            <textarea matInput [(ngModel)]="sectionForm.description" [ngModelOptions]="{standalone: true}" rows="2"
                       placeholder="Brief description of this section"></textarea>
           </mat-form-field>
 
@@ -168,7 +168,7 @@
               <mat-panel-title>
                 <mat-icon class="section-icon">folder</mat-icon>
                 <span class="section-title">{{ section.order }}. {{ section.title }}</span>
-                <span class="lesson-count">({{ section.lessons?.length || 0 }} lessons)</span>
+                <span class="lesson-count">({{ section.lessons.length || 0 }} lessons)</span>
               </mat-panel-title>
               <mat-panel-description>
                 {{ section.description }}
@@ -199,12 +199,12 @@
 
                 <mat-form-field appearance="outline" class="full-width">
                   <mat-label>Lesson Title</mat-label>
-                  <input matInput [(ngModel)]="lessonForm.title" placeholder="e.g., Introduction to Components">
+                  <input matInput [(ngModel)]="lessonForm.title" [ngModelOptions]="{standalone: true}" placeholder="e.g., Introduction to Components">
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="full-width">
                   <mat-label>Lesson Type</mat-label>
-                  <mat-select [(ngModel)]="lessonForm.type">
+                  <mat-select [(ngModel)]="lessonForm.type" [ngModelOptions]="{standalone: true}">
                     <mat-option *ngFor="let type of lessonTypes" [value]="type">
                       <mat-icon>{{ getLessonTypeIcon(type) }}</mat-icon>
                       {{ type | titlecase }}
@@ -214,31 +214,31 @@
 
                 <mat-form-field appearance="outline" class="full-width">
                   <mat-label>Description (Optional)</mat-label>
-                  <textarea matInput [(ngModel)]="lessonForm.description" rows="2"></textarea>
+                  <textarea matInput [(ngModel)]="lessonForm.description" [ngModelOptions]="{standalone: true}" rows="2"></textarea>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="full-width">
                   <mat-label>Duration (minutes)</mat-label>
-                  <input matInput type="number" [(ngModel)]="lessonForm.duration" min="0">
+                  <input matInput type="number" [(ngModel)]="lessonForm.duration" [ngModelOptions]="{standalone: true}" min="0">
                 </mat-form-field>
 
                 <!-- Type-specific fields -->
                 <mat-form-field appearance="outline" class="full-width" *ngIf="lessonForm.type === 'video'">
                   <mat-label>Video URL</mat-label>
-                  <input matInput [(ngModel)]="lessonForm.videoUrl" placeholder="https://www.youtube.com/embed/...">
+                  <input matInput [(ngModel)]="lessonForm.videoUrl" [ngModelOptions]="{standalone: true}" placeholder="https://www.youtube.com/embed/...">
                   <mat-hint>Use YouTube embed URL format</mat-hint>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="full-width" *ngIf="lessonForm.type === 'text' || lessonForm.type === 'assignment'">
                   <mat-label>Content (HTML)</mat-label>
-                  <textarea matInput [(ngModel)]="lessonForm.content" rows="6"
+                  <textarea matInput [(ngModel)]="lessonForm.content" [ngModelOptions]="{standalone: true}" rows="6"
                             placeholder="<p>Your content here...</p>"></textarea>
                   <mat-hint>You can use HTML formatting</mat-hint>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="full-width" *ngIf="lessonForm.type === 'quiz'">
                   <mat-label>Quiz ID</mat-label>
-                  <input matInput type="number" [(ngModel)]="lessonForm.quizId" placeholder="Enter quiz ID">
+                  <input matInput type="number" [(ngModel)]="lessonForm.quizId" [ngModelOptions]="{standalone: true}" placeholder="Enter quiz ID">
                   <mat-hint>Create the quiz first, then enter its ID here</mat-hint>
                 </mat-form-field>
 
