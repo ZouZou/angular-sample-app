@@ -64,6 +64,25 @@ export class ProgressController {
     }
   }
 
+  async updateLessonNotes(req: Request, res: Response, next: NextFunction) {
+    try {
+      if (!req.user) {
+        throw new AppError('Authentication required', 401);
+      }
+
+      const { enrollmentId, lessonId, notes } = req.body;
+
+      if (!enrollmentId || !lessonId) {
+        throw new AppError('Enrollment ID and Lesson ID are required', 400);
+      }
+
+      const progress = await progressService.updateLessonNotes(req.user.userId, enrollmentId, lessonId, notes || '');
+      res.json(progress);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   async getProgressStats(req: Request, res: Response, next: NextFunction) {
     try {
       if (!req.user) {

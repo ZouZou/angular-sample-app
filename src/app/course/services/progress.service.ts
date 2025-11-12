@@ -38,6 +38,17 @@ export class ProgressService {
   }
 
   /**
+   * Update notes for a lesson
+   */
+  updateLessonNotes(enrollmentId: number, lessonId: number, notes: string): Observable<UserProgress> {
+    return this.http.post<UserProgress>(`${this.apiUrl}/lesson/notes`, {
+      enrollmentId,
+      lessonId,
+      notes
+    });
+  }
+
+  /**
    * Track time spent on a lesson
    */
   trackTimeSpent(progressId: number, minutes: number): Observable<UserProgress> {

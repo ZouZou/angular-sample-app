@@ -98,6 +98,47 @@ export class ProgressService {
     return progress;
   }
 
+  async updateLessonNotes(userId: number, enrollmentId: number, lessonId: number, notes: string) {
+    // Verify enrollment exists
+    const enrollment = await this.enrollmentRepository.findOne({ where: { id: enrollmentId } });
+    if (!enrollment) {
+      throw new AppError('Enrollment not found', 404);
+    }
+
+    // Verify lesson exists
+    const lesson = await this.lessonRepository.findOne({ where: { id: lessonId } });
+    if (!lesson) {
+      throw new AppError('Lesson not found', 404);
+    }
+
+    // Check if progress already exists
+    let progress = await this.progressRepository.findOne({
+      where: { userId, lessonId }
+    });
+
+    if (progress) {
+      // Update existing progress
+      progress.notes = notes;
+    } else {
+      // Create new progress record with notes
+      progress = this.progressRepository.create({
+        userId,
+        enrollmentId,
+        lessonId,
+        completed: false,
+        notes,
+        timeSpent: 0
+      });
+    }
+
+    await this.progressRepository.save(progress);
+
+    // Update last accessed time
+    await enrollmentService.updateLastAccessed(enrollmentId);
+
+    return progress;
+  }
+
   async getProgressStats(userId: number) {
     // Get all enrollments
     const enrollments = await this.enrollmentRepository.find({
