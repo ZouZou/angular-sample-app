@@ -1,0 +1,65 @@
+<div class="component-container">
+  <!-- Header -->
+  <header class="component-header">
+    <h2>{{ exampleInput }}</h2>
+  </header>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-spinner">
+    <p>Loading data...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="errorMessage" class="error-message" role="alert">
+    <p>{{ errorMessage }}</p>
+    <button (click)="loadData()" class="btn btn-secondary">
+      Try Again
+    </button>
+  </div>
+
+  <!-- Content (shown when not loading and no error) -->
+  <div *ngIf="!isLoading && !errorMessage" class="component-content">
+    <!-- Main content here -->
+    <p>Content goes here</p>
+
+    <!-- Example list with trackBy -->
+    <!-- <ul class="item-list">
+      <li *ngFor="let item of items; trackBy: trackByItemId" class="item-list__item">
+        {{ item.name }}
+      </li>
+    </ul> -->
+
+    <!-- Example with ng-container for conditional rendering -->
+    <!-- <ng-container *ngIf="data$ | async as data; else noData">
+      <div class="data-display">
+        {{ data.value }}
+      </div>
+    </ng-container>
+
+    <ng-template #noData>
+      <div class="empty-state">
+        <p>No data available</p>
+        <button (click)="onExampleAction('refresh')" class="btn btn-primary">
+          Refresh
+        </button>
+      </div>
+    </ng-template> -->
+  </div>
+
+  <!-- Footer/Actions -->
+  <footer class="component-actions">
+    <button
+      (click)="onExampleAction('save')"
+      class="btn btn-primary"
+      [disabled]="isLoading"
+      aria-label="Save changes">
+      Save Changes
+    </button>
+    <button
+      (click)="onExampleAction('cancel')"
+      class="btn btn-secondary"
+      aria-label="Cancel action">
+      Cancel
+    </button>
+  </footer>
+</div>
