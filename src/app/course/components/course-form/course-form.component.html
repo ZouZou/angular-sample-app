@@ -247,7 +247,7 @@
                   <button mat-raised-button color="primary" (click)="saveLesson()"
                           [disabled]="!lessonForm.title?.trim()">
                     <mat-icon>save</mat-icon>
-                    {{ editingLesson.lesson?.id ? 'Update' : 'Create' }} Lesson
+                    {{ editingLesson?.lesson?.id ? 'Update' : 'Create' }} Lesson
                   </button>
                 </div>
               </div>
