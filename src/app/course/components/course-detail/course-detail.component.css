@@ -1,6 +1,6 @@
 .course-detail-container {
   min-height: calc(100vh - 64px);
-  background-color: #f5f5f5;
+  background-color: var(--background-secondary);
 }
 
 .loading {
@@ -8,38 +8,38 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 48px;
-  gap: 16px;
+  padding: var(--space-6);
+  gap: var(--space-3);
   min-height: 400px;
 }
 
 .error-container {
-  padding: 24px;
+  padding: var(--space-4);
   max-width: 600px;
-  margin: 48px auto;
+  margin: var(--space-6) auto;
 }
 
 .error {
   display: flex;
   align-items: flex-start;
-  gap: 16px;
-  padding: 24px;
+  gap: var(--space-3);
+  padding: var(--space-4);
 }
 
 .error mat-icon {
-  font-size: 48px;
-  width: 48px;
-  height: 48px;
+  font-size: var(--space-6);
+  width: var(--space-6);
+  height: var(--space-6);
 }
 
 .error h2 {
-  margin: 0 0 8px 0;
-  color: #d32f2f;
+  margin: 0 0 var(--space-2) 0;
+  color: var(--color-error);
 }
 
 .error p {
   margin: 0;
-  color: #616161;
+  color: var(--text-secondary);
 }
 
 .course-detail {
@@ -48,10 +48,10 @@
 }
 
 .detail-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  padding: 40px 24px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+  color: var(--background-primary);
+  padding: var(--space-5) var(--space-4);
+  box-shadow: var(--shadow-md);
 }
 
 .header-content {
@@ -61,34 +61,34 @@
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: var(--space-4);
 }
 
 .welcome-section h1 {
-  margin: 0 0 8px 0;
-  font-size: 32px;
-  font-weight: 600;
-  color: white;
+  margin: 0 0 var(--space-2) 0;
+  font-size: var(--font-size-h1);
+  font-weight: var(--font-weight-semibold);
+  color: var(--background-primary);
 }
 
 .welcome-section p {
   margin: 0;
-  font-size: 16px;
+  font-size: var(--font-size-body);
   opacity: 0.9;
-  color: white;
+  color: var(--background-primary);
 }
 
 .header-actions {
   display: flex;
-  gap: 12px;
+  gap: var(--space-3);
   flex-wrap: wrap;
 }
 
 .header-actions button {
   display: flex;
   align-items: center;
-  gap: 4px;
-  color: white;
+  gap: var(--space-1);
+  color: var(--background-primary);
   border: 1px solid rgba(255, 255, 255, 0.3);
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
@@ -119,8 +119,8 @@
 }
 
 .banner-content {
-  padding: 48px;
-  color: white;
+  padding: var(--space-6);
+  color: var(--background-primary);
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
@@ -128,40 +128,40 @@
 
 .level-badge {
   display: inline-block;
-  padding: 6px 16px;
-  border-radius: 16px;
-  color: white;
-  font-size: 0.875rem;
-  font-weight: 600;
+  padding: 6px var(--space-3);
+  border-radius: var(--radius-md);
+  color: var(--background-primary);
+  font-size: var(--font-size-body-small);
+  font-weight: var(--font-weight-semibold);
   text-transform: uppercase;
-  margin-bottom: 16px;
+  margin-bottom: var(--space-3);
 }
 
 .banner-content h1 {
-  margin: 0 0 16px 0;
+  margin: 0 0 var(--space-3) 0;
   font-size: 2.5rem;
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
 }
 
 .instructor {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 1.125rem;
+  gap: var(--space-2);
+  font-size: var(--font-size-body-large);
   margin: 0;
 }
 
 .instructor mat-icon {
-  font-size: 20px;
-  width: 20px;
-  height: 20px;
+  font-size: var(--font-size-h3);
+  width: var(--font-size-h3);
+  height: var(--font-size-h3);
 }
 
 .course-info-grid {
   display: grid;
   grid-template-columns: 1fr 350px;
-  gap: 24px;
-  padding: 24px;
+  gap: var(--space-4);
+  padding: var(--space-4);
   max-width: 1400px;
   margin: 0 auto;
 }
@@ -169,45 +169,45 @@
 .main-content-area {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: var(--space-4);
 }
 
 .main-content {
-  padding: 24px;
+  padding: var(--space-4);
 }
 
 mat-card-header {
-  margin-bottom: 24px;
+  margin-bottom: var(--space-4);
 }
 
 .description {
-  font-size: 1.125rem;
+  font-size: var(--font-size-body-large);
   line-height: 1.8;
-  color: #424242;
-  margin-bottom: 32px;
+  color: var(--text-primary);
+  margin-bottom: var(--space-5);
 }
 
 .course-stats {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 24px;
-  margin-bottom: 24px;
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
 }
 
 .stat-item {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 16px;
-  background-color: #f5f5f5;
-  border-radius: 8px;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  background-color: var(--background-secondary);
+  border-radius: var(--radius-md);
 }
 
 .stat-item mat-icon {
-  font-size: 32px;
-  width: 32px;
-  height: 32px;
-  color: #1976d2;
+  font-size: var(--font-size-h1);
+  width: var(--font-size-h1);
+  height: var(--font-size-h1);
+  color: var(--primary-color);
 }
 
 .stat-item div {
@@ -216,90 +216,90 @@ mat-card-header {
 }
 
 .stat-item strong {
-  font-size: 1.25rem;
-  color: #212121;
-  margin-bottom: 4px;
+  font-size: var(--font-size-h3);
+  color: var(--text-primary);
+  margin-bottom: var(--space-1);
 }
 
 .stat-item span {
-  font-size: 0.875rem;
-  color: #757575;
+  font-size: var(--font-size-body-small);
+  color: var(--text-tertiary);
 }
 
 .additional-info {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 16px;
-  background-color: #e3f2fd;
-  border-radius: 8px;
-  color: #1565c0;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  background-color: var(--background-secondary);
+  border-radius: var(--radius-md);
+  color: var(--primary-color);
 }
 
 .additional-info mat-icon {
-  font-size: 20px;
-  width: 20px;
-  height: 20px;
+  font-size: var(--font-size-h3);
+  width: var(--font-size-h3);
+  height: var(--font-size-h3);
 }
 
 .sidebar {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: var(--space-4);
 }
 
 .pricing-card {
   position: sticky;
-  top: 24px;
-  padding: 24px;
+  top: var(--space-4);
+  padding: var(--space-4);
 }
 
 .price-section {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 24px;
+  gap: var(--space-4);
 }
 
 .price {
   display: flex;
   align-items: flex-start;
-  gap: 4px;
-  font-weight: 600;
+  gap: var(--space-1);
+  font-weight: var(--font-weight-semibold);
 }
 
 .currency {
   font-size: 1.5rem;
-  color: #2e7d32;
-  margin-top: 8px;
+  color: var(--color-success);
+  margin-top: var(--space-2);
 }
 
 .amount {
   font-size: 3rem;
-  color: #2e7d32;
+  color: var(--color-success);
 }
 
 .enroll-button {
   width: 100%;
   height: 48px;
-  font-size: 1rem;
-  font-weight: 600;
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-semibold);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: var(--space-2);
 }
 
 .details-card {
-  padding: 24px;
+  padding: var(--space-4);
 }
 
 .detail-item {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 12px 0;
-  border-bottom: 1px solid #e0e0e0;
+  gap: var(--space-3);
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .detail-item:last-child {
@@ -307,10 +307,10 @@ mat-card-header {
 }
 
 .detail-item mat-icon {
-  color: #757575;
-  font-size: 24px;
-  width: 24px;
-  height: 24px;
+  color: var(--text-tertiary);
+  font-size: var(--font-size-h2);
+  width: var(--font-size-h2);
+  height: var(--font-size-h2);
 }
 
 .detail-item div {
@@ -320,14 +320,14 @@ mat-card-header {
 }
 
 .detail-item strong {
-  font-size: 0.875rem;
-  color: #757575;
-  margin-bottom: 4px;
+  font-size: var(--font-size-body-small);
+  color: var(--text-tertiary);
+  margin-bottom: var(--space-1);
 }
 
 .detail-item span {
-  font-size: 1rem;
-  color: #212121;
+  font-size: var(--font-size-body);
+  color: var(--text-primary);
 }
 
 /* Responsive adjustments */
@@ -355,7 +355,7 @@ mat-card-header {
   }
 
   .banner-content {
-    padding: 24px;
+    padding: var(--space-4);
   }
 
   .banner-content h1 {
@@ -363,11 +363,11 @@ mat-card-header {
   }
 
   .course-info-grid {
-    padding: 16px;
+    padding: var(--space-3);
   }
 
   .main-content {
-    padding: 16px;
+    padding: var(--space-3);
   }
 
   .course-stats {
@@ -375,7 +375,7 @@ mat-card-header {
   }
 
   .detail-header {
-    padding: 24px 16px;
+    padding: var(--space-4) var(--space-3);
   }
 
   .header-content {
@@ -384,7 +384,7 @@ mat-card-header {
   }
 
   .welcome-section h1 {
-    font-size: 24px;
+    font-size: var(--font-size-h2);
   }
 
   .header-actions {
@@ -399,7 +399,7 @@ mat-card-header {
 
 /* Curriculum Styles */
 .curriculum-card {
-  padding: 24px;
+  padding: var(--space-4);
 }
 
 .curriculum-loading {
@@ -407,82 +407,82 @@ mat-card-header {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 48px;
-  gap: 16px;
+  padding: var(--space-6);
+  gap: var(--space-3);
 }
 
 .curriculum-summary {
   display: flex;
-  gap: 32px;
-  padding: 20px;
-  background-color: #e3f2fd;
-  border-radius: 8px;
-  margin-bottom: 24px;
+  gap: var(--space-5);
+  padding: var(--space-4);
+  background-color: var(--background-secondary);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-4);
   flex-wrap: wrap;
 }
 
 .summary-item {
   display: flex;
   align-items: center;
-  gap: 8px;
-  color: #1565c0;
-  font-size: 0.875rem;
+  gap: var(--space-2);
+  color: var(--primary-color);
+  font-size: var(--font-size-body-small);
 }
 
 .summary-item mat-icon {
-  font-size: 20px;
-  width: 20px;
-  height: 20px;
+  font-size: var(--font-size-h3);
+  width: var(--font-size-h3);
+  height: var(--font-size-h3);
 }
 
 .summary-item strong {
-  color: #0d47a1;
-  font-size: 1rem;
+  color: var(--primary-dark);
+  font-size: var(--font-size-body);
 }
 
 .curriculum-accordion {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--space-3);
 }
 
 .curriculum-accordion .mat-expansion-panel {
-  border-radius: 8px !important;
-  border: 1px solid #e0e0e0;
+  border-radius: var(--radius-md) !important;
+  border: 1px solid var(--border-color);
 }
 
 .section-header {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: var(--space-1);
   flex: 1;
 }
 
 .section-number {
-  font-size: 0.75rem;
-  color: #1976d2;
-  font-weight: 600;
+  font-size: var(--font-size-caption);
+  color: var(--primary-color);
+  font-weight: var(--font-weight-semibold);
   text-transform: uppercase;
 }
 
 .section-title {
-  font-size: 1rem;
-  color: #212121;
-  font-weight: 500;
+  font-size: var(--font-size-body);
+  color: var(--text-primary);
+  font-weight: var(--font-weight-medium);
 }
 
 .section-meta {
-  font-size: 0.875rem;
-  color: #757575;
+  font-size: var(--font-size-body-small);
+  color: var(--text-tertiary);
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: var(--space-1);
 }
 
 .section-description {
-  color: #616161;
-  margin: 0 0 16px 0;
-  padding: 0 24px;
+  color: var(--text-secondary);
+  margin: 0 0 var(--space-3) 0;
+  padding: 0 var(--space-4);
   line-height: 1.6;
 }
 
@@ -491,7 +491,7 @@ mat-card-header {
 }
 
 .lessons-list .mat-mdc-list-item {
-  border-bottom: 1px solid #f5f5f5;
+  border-bottom: 1px solid var(--background-secondary);
   min-height: 64px;
 }
 
@@ -500,53 +500,53 @@ mat-card-header {
 }
 
 .lesson-title {
-  font-size: 0.95rem;
-  color: #212121;
-  font-weight: 500;
+  font-size: var(--font-size-body);
+  color: var(--text-primary);
+  font-weight: var(--font-weight-medium);
 }
 
 .lesson-meta {
   display: flex;
   align-items: center;
-  gap: 12px;
-  font-size: 0.875rem;
-  color: #757575;
+  gap: var(--space-3);
+  font-size: var(--font-size-body-small);
+  color: var(--text-tertiary);
 }
 
 .lesson-type {
-  background-color: #f5f5f5;
-  padding: 2px 8px;
-  border-radius: 4px;
-  font-size: 0.75rem;
-  font-weight: 500;
+  background-color: var(--background-secondary);
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-medium);
 }
 
 .lesson-duration {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: var(--space-1);
 }
 
 .lesson-duration mat-icon {
-  font-size: 16px;
-  width: 16px;
-  height: 16px;
+  font-size: var(--font-size-body);
+  width: var(--font-size-body);
+  height: var(--font-size-body);
 }
 
 .lesson-icon-video {
-  color: #e91e63;
+  color: var(--color-error);
 }
 
 .lesson-icon-text {
-  color: #1976d2;
+  color: var(--primary-color);
 }
 
 .lesson-icon-quiz {
-  color: #ff9800;
+  color: var(--accent-orange);
 }
 
 .lesson-icon-assignment {
-  color: #4caf50;
+  color: var(--color-success);
 }
 
 .empty-curriculum {
@@ -554,9 +554,9 @@ mat-card-header {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 48px;
-  gap: 16px;
-  color: #9e9e9e;
+  padding: var(--space-6);
+  gap: var(--space-3);
+  color: var(--text-tertiary);
 }
 
 .empty-curriculum mat-icon {
@@ -568,18 +568,18 @@ mat-card-header {
 
 .empty-curriculum p {
   margin: 0;
-  font-size: 1rem;
+  font-size: var(--font-size-body);
 }
 
 /* Curriculum Responsive */
 @media (max-width: 768px) {
   .curriculum-card {
-    padding: 16px;
+    padding: var(--space-3);
   }
 
   .curriculum-summary {
     flex-direction: column;
-    gap: 12px;
+    gap: var(--space-3);
   }
 
   .section-header {
@@ -589,4 +589,21 @@ mat-card-header {
   .lesson-meta {
     flex-wrap: wrap;
   }
+}
+
+/* Level badge classes (brand-compliant) */
+.level-beginner {
+  background-color: var(--color-success) !important;
+}
+
+.level-intermediate {
+  background-color: var(--color-warning) !important;
+}
+
+.level-advanced {
+  background-color: var(--color-error) !important;
+}
+
+.level-default {
+  background-color: var(--text-tertiary) !important;
 }

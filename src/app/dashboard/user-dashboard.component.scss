@@ -1,13 +1,13 @@
 .dashboard-container {
   min-height: 100vh;
-  background: #f5f5f5;
+  background: var(--background-secondary);
 }
 
 .dashboard-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  padding: 40px 24px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+  color: var(--background-primary);
+  padding: var(--space-6) var(--space-4);
+  box-shadow: var(--shadow-md);
 
   .header-content {
     max-width: 1400px;
@@ -16,29 +16,29 @@
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: var(--space-4);
   }
 
   .welcome-section {
     h1 {
-      margin: 0 0 8px 0;
-      font-size: 32px;
-      font-weight: 600;
+      margin: 0 0 var(--space-2) 0;
+      font-size: var(--font-size-h1);
+      font-weight: var(--font-weight-semibold);
     }
 
     p {
       margin: 0;
-      font-size: 16px;
+      font-size: var(--font-size-body);
       opacity: 0.9;
     }
   }
 
   .header-actions {
     display: flex;
-    gap: 12px;
+    gap: var(--space-3);
 
     button {
-      color: white;
+      color: var(--background-primary);
       border: 1px solid rgba(255, 255, 255, 0.3);
       background: rgba(255, 255, 255, 0.1);
       backdrop-filter: blur(10px);
@@ -49,7 +49,7 @@
       }
 
       mat-icon {
-        margin-right: 8px;
+        margin-right: var(--space-2);
       }
     }
   }
@@ -62,56 +62,56 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 80px 20px;
+  padding: 80px var(--space-4);
   text-align: center;
 
   mat-icon {
     font-size: 80px;
     width: 80px;
     height: 80px;
-    margin-bottom: 20px;
+    margin-bottom: var(--space-4);
     opacity: 0.3;
   }
 
   h2 {
-    margin: 0 0 12px 0;
-    font-size: 24px;
-    color: #333;
+    margin: 0 0 var(--space-3) 0;
+    font-size: var(--font-size-h2);
+    color: var(--text-primary);
   }
 
   p {
-    margin: 0 0 24px 0;
-    color: #666;
-    font-size: 16px;
+    margin: 0 0 var(--space-4) 0;
+    color: var(--text-secondary);
+    font-size: var(--font-size-body);
   }
 }
 
 .courses-section {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 40px 24px;
+  padding: var(--space-6) var(--space-4);
 
   h2 {
-    margin: 0 0 24px 0;
-    font-size: 28px;
-    color: #333;
-    font-weight: 600;
+    margin: 0 0 var(--space-4) 0;
+    font-size: var(--font-size-h1);
+    color: var(--text-primary);
+    font-weight: var(--font-weight-semibold);
   }
 }
 
 .courses-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-  gap: 24px;
+  gap: var(--space-4);
 }
 
 .course-card {
   overflow: hidden;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
 
   &:hover {
     transform: translateY(-4px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    box-shadow: var(--shadow-lg);
   }
 
   .course-thumbnail {
@@ -122,138 +122,138 @@
 
     .status-badge {
       position: absolute;
-      top: 12px;
-      right: 12px;
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 600;
+      top: var(--space-3);
+      right: var(--space-3);
+      padding: 6px var(--space-3);
+      border-radius: var(--radius-full);
+      font-size: var(--font-size-caption);
+      font-weight: var(--font-weight-semibold);
       text-transform: uppercase;
       background: rgba(255, 255, 255, 0.95);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      box-shadow: var(--shadow-md);
 
       &.status-active {
-        color: #2196f3;
+        color: var(--color-info);
       }
 
       &.status-completed {
-        color: #4caf50;
+        color: var(--color-success);
       }
 
       &.status-dropped {
-        color: #f44336;
+        color: var(--color-error);
       }
     }
   }
 
   mat-card-header {
-    padding: 16px;
+    padding: var(--space-3);
 
     mat-card-title {
-      font-size: 18px;
-      font-weight: 600;
-      margin-bottom: 4px;
+      font-size: var(--font-size-h4);
+      font-weight: var(--font-weight-semibold);
+      margin-bottom: var(--space-1);
     }
 
     mat-card-subtitle {
-      font-size: 14px;
-      color: #666;
+      font-size: var(--font-size-body-small);
+      color: var(--text-secondary);
     }
   }
 
   mat-card-content {
-    padding: 0 16px 16px 16px;
+    padding: 0 var(--space-3) var(--space-3) var(--space-3);
   }
 
   .progress-section {
-    margin-bottom: 20px;
+    margin-bottom: var(--space-4);
 
     .progress-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 8px;
+      margin-bottom: var(--space-2);
 
       .progress-label {
-        font-size: 14px;
-        font-weight: 500;
-        color: #666;
+        font-size: var(--font-size-body-small);
+        font-weight: var(--font-weight-medium);
+        color: var(--text-secondary);
       }
 
       .progress-value {
-        font-size: 16px;
-        font-weight: 700;
-        color: #333;
+        font-size: var(--font-size-body);
+        font-weight: var(--font-weight-bold);
+        color: var(--text-primary);
       }
     }
 
     mat-progress-bar {
-      height: 8px;
-      border-radius: 4px;
+      height: var(--space-2);
+      border-radius: var(--radius-sm);
     }
   }
 
   .quiz-scores-section {
-    padding: 16px;
-    background: #f8f9fa;
-    border-radius: 8px;
-    margin-bottom: 16px;
+    padding: var(--space-3);
+    background: var(--background-secondary);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-3);
 
     .section-title {
       display: flex;
       align-items: center;
-      gap: 8px;
-      margin-bottom: 12px;
-      font-weight: 600;
-      color: #333;
+      gap: var(--space-2);
+      margin-bottom: var(--space-3);
+      font-weight: var(--font-weight-semibold);
+      color: var(--text-primary);
 
       mat-icon {
-        font-size: 20px;
-        width: 20px;
-        height: 20px;
+        font-size: var(--font-size-h3);
+        width: var(--font-size-h3);
+        height: var(--font-size-h3);
       }
     }
 
     .quiz-stats {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin-bottom: 16px;
+      gap: var(--space-3);
+      margin-bottom: var(--space-3);
 
       .quiz-stat {
         text-align: center;
-        padding: 12px;
-        background: white;
-        border-radius: 6px;
+        padding: var(--space-3);
+        background: var(--background-primary);
+        border-radius: var(--radius-sm);
 
         .stat-label {
-          font-size: 12px;
-          color: #666;
-          margin-bottom: 4px;
+          font-size: var(--font-size-caption);
+          color: var(--text-secondary);
+          margin-bottom: var(--space-1);
         }
 
         .stat-value {
-          font-size: 20px;
-          font-weight: 700;
+          font-size: var(--font-size-h3);
+          font-weight: var(--font-weight-bold);
         }
       }
     }
 
     .recent-attempts {
       .attempts-header {
-        font-size: 13px;
-        font-weight: 600;
-        color: #666;
-        margin-bottom: 8px;
+        font-size: var(--font-size-caption);
+        font-weight: var(--font-weight-semibold);
+        color: var(--text-secondary);
+        margin-bottom: var(--space-2);
       }
 
       .attempt-item {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 8px 12px;
-        background: white;
-        border-radius: 6px;
+        padding: var(--space-2) var(--space-3);
+        background: var(--background-primary);
+        border-radius: var(--radius-sm);
         margin-bottom: 6px;
 
         &:last-child {
@@ -263,23 +263,23 @@
         .attempt-info {
           display: flex;
           align-items: center;
-          gap: 8px;
+          gap: var(--space-2);
 
           .attempt-score {
-            font-weight: 700;
-            font-size: 16px;
+            font-weight: var(--font-weight-bold);
+            font-size: var(--font-size-body);
           }
 
           .attempt-icon {
-            font-size: 20px;
-            width: 20px;
-            height: 20px;
+            font-size: var(--font-size-h3);
+            width: var(--font-size-h3);
+            height: var(--font-size-h3);
           }
         }
 
         .attempt-date {
-          font-size: 12px;
-          color: #666;
+          font-size: var(--font-size-caption);
+          color: var(--text-secondary);
         }
       }
     }
@@ -289,13 +289,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    padding: 24px;
-    background: #f8f9fa;
-    border-radius: 8px;
-    margin-bottom: 16px;
-    color: #999;
-    font-size: 14px;
+    gap: var(--space-2);
+    padding: var(--space-4);
+    background: var(--background-secondary);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-3);
+    color: var(--text-tertiary);
+    font-size: var(--font-size-body-small);
 
     mat-icon {
       opacity: 0.5;
@@ -305,29 +305,29 @@
   .enrollment-info {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: var(--space-2);
 
     .info-item {
       display: flex;
       align-items: center;
-      gap: 8px;
-      font-size: 13px;
-      color: #666;
+      gap: var(--space-2);
+      font-size: var(--font-size-caption);
+      color: var(--text-secondary);
 
       mat-icon {
-        font-size: 16px;
-        width: 16px;
-        height: 16px;
-        color: #999;
+        font-size: var(--space-3);
+        width: var(--space-3);
+        height: var(--space-3);
+        color: var(--text-tertiary);
       }
     }
   }
 
   mat-card-actions {
     display: flex;
-    gap: 12px;
-    padding: 16px;
-    border-top: 1px solid #e0e0e0;
+    gap: var(--space-3);
+    padding: var(--space-3);
+    border-top: 1px solid var(--border-color);
 
     button {
       flex: 1;
@@ -363,4 +363,17 @@
       grid-template-columns: 1fr !important;
     }
   }
+}
+
+// Score color classes (brand-compliant)
+.score-high {
+  color: var(--color-success) !important;
+}
+
+.score-medium {
+  color: var(--color-warning) !important;
+}
+
+.score-low {
+  color: var(--color-error) !important;
 }

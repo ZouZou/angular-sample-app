@@ -17,7 +17,7 @@
         </button>
         <button mat-button (click)="logout()">
           <mat-icon>logout</mat-icon>
-          Logout
+          Sign out
         </button>
       </div>
     </div>
@@ -96,14 +96,14 @@
 
               <div class="quiz-stat" *ngIf="data.bestScore !== undefined">
                 <div class="stat-label">Best Score</div>
-                <div class="stat-value" [style.color]="getScoreColor(data.bestScore)">
+                <div class="stat-value" [ngClass]="getScoreColorClass(data.bestScore)">
                   {{ data.bestScore | number:'1.0-0' }}%
                 </div>
               </div>
 
               <div class="quiz-stat" *ngIf="data.averageScore !== undefined">
                 <div class="stat-label">Average Score</div>
-                <div class="stat-value" [style.color]="getScoreColor(data.averageScore)">
+                <div class="stat-value" [ngClass]="getScoreColorClass(data.averageScore)">
                   {{ data.averageScore | number:'1.0-0' }}%
                 </div>
               </div>

@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { map, takeUntil } from 'rxjs/operators';
 import { CourseService } from '../../services/course.service';
 import { AuthService } from '../../services/auth.service';
 import { Course } from '../../models/course.interface';
@@ -13,7 +13,21 @@ import { Course } from '../../models/course.interface';
   styleUrls: ['./course-list.component.css'],
   standalone: false
 })
-export class CourseListComponent implements OnInit {
+/**
+ * Displays a filterable course catalog with administrative management actions
+ *
+ * Renders a comprehensive list of available courses with dynamic filtering by category and difficulty level.
+ * Provides course navigation, detailed view access, and administrative capabilities for course creation,
+ * editing, and deletion. Supports responsive layout detection for mobile and desktop views. Includes course
+ * level classification with visual styling for better user experience.
+ *
+ * @example
+ * ```html
+ * <app-course-list></app-course-list>
+ * ```
+ */
+export class CourseListComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
   courses: Course[] = [];
   filteredCourses: Course[] = [];
   isLoading = false;
@@ -44,18 +58,20 @@ export class CourseListComponent implements OnInit {
     this.isLoading = true;
     this.error = null;
 
-    this.courseService.getCourses().subscribe({
-      next: (courses) => {
-        this.courses = courses;
-        this.filteredCourses = courses;
-        this.isLoading = false;
-      },
-      error: (error) => {
-        console.error('Error loading courses:', error);
-        this.error = 'Failed to load courses. Please try again later.';
-        this.isLoading = false;
-      }
-    });
+    this.courseService.getCourses()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (courses) => {
+          this.courses = courses;
+          this.filteredCourses = courses;
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.error('Error loading courses:', error);
+          this.error = 'Failed to load courses. Please try again later.';
+          this.isLoading = false;
+        }
+      });
   }
 
   applyFilters(): void {
@@ -103,28 +119,35 @@ export class CourseListComponent implements OnInit {
     if (!courseId) return;
 
     if (confirm('Are you sure you want to delete this course? This action cannot be undone.')) {
-      this.courseService.deleteCourse(courseId).subscribe({
-        next: () => {
-          this.loadCourses();
-        },
-        error: (error) => {
-          console.error('Error deleting course:', error);
-          alert('Failed to delete course. Please try again.');
-        }
-      });
+      this.courseService.deleteCourse(courseId)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: () => {
+            this.loadCourses();
+          },
+          error: (error) => {
+            console.error('Error deleting course:', error);
+            alert('Failed to delete course. Please try again.');
+          }
+        });
     }
   }
 
-  getLevelColor(level: string): string {
+  /**
+   * Returns CSS class name for course level badge styling
+   * @param level - The course difficulty level
+   * @returns CSS class name for styling
+   */
+  getLevelClass(level: string): string {
     switch (level) {
       case 'Beginner':
-        return '#4caf50';
+        return 'level-beginner';
       case 'Intermediate':
-        return '#ff9800';
+        return 'level-intermediate';
       case 'Advanced':
-        return '#f44336';
+        return 'level-advanced';
       default:
-        return '#9e9e9e';
+        return 'level-default';
     }
   }
 
@@ -141,5 +164,10 @@ export class CourseListComponent implements OnInit {
   logout(): void {
     this.authService.logout();
     this.router.navigate(['/login']);
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

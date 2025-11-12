@@ -6,7 +6,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class TruncatePipe implements PipeTransform {
 
-  transform(value: any): any {
+  transform(value: string | null | undefined): string {
+    if (!value) {
+      return '';
+    }
     return value.split(' ').slice(0, 2).join(' ') + '...';
   }
 

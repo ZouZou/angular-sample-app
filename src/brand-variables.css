@@ -1,0 +1,119 @@
+/* Brand Design Tokens & Variables */
+/* Based on Brand Style Guidelines */
+
+:root {
+  /* ========================================
+     PRIMARY COLORS
+     ======================================== */
+  --primary-color: #0066CC;
+  --primary-hover: #0052A3;
+  --primary-dark: #003366;
+
+  /* ========================================
+     SECONDARY COLORS
+     ======================================== */
+  --accent-teal: #00A896;
+  --accent-orange: #FF6B35;
+
+  /* ========================================
+     SEMANTIC COLORS
+     ======================================== */
+  --color-success: #28A745;
+  --color-warning: #FFC107;
+  --color-error: #DC3545;
+  --color-info: #17A2B8;
+
+  /* ========================================
+     NEUTRAL COLORS
+     ======================================== */
+  --text-primary: #1A1A1A;      /* Gray 900 - Body text */
+  --text-secondary: #4A4A4A;    /* Gray 700 - Secondary text */
+  --text-tertiary: #666666;     /* Gray 500 - Disabled text */
+  --border-color: #CCCCCC;      /* Gray 300 - Borders, dividers */
+  --background-secondary: #F5F5F5; /* Gray 100 - Backgrounds */
+  --background-primary: #FFFFFF;   /* White */
+
+  /* ========================================
+     TYPOGRAPHY
+     ======================================== */
+  --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-monospace: 'JetBrains Mono', 'Consolas', 'Monaco', monospace;
+
+  /* Type Scale */
+  --font-size-h1: 32px;
+  --line-height-h1: 40px;
+  --font-weight-h1: 700;
+
+  --font-size-h2: 24px;
+  --line-height-h2: 32px;
+  --font-weight-h2: 600;
+
+  --font-size-h3: 20px;
+  --line-height-h3: 28px;
+  --font-weight-h3: 600;
+
+  --font-size-h4: 18px;
+  --line-height-h4: 24px;
+  --font-weight-h4: 600;
+
+  --font-size-body-large: 18px;
+  --line-height-body-large: 28px;
+
+  --font-size-body: 16px;
+  --line-height-body: 24px;
+
+  --font-size-body-small: 14px;
+  --line-height-body-small: 20px;
+
+  --font-size-caption: 12px;
+  --line-height-caption: 16px;
+
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* ========================================
+     SPACING SYSTEM (8px base unit)
+     ======================================== */
+  --space-1: 4px;   /* Half unit */
+  --space-2: 8px;   /* Tight spacing */
+  --space-3: 16px;  /* Default spacing */
+  --space-4: 24px;  /* Comfortable spacing */
+  --space-5: 32px;  /* Section spacing */
+  --space-6: 48px;  /* Large gaps */
+  --space-7: 64px;  /* Page sections */
+  --space-8: 96px;  /* Major sections */
+
+  /* ========================================
+     BORDER RADIUS
+     ======================================== */
+  --radius-sm: 4px;    /* Buttons, inputs */
+  --radius-md: 8px;    /* Cards, modals */
+  --radius-lg: 12px;   /* Large containers */
+  --radius-full: 9999px; /* Pills, avatars */
+
+  /* ========================================
+     SHADOWS & ELEVATION
+     ======================================== */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
+  --shadow-xl: 0 16px 32px rgba(0, 0, 0, 0.2);
+
+  /* ========================================
+     TRANSITIONS
+     ======================================== */
+  --transition-fast: 150ms ease-in-out;
+  --transition-base: 250ms ease-in-out;
+  --transition-slow: 350ms ease-in-out;
+
+  /* ========================================
+     LAYOUT - BREAKPOINTS (for reference)
+     ======================================== */
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 992px;
+  --breakpoint-xl: 1200px;
+  --breakpoint-xxl: 1400px;
+}

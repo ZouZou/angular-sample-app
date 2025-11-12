@@ -40,11 +40,11 @@
           </button>
           <button *ngIf="isAdmin()" mat-button (click)="navigateToEdit()">
             <mat-icon>edit</mat-icon>
-            Edit
+            Edit Course
           </button>
           <button *ngIf="isAdmin()" mat-button (click)="deleteCourse()">
             <mat-icon>delete</mat-icon>
-            Delete
+            Delete Course
           </button>
         </div>
       </div>
@@ -54,7 +54,7 @@
     <div class="course-banner" [style.background-image]="'url(' + (course.bannerUrl || course.thumbnailUrl || 'https://via.placeholder.com/1200x400?text=Course+Image') + ')'">
       <div class="banner-overlay">
         <div class="banner-content">
-          <span class="level-badge" [style.background-color]="getLevelColor(course.level)">
+          <span class="level-badge" [ngClass]="getLevelClass(course.level)">
             {{ course.level }}
           </span>
           <h1>{{ course.title }}</h1>
