@@ -152,6 +152,88 @@ npm run start:frontend
 - Frontend: http://localhost:4200
 - Backend API: http://localhost:3000/api
 
+## Docker Deployment
+
+The application can be deployed using Docker and Docker Compose, which provides a containerized environment with all dependencies included.
+
+### Prerequisites for Docker
+
+- Docker (version 20.10 or higher)
+- Docker Compose (version 2.0 or higher)
+
+### Quick Start with Docker
+
+1. **Build and start all services** (frontend, backend, and PostgreSQL):
+   ```bash
+   docker compose up -d
+   ```
+
+2. **Access the application**:
+   - Frontend: http://localhost
+   - Backend API: http://localhost:3000
+   - Database: localhost:5432
+
+3. **View logs**:
+   ```bash
+   docker compose logs -f
+   ```
+
+4. **Stop all services**:
+   ```bash
+   docker compose down
+   ```
+
+### Docker Architecture
+
+The Docker setup includes three services:
+- **Frontend**: Angular app served by Nginx (port 80)
+- **Backend**: Node.js Express API (port 3000)
+- **Database**: PostgreSQL 15 (port 5432)
+
+All services are connected via a Docker bridge network with health checks enabled.
+
+### Docker Commands
+
+```bash
+# Build services
+docker compose build
+
+# Start services in background
+docker compose up -d
+
+# Start with rebuild
+docker compose up -d --build
+
+# View service status
+docker compose ps
+
+# View logs for specific service
+docker compose logs -f backend
+
+# Restart a service
+docker compose restart backend
+
+# Stop and remove containers
+docker compose down
+
+# Stop and remove containers + volumes (deletes database data)
+docker compose down -v
+
+# Execute command in container
+docker compose exec backend npm run seed
+```
+
+### Configuration
+
+Environment variables are configured in `docker-compose.yml`. For production:
+
+1. Update database password in `docker-compose.yml`
+2. Change `JWT_SECRET` to a secure random string
+3. Update `CORS_ORIGIN` to your production domain
+4. Review security settings in `nginx.conf`
+
+For detailed Docker deployment instructions, see [DOCKER_DEPLOYMENT.md](DOCKER_DEPLOYMENT.md).
+
 ## Available Scripts
 
 ### Root Level Scripts
