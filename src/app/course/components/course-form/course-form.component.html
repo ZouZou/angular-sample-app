@@ -194,7 +194,7 @@
               </div>
 
               <!-- Add/Edit Lesson Form -->
-              <div *ngIf="editingLesson?.section.id === section.id" class="lesson-form">
+              <div *ngIf="editingLesson?.section?.id === section.id" class="lesson-form">
                 <h4>{{ editingLesson.lesson?.id ? 'Edit Lesson' : 'Add New Lesson' }}</h4>
 
                 <mat-form-field appearance="outline" class="full-width">
