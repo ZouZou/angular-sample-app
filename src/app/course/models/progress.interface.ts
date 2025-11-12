@@ -6,4 +6,5 @@ export interface UserProgress {
   completed: boolean;
   completedDate?: Date;
   timeSpent?: number; // in minutes
+  notes?: string;
 }

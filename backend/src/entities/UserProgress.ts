@@ -24,6 +24,9 @@ export class UserProgress {
   @Column({ name: 'time_spent', default: 0 })
   timeSpent!: number;
 
+  @Column({ type: 'text', nullable: true })
+  notes?: string;
+
   @Column({ name: 'completed_at', nullable: true })
   completedAt?: Date;
 

@@ -91,7 +91,7 @@
               [(ngModel)]="lessonNotes">
             </textarea>
           </mat-form-field>
-          <button mat-stroked-button color="primary" class="save-notes-btn">
+          <button mat-stroked-button color="primary" class="save-notes-btn" (click)="saveNotes()">
             <mat-icon>save</mat-icon>
             Save Notes
           </button>

@@ -129,14 +129,17 @@ export class LessonViewerComponent implements OnInit, OnDestroy {
   }
 
   checkCompletion(): void {
-    this.progressService.isLessonCompleted(this.userId, this.enrollmentId, this.lessonId)
+    this.progressService.getLessonProgress(this.userId, this.lessonId)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (completed) => {
-          this.isCompleted = completed;
+        next: (progress) => {
+          this.isCompleted = progress?.completed || false;
+          this.lessonNotes = progress?.notes || '';
         },
         error: (error) => {
           console.error('Error checking completion:', error);
+          this.isCompleted = false;
+          this.lessonNotes = '';
         }
       });
   }
@@ -156,6 +159,21 @@ export class LessonViewerComponent implements OnInit, OnDestroy {
         error: (error) => {
           console.error('Error marking lesson as complete:', error);
           alert('Failed to mark lesson as complete. Please try again.');
+        }
+      });
+  }
+
+  saveNotes(): void {
+    this.progressService.updateLessonNotes(this.enrollmentId, this.lessonId, this.lessonNotes)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          // Show success message
+          alert('Notes saved successfully!');
+        },
+        error: (error) => {
+          console.error('Error saving notes:', error);
+          alert('Failed to save notes. Please try again.');
         }
       });
   }
