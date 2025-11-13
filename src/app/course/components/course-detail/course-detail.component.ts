@@ -120,16 +120,23 @@ export class CourseDetailComponent implements OnInit {
     }
   }
 
-  getLevelColor(level: string): string {
+  /**
+   * Returns a brand-compliant CSS class name for the course level badge.
+   * Maps course level strings to their corresponding level class names.
+   *
+   * @param level - The course level ('Beginner', 'Intermediate', 'Advanced', or other)
+   * @returns The CSS class name for styling the level badge
+   */
+  getLevelClass(level: string): string {
     switch (level) {
       case 'Beginner':
-        return '#4caf50';
+        return 'level-beginner';
       case 'Intermediate':
-        return '#ff9800';
+        return 'level-intermediate';
       case 'Advanced':
-        return '#f44336';
+        return 'level-advanced';
       default:
-        return '#9e9e9e';
+        return 'level-default';
     }
   }
 

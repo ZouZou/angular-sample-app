@@ -22,7 +22,7 @@ export class QuizPlayerComponent implements OnInit, OnDestroy {
   isSubmitting = false;
   error: string | null = null;
   timeRemaining: number | null = null;
-  timerInterval: any;
+  timerInterval: ReturnType<typeof setInterval> | undefined;
 
   private destroy$ = new Subject<void>();
   private courseId!: number;

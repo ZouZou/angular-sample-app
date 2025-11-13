@@ -12,22 +12,41 @@ export class HttpService {
     private http: HttpClient
   ) { }
 
-  getRequest(url: string): any {
-    return this.http.get(url)
+  /**
+   * Performs an HTTP GET request to the specified URL
+   * @param url - The endpoint URL to fetch data from
+   * @returns Observable of the HTTP response
+   */
+  getRequest<T = unknown>(url: string): Observable<T> {
+    return this.http.get<T>(url)
     .pipe(
       catchError(this.handleError)
     );
   }
 
-  postRequest(url: string, data: any, option?: any): Observable<any> {
-    return this.http.post(url, data, option)
+  /**
+   * Performs an HTTP POST request to the specified URL
+   * @param url - The endpoint URL to send data to
+   * @param data - The request body data
+   * @param option - Optional HTTP options (headers, params, etc.)
+   * @returns Observable of the HTTP response
+   */
+  postRequest<T = unknown>(url: string, data: unknown, option?: { headers?: HttpHeaders; params?: HttpParams }): Observable<T> {
+    return this.http.post<T>(url, data, option)
     .pipe(
       catchError(this.handleError)
     );
   }
 
-  updateRequest(url: string, data: any, option?: any): Observable<any> {
-    return this.http.put(url, data, option)
+  /**
+   * Performs an HTTP PUT request to the specified URL
+   * @param url - The endpoint URL to update data at
+   * @param data - The request body data
+   * @param option - Optional HTTP options (headers, params, etc.)
+   * @returns Observable of the HTTP response
+   */
+  updateRequest<T = unknown>(url: string, data: unknown, option?: { headers?: HttpHeaders; params?: HttpParams }): Observable<T> {
+    return this.http.put<T>(url, data, option)
     .pipe(
       catchError(this.handleError)
     );

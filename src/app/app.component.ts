@@ -2,6 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpService } from './http.service';
+import { Observable } from 'rxjs';
+
+interface Post {
+  userId: number;
+  id: number;
+  title: string;
+  body: string;
+}
 
 @Component({
   selector: 'app-root',
@@ -23,8 +31,8 @@ export class AppComponent implements OnInit{
     isColored: true
   };
   showUser: boolean = true;
-  posts: any = [];
-  postsAsync: any = this.httpService.getRequest("http://jsonplaceholder.typicode.com/posts");
+  posts: Post[] = [];
+  postsAsync: Observable<Post[]> = this.httpService.getRequest<Post[]>("http://jsonplaceholder.typicode.com/posts");
   testProp = new FormControl('');
   profileForm = new FormGroup({
     firstName: new FormControl('', [Validators.required, Validators.minLength(2)]),
@@ -45,17 +53,17 @@ export class AppComponent implements OnInit{
     this.getPosts();
   }
 
-  handleEvent(event: any) {
+  handleEvent(event: Event): void {
     // this.httpService.getRequest('http://jsonplaceholder.typicode.com/todos/1')
     // .subscribe((response: any) => this.jsonValue = response);
     console.log(event);
   }
 
-  getPosts(): any {
-    this.httpService.getRequest("http://jsonplaceholder.typicode.com/posts")
-    .subscribe((response: any) => {
+  getPosts(): void {
+    this.httpService.getRequest<Post[]>("http://jsonplaceholder.typicode.com/posts")
+    .subscribe((response: Post[]) => {
       this.posts = response;
-    });  
+    });
   }
 
   goToRoute(route: string = '/customer'): void {

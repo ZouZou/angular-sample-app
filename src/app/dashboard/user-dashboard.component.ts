@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../course/services/auth.service';
 import { EnrollmentService } from '../course/services/enrollment.service';
@@ -8,7 +8,8 @@ import { User } from '../course/models/user.interface';
 import { Enrollment } from '../course/models/enrollment.interface';
 import { Course } from '../course/models/course.interface';
 import { QuizAttempt } from '../course/models/quiz.interface';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 interface EnrolledCourseData {
   enrollment: Enrollment;
@@ -26,7 +27,21 @@ interface EnrolledCourseData {
   styleUrls: ['./user-dashboard.component.scss'],
   standalone: false
 })
-export class UserDashboardComponent implements OnInit {
+/**
+ * Displays the user learning dashboard with course progress and performance metrics
+ *
+ * Provides a comprehensive overview of enrolled courses, learning progress tracking,
+ * and quiz performance statistics. Aggregates quiz attempt data to calculate best scores
+ * and average performance per course. Supports quick course navigation and continued learning
+ * from enrolled courses. Automatically redirects unauthenticated users to the login page.
+ *
+ * @example
+ * ```html
+ * <app-user-dashboard></app-user-dashboard>
+ * ```
+ */
+export class UserDashboardComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
   currentUser: User | null = null;
   enrolledCourses: EnrolledCourseData[] = [];
   isLoading = false;
@@ -63,72 +78,78 @@ export class UserDashboardComponent implements OnInit {
     }
 
     // Get user enrollments
-    this.enrollmentService.getUserEnrollments(userId).subscribe({
-      next: (enrollments) => {
-        if (enrollments.length === 0) {
-          this.isLoading = false;
-          return;
-        }
+    this.enrollmentService.getUserEnrollments(userId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (enrollments) => {
+          if (enrollments.length === 0) {
+            this.isLoading = false;
+            return;
+          }
 
-        // Fetch course details and quiz attempts for each enrollment
-        const courseRequests = enrollments.map(enrollment =>
-          this.courseService.getCourse(enrollment.courseId)
-        );
+          // Fetch course details and quiz attempts for each enrollment
+          const courseRequests = enrollments.map(enrollment =>
+            this.courseService.getCourse(enrollment.courseId)
+          );
 
-        forkJoin(courseRequests).subscribe({
-          next: (courses) => {
-            // Get quiz attempts for the user
-            this.quizService.getUserAllAttempts(userId).subscribe({
-              next: (allAttempts) => {
-                this.enrolledCourses = enrollments.map((enrollment, index) => {
-                  const course = courses[index];
-                  const courseAttempts = allAttempts.filter(
-                    attempt => attempt.quizId && this.isQuizInCourse(attempt.quizId, course.id!)
-                  );
+          forkJoin(courseRequests)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+              next: (courses) => {
+                // Get quiz attempts for the user
+                this.quizService.getUserAllAttempts(userId)
+                  .pipe(takeUntil(this.destroy$))
+                  .subscribe({
+                    next: (allAttempts) => {
+                      this.enrolledCourses = enrollments.map((enrollment, index) => {
+                        const course = courses[index];
+                        const courseAttempts = allAttempts.filter(
+                          attempt => attempt.quizId && this.isQuizInCourse(attempt.quizId, course.id!)
+                        );
 
-                  const completedAttempts = courseAttempts.filter(a => a.completedAt);
-                  const scores = completedAttempts.map(a => a.percentage);
+                        const completedAttempts = courseAttempts.filter(a => a.completedAt);
+                        const scores = completedAttempts.map(a => a.percentage);
 
-                  return {
-                    enrollment,
-                    course,
-                    quizAttempts: courseAttempts,
-                    bestScore: scores.length > 0 ? Math.max(...scores) : undefined,
-                    averageScore: scores.length > 0 ? scores.reduce((a, b) => a + b, 0) / scores.length : undefined,
-                    completedQuizzes: completedAttempts.length,
-                    totalQuizzes: this.getTotalQuizzesInCourse(course.id!)
-                  };
-                });
+                        return {
+                          enrollment,
+                          course,
+                          quizAttempts: courseAttempts,
+                          bestScore: scores.length > 0 ? Math.max(...scores) : undefined,
+                          averageScore: scores.length > 0 ? scores.reduce((a, b) => a + b, 0) / scores.length : undefined,
+                          completedQuizzes: completedAttempts.length,
+                          totalQuizzes: this.getTotalQuizzesInCourse(course.id!)
+                        };
+                      });
 
-                this.isLoading = false;
+                      this.isLoading = false;
+                    },
+                    error: (error) => {
+                      console.error('Error loading quiz attempts:', error);
+                      // Still show courses even if quiz attempts fail to load
+                      this.enrolledCourses = enrollments.map((enrollment, index) => ({
+                        enrollment,
+                        course: courses[index],
+                        quizAttempts: [],
+                        completedQuizzes: 0,
+                        totalQuizzes: 0
+                      }));
+                      this.isLoading = false;
+                    }
+                  });
               },
               error: (error) => {
-                console.error('Error loading quiz attempts:', error);
-                // Still show courses even if quiz attempts fail to load
-                this.enrolledCourses = enrollments.map((enrollment, index) => ({
-                  enrollment,
-                  course: courses[index],
-                  quizAttempts: [],
-                  completedQuizzes: 0,
-                  totalQuizzes: 0
-                }));
+                console.error('Error loading courses:', error);
+                this.error = 'Failed to load course details';
                 this.isLoading = false;
               }
             });
-          },
-          error: (error) => {
-            console.error('Error loading courses:', error);
-            this.error = 'Failed to load course details';
-            this.isLoading = false;
-          }
-        });
-      },
-      error: (error) => {
-        console.error('Error loading enrollments:', error);
-        this.error = 'Failed to load your enrolled courses';
-        this.isLoading = false;
-      }
-    });
+        },
+        error: (error) => {
+          console.error('Error loading enrollments:', error);
+          this.error = 'Failed to load your enrolled courses';
+          this.isLoading = false;
+        }
+      });
   }
 
   // Helper method to check if a quiz belongs to a course
@@ -160,14 +181,24 @@ export class UserDashboardComponent implements OnInit {
     return 'warn';
   }
 
-  getScoreColor(score: number): string {
-    if (score >= 80) return '#4caf50';
-    if (score >= 60) return '#ff9800';
-    return '#f44336';
+  /**
+   * Returns CSS class name for score color based on performance
+   * @param score - The score percentage (0-100)
+   * @returns CSS class name for styling
+   */
+  getScoreColorClass(score: number): string {
+    if (score >= 80) return 'score-high';
+    if (score >= 60) return 'score-medium';
+    return 'score-low';
   }
 
   logout(): void {
     this.authService.logout();
     this.router.navigate(['/login']);
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
