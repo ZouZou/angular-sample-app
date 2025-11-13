@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatDialog } from '@angular/material/dialog';
@@ -16,7 +16,8 @@ import { fadeInUp, staggerList } from '../../../shared/animations/animations';
   templateUrl: './course-list.component.html',
   styleUrls: ['./course-list.component.css'],
   standalone: false,
-  animations: [fadeInUp, staggerList]
+  animations: [fadeInUp, staggerList],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 /**
  * Displays a filterable course catalog with administrative management actions
@@ -54,7 +55,8 @@ export class CourseListComponent implements OnInit, OnDestroy {
     private router: Router,
     private breakpointObserver: BreakpointObserver,
     private dialog: MatDialog,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -64,6 +66,7 @@ export class CourseListComponent implements OnInit, OnDestroy {
   loadCourses(): void {
     this.isLoading = true;
     this.error = null;
+    this.cdr.markForCheck();
 
     this.courseService.getCourses()
       .pipe(takeUntil(this.destroy$))
@@ -72,11 +75,13 @@ export class CourseListComponent implements OnInit, OnDestroy {
           this.courses = courses;
           this.filteredCourses = courses;
           this.isLoading = false;
+          this.cdr.markForCheck();
         },
         error: (error) => {
           console.error('Error loading courses:', error);
           this.error = 'Failed to load courses. Please try again later.';
           this.isLoading = false;
+          this.cdr.markForCheck();
         }
       });
   }

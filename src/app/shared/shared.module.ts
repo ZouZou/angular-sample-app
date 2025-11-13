@@ -12,6 +12,7 @@ import { PwaInstallPromptComponent } from './components/pwa-install-prompt/pwa-i
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
 import { CharacterCounterDirective } from './directives/character-counter.directive';
 import { PhoneMaskDirective } from './directives/phone-mask.directive';
+import { LazyLoadImageDirective } from './directives/lazy-load-image.directive';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { PhoneMaskDirective } from './directives/phone-mask.directive';
     PwaInstallPromptComponent,
     FileUploadComponent,
     CharacterCounterDirective,
-    PhoneMaskDirective
+    PhoneMaskDirective,
+    LazyLoadImageDirective
   ],
   imports: [
     CommonModule,
@@ -38,7 +40,8 @@ import { PhoneMaskDirective } from './directives/phone-mask.directive';
     PwaInstallPromptComponent,
     FileUploadComponent,
     CharacterCounterDirective,
-    PhoneMaskDirective
+    PhoneMaskDirective,
+    LazyLoadImageDirective
   ]
 })
 export class SharedModule { }
