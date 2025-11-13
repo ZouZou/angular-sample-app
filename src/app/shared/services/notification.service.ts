@@ -8,7 +8,8 @@ export class NotificationService {
   private defaultConfig: MatSnackBarConfig = {
     duration: 3000,
     horizontalPosition: 'end',
-    verticalPosition: 'top'
+    verticalPosition: 'top',
+    politeness: 'polite' // ARIA live region politeness for screen readers
   };
 
   constructor(private snackBar: MatSnackBar) {}
@@ -16,7 +17,8 @@ export class NotificationService {
   success(message: string, action: string = 'Close'): void {
     this.snackBar.open(message, action, {
       ...this.defaultConfig,
-      panelClass: ['success-snackbar']
+      panelClass: ['success-snackbar'],
+      politeness: 'polite'
     });
   }
 
@@ -24,14 +26,16 @@ export class NotificationService {
     this.snackBar.open(message, action, {
       ...this.defaultConfig,
       duration: 5000,
-      panelClass: ['error-snackbar']
+      panelClass: ['error-snackbar'],
+      politeness: 'assertive' // Errors are announced immediately
     });
   }
 
   info(message: string, action: string = 'Close'): void {
     this.snackBar.open(message, action, {
       ...this.defaultConfig,
-      panelClass: ['info-snackbar']
+      panelClass: ['info-snackbar'],
+      politeness: 'polite'
     });
   }
 
@@ -39,7 +43,8 @@ export class NotificationService {
     this.snackBar.open(message, action, {
       ...this.defaultConfig,
       duration: 4000,
-      panelClass: ['warning-snackbar']
+      panelClass: ['warning-snackbar'],
+      politeness: 'assertive' // Warnings are announced immediately
     });
   }
 }

@@ -1,10 +1,13 @@
+<!-- Skip to main content link for keyboard navigation -->
+<a href="#main-content" class="skip-to-main">Skip to main content</a>
+
 <mat-sidenav-container class="sidenav-container">
   <mat-sidenav #drawer class="sidenav" fixedInViewport
       [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
       [mode]="(isHandset$ | async) ? 'over' : 'side'"
       [opened]="(isHandset$ | async) === false">
     <mat-toolbar>Menu</mat-toolbar>
-    <mat-nav-list>
+    <mat-nav-list role="navigation" aria-label="Main navigation">
       <a mat-list-item routerLink="/motor-quote" aria-label="Motor Quote - Get insurance quotations">
         <mat-icon aria-hidden="true">directions_car</mat-icon>
         Motor Quote
@@ -35,7 +38,9 @@
       </button>
       <span>myapp</span>
     </mat-toolbar>
-    <!-- Add Content Here -->
-    <app-address></app-address>
+    <!-- Main content region with ID for skip link -->
+    <main id="main-content" role="main" tabindex="-1">
+      <app-address></app-address>
+    </main>
   </mat-sidenav-content>
 </mat-sidenav-container>
