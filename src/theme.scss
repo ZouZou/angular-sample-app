@@ -1,0 +1,77 @@
+@use '@angular/material' as mat;
+
+// Include the common styles for Angular Material
+@include mat.core();
+
+// Define a custom blue palette based on the header color #0066CC
+$custom-blue-palette: (
+  50: #e6f0ff,
+  100: #b3d1ff,
+  200: #80b3ff,
+  300: #4d94ff,
+  400: #267dff,
+  500: #0066cc,  // Primary color matching header
+  600: #0059b3,
+  700: #004d99,
+  800: #004080,
+  900: #003366,
+  A100: #99c2ff,
+  A200: #66a3ff,
+  A400: #3385ff,
+  A700: #0073ff,
+  contrast: (
+    50: rgba(black, 0.87),
+    100: rgba(black, 0.87),
+    200: rgba(black, 0.87),
+    300: rgba(black, 0.87),
+    400: white,
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+    A100: rgba(black, 0.87),
+    A200: rgba(black, 0.87),
+    A400: white,
+    A700: white,
+  )
+);
+
+// Define the palettes for your theme
+$primary: mat.define-palette($custom-blue-palette, 500);
+$accent: mat.define-palette(mat.$orange-palette, A200, A100, A400);
+$warn: mat.define-palette(mat.$red-palette);
+
+// Create the theme object
+$theme: mat.define-light-theme((
+  color: (
+    primary: $primary,
+    accent: $accent,
+    warn: $warn,
+  ),
+  typography: mat.define-typography-config(),
+  density: 0,
+));
+
+// Include theme styles for core and each component
+@include mat.all-component-themes($theme);
+
+// Additional custom button styling to ensure consistency
+.mat-mdc-raised-button.mat-primary,
+.mat-mdc-unelevated-button.mat-primary,
+.mat-mdc-flat-button.mat-primary {
+  --mdc-protected-button-container-color: #0066cc;
+  --mdc-filled-button-container-color: #0066cc;
+  --mat-protected-button-state-layer-color: #0066cc;
+  --mat-filled-button-state-layer-color: #0066cc;
+}
+
+.mat-mdc-button.mat-primary {
+  --mdc-text-button-label-text-color: #0066cc;
+  --mat-text-button-state-layer-color: #0066cc;
+}
+
+.mat-mdc-icon-button.mat-primary {
+  --mdc-icon-button-icon-color: #0066cc;
+  --mat-icon-button-state-layer-color: #0066cc;
+}
