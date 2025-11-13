@@ -10,6 +10,7 @@ import { Course } from '../course/models/course.interface';
 import { QuizAttempt } from '../course/models/quiz.interface';
 import { forkJoin, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { NotificationService } from '../shared/services/notification.service';
 
 interface EnrolledCourseData {
   enrollment: Enrollment;
@@ -52,7 +53,8 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
     private enrollmentService: EnrollmentService,
     private courseService: CourseService,
     private quizService: QuizService,
-    private router: Router
+    private router: Router,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -193,7 +195,9 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
   }
 
   logout(): void {
+    const userName = this.currentUser?.name || 'User';
     this.authService.logout();
+    this.notificationService.info(`Goodbye, ${userName}! See you next time. 👋`);
     this.router.navigate(['/login']);
   }
 

@@ -12,6 +12,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AuthService } from '../../course/services/auth.service';
+import { NotificationService } from '../../shared/services/notification.service';
 
 @Component({
   selector: 'app-login',
@@ -60,7 +61,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -89,22 +91,12 @@ export class LoginComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (user) => {
-          this.snackBar.open(`Welcome back, ${user.name}!`, 'Close', {
-            duration: 3000,
-            horizontalPosition: 'end',
-            verticalPosition: 'top'
-          });
-
+          this.notificationService.success(`Welcome back, ${user.name}! 👋`);
           this.redirectUser();
         },
         error: (error) => {
           this.loading = false;
-          this.snackBar.open(error.message || 'Invalid credentials. Please verify your email and password.', 'Close', {
-            duration: 5000,
-            horizontalPosition: 'end',
-            verticalPosition: 'top',
-            panelClass: ['error-snackbar']
-          });
+          this.notificationService.error(error.message || 'Invalid credentials. Please verify your email and password.');
         }
       });
   }

@@ -4,6 +4,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { QuizService } from '../../../services/quiz.service';
 import { Quiz, QuizAttempt } from '../../../models/quiz.interface';
+import { NotificationService } from '../../../../shared/services/notification.service';
 
 @Component({
   selector: 'app-quiz-result',
@@ -25,7 +26,8 @@ export class QuizResultComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private quizService: QuizService
+    private quizService: QuizService,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -76,6 +78,7 @@ export class QuizResultComponent implements OnInit, OnDestroy {
           if (attempt) {
             this.attempt = attempt;
             this.isLoading = false;
+            this.showScoreNotification(attempt);
           } else {
             this.error = 'Attempt not found';
             this.isLoading = false;
@@ -87,6 +90,23 @@ export class QuizResultComponent implements OnInit, OnDestroy {
           this.isLoading = false;
         }
       });
+  }
+
+  showScoreNotification(attempt: QuizAttempt): void {
+    const score = attempt.percentage;
+    const passed = attempt.passed;
+
+    if (passed) {
+      if (score >= 90) {
+        this.notificationService.success(`🎉 Outstanding! You scored ${score}% - Excellent work!`);
+      } else if (score >= 80) {
+        this.notificationService.success(`🌟 Great job! You scored ${score}% and passed the quiz!`);
+      } else {
+        this.notificationService.success(`✅ Well done! You scored ${score}% and passed the quiz!`);
+      }
+    } else {
+      this.notificationService.warning(`You scored ${score}%. Keep practicing and try again!`);
+    }
   }
 
   getScoreColor(): string {
