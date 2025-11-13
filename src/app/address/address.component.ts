@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { NotificationService } from '../shared/services/notification.service';
 
 @Component({
   standalone: false,
@@ -86,9 +87,20 @@ export class AddressComponent {
     {name: 'Wyoming', abbreviation: 'WY'}
   ];
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private notificationService: NotificationService
+  ) {}
 
   onSubmit(): void {
-    alert('Thanks!');
+    if (this.addressForm.valid) {
+      // In a real app, you would send this to a server
+      console.log('Address form submitted:', this.addressForm.value);
+      this.notificationService.success('Address saved successfully!');
+      this.addressForm.reset({ shipping: 'free' });
+      this.hasUnitNumber = false;
+    } else {
+      this.notificationService.error('Please fill in all required fields');
+    }
   }
 }

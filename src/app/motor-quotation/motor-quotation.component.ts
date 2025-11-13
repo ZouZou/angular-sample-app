@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { NotificationService } from '../shared/services/notification.service';
 
 interface QuoteResult {
   premium: number;
@@ -54,7 +55,8 @@ export class MotorQuotationComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private breakpointObserver: BreakpointObserver
+    private breakpointObserver: BreakpointObserver,
+    private notificationService: NotificationService
   ) {
     // Generate years from current year back 25 years
     const currentYear = new Date().getFullYear();
@@ -198,6 +200,7 @@ export class MotorQuotationComponent implements OnInit {
       };
 
       this.isCalculating = false;
+      this.notificationService.success('Your quote has been calculated successfully!');
     }, 1500);
   }
 

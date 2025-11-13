@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 import { CourseService } from '../../services/course.service';
 import { CurriculumService } from '../../services/curriculum.service';
 import { EnrollmentService } from '../../services/enrollment.service';
@@ -7,6 +8,8 @@ import { AuthService } from '../../services/auth.service';
 import { Course } from '../../models/course.interface';
 import { Enrollment } from '../../models/enrollment.interface';
 import { CourseSection } from '../../models/curriculum.interface';
+import { ConfirmationDialogComponent } from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
+import { NotificationService } from '../../../shared/services/notification.service';
 
 @Component({
   selector: 'app-course-detail',
@@ -29,7 +32,9 @@ export class CourseDetailComponent implements OnInit {
     private enrollmentService: EnrollmentService,
     private authService: AuthService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -107,17 +112,31 @@ export class CourseDetailComponent implements OnInit {
   deleteCourse(): void {
     if (!this.course?.id) return;
 
-    if (confirm(`Are you sure you want to delete "${this.course.title}"? This action cannot be undone.`)) {
-      this.courseService.deleteCourse(this.course.id).subscribe({
-        next: () => {
-          this.router.navigate(['/courses']);
-        },
-        error: (error) => {
-          console.error('Error deleting course:', error);
-          alert('Failed to delete course. Please try again.');
-        }
-      });
-    }
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '400px',
+      data: {
+        title: 'Delete Course',
+        message: `Are you sure you want to delete "${this.course.title}"? This action cannot be undone.`,
+        confirmText: 'Delete',
+        cancelText: 'Cancel',
+        confirmColor: 'warn'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(confirmed => {
+      if (confirmed && this.course?.id) {
+        this.courseService.deleteCourse(this.course.id).subscribe({
+          next: () => {
+            this.notificationService.success('Course deleted successfully');
+            this.router.navigate(['/courses']);
+          },
+          error: (error) => {
+            console.error('Error deleting course:', error);
+            this.notificationService.error('Failed to delete course. Please try again.');
+          }
+        });
+      }
+    });
   }
 
   /**
@@ -145,7 +164,7 @@ export class CourseDetailComponent implements OnInit {
 
     const userId = this.authService.currentUserId;
     if (!userId) {
-      alert('Please log in to enroll in courses');
+      this.notificationService.error('Please log in to enroll in courses');
       return;
     }
 
@@ -155,12 +174,13 @@ export class CourseDetailComponent implements OnInit {
       next: (enrollment) => {
         this.enrollment = enrollment;
         this.isEnrolling = false;
+        this.notificationService.success(`Successfully enrolled in ${this.course!.title}!`);
         // Navigate to course player
         this.router.navigate(['/courses', this.course!.id, 'learn']);
       },
       error: (error) => {
         console.error('Error enrolling in course:', error);
-        alert(error.message || 'Failed to enroll in course. Please try again.');
+        this.notificationService.error(error.message || 'Failed to enroll in course. Please try again.');
         this.isEnrolling = false;
       }
     });
