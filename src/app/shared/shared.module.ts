@@ -4,27 +4,32 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
 import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
 import { SkeletonCourseCardComponent } from './components/skeleton-course-card/skeleton-course-card.component';
+import { PwaInstallPromptComponent } from './components/pwa-install-prompt/pwa-install-prompt.component';
 
 @NgModule({
   declarations: [
     LoadingSpinnerComponent,
     ConfirmationDialogComponent,
-    SkeletonCourseCardComponent
+    SkeletonCourseCardComponent,
+    PwaInstallPromptComponent
   ],
   imports: [
     CommonModule,
     MatProgressSpinnerModule,
     MatDialogModule,
     MatButtonModule,
-    MatCardModule
+    MatCardModule,
+    MatIconModule
   ],
   exports: [
     LoadingSpinnerComponent,
     ConfirmationDialogComponent,
-    SkeletonCourseCardComponent
+    SkeletonCourseCardComponent,
+    PwaInstallPromptComponent
   ]
 })
 export class SharedModule { }
