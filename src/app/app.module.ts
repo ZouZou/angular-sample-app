@@ -33,6 +33,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MotorQuotationComponent } from './motor-quotation/motor-quotation.component';
 import { UserDashboardComponent } from './dashboard/user-dashboard.component';
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -70,7 +71,8 @@ import { UserDashboardComponent } from './dashboard/user-dashboard.component';
     MatTableModule,
     MatTooltipModule,
     MatSnackBarModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    SharedModule
   ],
   providers: [
     {

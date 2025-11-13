@@ -255,6 +255,17 @@ export class QuizPlayerComponent implements OnInit, OnDestroy {
       });
   }
 
+  exitQuiz(): void {
+    if (confirm('Are you sure you want to exit? Your progress will not be saved.')) {
+      // Stop timer
+      if (this.timerInterval) {
+        clearInterval(this.timerInterval);
+      }
+      // Navigate back to course detail page
+      this.router.navigate(['/courses', this.courseId]);
+    }
+  }
+
   getTimerDisplay(): string {
     if (this.timeRemaining === null) return '';
 

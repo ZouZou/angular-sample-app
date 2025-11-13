@@ -32,3 +32,24 @@ body {
   white-space: nowrap;
   border-width: 0;
 }
+
+/* Snackbar Notifications */
+.success-snackbar {
+  background-color: var(--color-success) !important;
+  color: white !important;
+}
+
+.error-snackbar {
+  background-color: var(--color-error) !important;
+  color: white !important;
+}
+
+.info-snackbar {
+  background-color: var(--color-info) !important;
+  color: white !important;
+}
+
+.warning-snackbar {
+  background-color: var(--color-warning) !important;
+  color: var(--text-primary) !important;
+}
