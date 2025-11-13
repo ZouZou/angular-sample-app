@@ -2,8 +2,8 @@
 .quotation-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: var(--space-4);
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
   min-height: 100vh;
 }
 
@@ -102,12 +102,12 @@
 }
 
 .step.active .step-icon mat-icon {
-  color: #667eea;
+  color: var(--primary-color);
 }
 
 .step.completed .step-icon {
-  background: #4caf50;
-  border-color: #4caf50;
+  background: var(--color-success);
+  border-color: var(--color-success);
 }
 
 .step-label {
@@ -129,7 +129,7 @@
 }
 
 .step.completed .step-line {
-  background: #4caf50;
+  background: var(--color-success);
 }
 
 /* Form Container */
@@ -186,7 +186,7 @@
   font-size: 48px;
   width: 48px;
   height: 48px;
-  color: #667eea;
+  color: var(--primary-color);
 }
 
 .step-header h2 {
@@ -227,16 +227,16 @@
 }
 
 ::ng-deep .mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
-  color: #667eea;
+  color: var(--primary-color);
 }
 
 ::ng-deep .mat-form-field-appearance-outline.mat-focused .mat-form-field-label {
-  color: #667eea;
+  color: var(--primary-color);
 }
 
 ::ng-deep .mat-form-field-prefix mat-icon {
   margin-right: 8px;
-  color: #667eea;
+  color: var(--primary-color);
 }
 
 /* Coverage Types */
@@ -260,15 +260,15 @@
 }
 
 .coverage-card:hover {
-  border-color: #667eea;
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+  border-color: var(--primary-color);
+  box-shadow: var(--shadow-md);
   transform: translateY(-2px);
 }
 
 .coverage-card.selected {
-  border-color: #667eea;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  border-color: var(--primary-color);
+  background: linear-gradient(135deg, rgba(0, 102, 204, 0.1) 0%, rgba(0, 51, 102, 0.1) 100%);
+  box-shadow: var(--shadow-lg);
 }
 
 .coverage-radio {
@@ -321,12 +321,12 @@
 }
 
 .premium-card {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
   color: white;
   padding: 40px;
-  border-radius: 16px;
-  margin-bottom: 30px;
-  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--space-5);
+  box-shadow: var(--shadow-xl);
 }
 
 .premium-label {
@@ -385,7 +385,7 @@
 }
 
 .summary-item mat-icon {
-  color: #667eea;
+  color: var(--primary-color);
   font-size: 32px;
   width: 32px;
   height: 32px;
@@ -599,15 +599,15 @@
 
 /* Material Theme Overrides */
 ::ng-deep .mat-raised-button.mat-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
   color: white;
 }
 
 ::ng-deep .mat-raised-button.mat-accent {
-  background: #4caf50;
+  background: var(--color-success);
   color: white;
 }
 
 ::ng-deep .mat-progress-spinner circle {
-  stroke: #667eea;
+  stroke: var(--primary-color);
 }
