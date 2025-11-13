@@ -24,6 +24,7 @@ export class AddressComponent {
   });
 
   hasUnitNumber = false;
+  isSubmitting = false;
 
   states = [
     {name: 'Alabama', abbreviation: 'AL'},
@@ -94,11 +95,17 @@ export class AddressComponent {
 
   onSubmit(): void {
     if (this.addressForm.valid) {
-      // In a real app, you would send this to a server
-      console.log('Address form submitted:', this.addressForm.value);
-      this.notificationService.success('Address saved successfully!');
-      this.addressForm.reset({ shipping: 'free' });
-      this.hasUnitNumber = false;
+      this.isSubmitting = true;
+
+      // Simulate API call with setTimeout
+      setTimeout(() => {
+        // In a real app, you would send this to a server
+        console.log('Address form submitted:', this.addressForm.value);
+        this.notificationService.success('Address saved successfully!');
+        this.addressForm.reset({ shipping: 'free' });
+        this.hasUnitNumber = false;
+        this.isSubmitting = false;
+      }, 1000);
     } else {
       this.notificationService.error('Please fill in all required fields');
       // Mark all fields as touched to show validation errors

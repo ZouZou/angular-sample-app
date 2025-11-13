@@ -23,8 +23,13 @@
     </div>
   </div>
 
-  <!-- Loading State -->
-  <app-loading-spinner *ngIf="isLoading" message="Loading your courses..."></app-loading-spinner>
+  <!-- Loading State with Skeleton Cards -->
+  <div *ngIf="isLoading" class="courses-section">
+    <h2>My Courses</h2>
+    <div class="courses-grid">
+      <app-skeleton-course-card *ngFor="let item of [1,2,3,4]"></app-skeleton-course-card>
+    </div>
+  </div>
 
   <!-- Error State -->
   <div *ngIf="error && !isLoading" class="error-container">

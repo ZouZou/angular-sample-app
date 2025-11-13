@@ -30,6 +30,17 @@
         <div class="step-line" *ngIf="i < 3" aria-hidden="true"></div>
       </div>
     </div>
+
+    <!-- Overall Progress Bar -->
+    <div class="overall-progress">
+      <div class="progress-info">
+        <span class="progress-text">Overall Progress</span>
+        <span class="progress-percentage">{{ getProgressPercentage() }}%</span>
+      </div>
+      <div class="progress-bar-container">
+        <div class="progress-bar-fill" [style.width.%]="getProgressPercentage()"></div>
+      </div>
+    </div>
   </div>
 
   <!-- Form Content -->

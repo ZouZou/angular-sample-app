@@ -50,8 +50,10 @@
       </mat-form-field>
     </div>
 
-    <!-- Loading State -->
-    <app-loading-spinner *ngIf="isLoading" message="Loading courses..."></app-loading-spinner>
+    <!-- Loading State with Skeleton Cards -->
+    <div *ngIf="isLoading" class="courses-grid">
+      <app-skeleton-course-card *ngFor="let item of [1,2,3,4,5,6]"></app-skeleton-course-card>
+    </div>
 
     <!-- Error State -->
     <div *ngIf="error && !isLoading" class="error-container">

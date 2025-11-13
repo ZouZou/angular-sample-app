@@ -131,6 +131,10 @@ export class MotorQuotationComponent implements OnInit {
     }
   }
 
+  getProgressPercentage(): number {
+    return Math.round(((this.currentStep + 1) / 4) * 100);
+  }
+
   nextStep(): void {
     if (this.currentStep < 3) {
       this.currentStep++;
