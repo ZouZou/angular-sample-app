@@ -16,14 +16,10 @@ import { LazyLoadImageDirective } from './directives/lazy-load-image.directive';
 
 @NgModule({
   declarations: [
-    LoadingSpinnerComponent,
-    ConfirmationDialogComponent,
-    SkeletonCourseCardComponent,
     PwaInstallPromptComponent,
     FileUploadComponent,
     CharacterCounterDirective,
-    PhoneMaskDirective,
-    LazyLoadImageDirective
+    PhoneMaskDirective
   ],
   imports: [
     CommonModule,
@@ -31,7 +27,11 @@ import { LazyLoadImageDirective } from './directives/lazy-load-image.directive';
     MatDialogModule,
     MatButtonModule,
     MatCardModule,
-    MatIconModule
+    MatIconModule,
+    LoadingSpinnerComponent,
+    ConfirmationDialogComponent,
+    SkeletonCourseCardComponent,
+    LazyLoadImageDirective
   ],
   exports: [
     LoadingSpinnerComponent,

@@ -34,6 +34,9 @@ import { MarkdownPipe } from './pipes/markdown.pipe';
 // Layout
 import { LayoutModule } from '@angular/cdk/layout';
 
+// Shared Module
+import { SharedModule } from '../shared/shared.module';
+
 @NgModule({
   declarations: [
     CourseListComponent,
@@ -51,6 +54,7 @@ import { LayoutModule } from '@angular/cdk/layout';
     FormsModule,
     CourseRoutingModule,
     LayoutModule,
+    SharedModule,
     // Material Modules
     MatCardModule,
     MatButtonModule,
