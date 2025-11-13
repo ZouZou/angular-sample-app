@@ -45,12 +45,12 @@
   align-items: center;
   gap: 6px;
   padding: 6px 14px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
   color: white;
   border-radius: 20px;
   font-weight: 600;
   font-size: 0.8125rem;
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 2px 8px rgba(0, 102, 204, 0.3);
 }
 
 .lesson-type-badge mat-icon {
@@ -274,7 +274,7 @@ pre code {
 }
 
 .code-block-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
   padding: 10px 20px;
   display: flex;
   align-items: center;
