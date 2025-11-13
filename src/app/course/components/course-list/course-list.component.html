@@ -48,11 +48,11 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
-    </div>
+    </section>
 
     <!-- Loading State with Skeleton Cards -->
-    <div *ngIf="isLoading" class="courses-grid">
-      <app-skeleton-course-card *ngFor="let item of [1,2,3,4,5,6]"></app-skeleton-course-card>
+    <div *ngIf="isLoading" class="courses-grid" @fadeInUp>
+      <app-skeleton-course-card *ngFor="let item of [1,2,3,4,5,6]" @fadeInUp></app-skeleton-course-card>
     </div>
 
     <!-- Error State -->
@@ -70,9 +70,10 @@
     </div>
 
     <!-- Course Grid -->
-    <div *ngIf="!isLoading && !error && filteredCourses.length > 0" class="courses-grid">
+    <div *ngIf="!isLoading && !error && filteredCourses.length > 0" class="courses-grid" [@staggerList]="filteredCourses.length">
       <mat-card *ngFor="let course of filteredCourses"
                 class="course-card"
+                @fadeInUp
                 tabindex="0"
                 role="button"
                 [attr.aria-label]="'View details for ' + course.title + ' course by ' + course.instructor"

@@ -11,6 +11,7 @@ import { QuizAttempt } from '../course/models/quiz.interface';
 import { forkJoin, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { NotificationService } from '../shared/services/notification.service';
+import { fadeInUp, staggerList, scaleIn } from '../shared/animations/animations';
 
 interface EnrolledCourseData {
   enrollment: Enrollment;
@@ -26,7 +27,8 @@ interface EnrolledCourseData {
   selector: 'app-user-dashboard',
   templateUrl: './user-dashboard.component.html',
   styleUrls: ['./user-dashboard.component.scss'],
-  standalone: false
+  standalone: false,
+  animations: [fadeInUp, staggerList, scaleIn]
 })
 /**
  * Displays the user learning dashboard with course progress and performance metrics

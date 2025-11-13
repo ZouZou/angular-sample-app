@@ -24,10 +24,10 @@
   </div>
 
   <!-- Loading State with Skeleton Cards -->
-  <div *ngIf="isLoading" class="courses-section">
+  <div *ngIf="isLoading" class="courses-section" @fadeInUp>
     <h2>My Courses</h2>
     <div class="courses-grid">
-      <app-skeleton-course-card *ngFor="let item of [1,2,3,4]"></app-skeleton-course-card>
+      <app-skeleton-course-card *ngFor="let item of [1,2,3,4]" @scaleIn></app-skeleton-course-card>
     </div>
   </div>
 
@@ -52,12 +52,13 @@
   </div>
 
   <!-- Enrolled Courses -->
-  <div *ngIf="!isLoading && !error && enrolledCourses.length > 0" class="courses-section">
+  <div *ngIf="!isLoading && !error && enrolledCourses.length > 0" class="courses-section" @fadeInUp>
     <h2>My Courses ({{ enrolledCourses.length }})</h2>
 
-    <div class="courses-grid">
+    <div class="courses-grid" [@staggerList]="enrolledCourses.length">
       <mat-card *ngFor="let data of enrolledCourses"
                 class="course-card"
+                @fadeInUp
                 tabindex="0"
                 role="article"
                 [attr.aria-label]="'Course: ' + data.course.title + ' by ' + data.course.instructor + ', ' + data.enrollment.progress + '% complete'">

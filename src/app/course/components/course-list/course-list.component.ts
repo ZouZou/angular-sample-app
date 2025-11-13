@@ -9,12 +9,14 @@ import { AuthService } from '../../services/auth.service';
 import { Course } from '../../models/course.interface';
 import { ConfirmationDialogComponent } from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import { NotificationService } from '../../../shared/services/notification.service';
+import { fadeInUp, staggerList } from '../../../shared/animations/animations';
 
 @Component({
   selector: 'app-course-list',
   templateUrl: './course-list.component.html',
   styleUrls: ['./course-list.component.css'],
-  standalone: false
+  standalone: false,
+  animations: [fadeInUp, staggerList]
 })
 /**
  * Displays a filterable course catalog with administrative management actions

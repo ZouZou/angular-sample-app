@@ -13,6 +13,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AuthService } from '../../course/services/auth.service';
 import { NotificationService } from '../../shared/services/notification.service';
+import { fadeInUp, scaleIn, shake } from '../../shared/animations/animations';
 
 @Component({
   selector: 'app-login',
@@ -29,7 +30,8 @@ import { NotificationService } from '../../shared/services/notification.service'
     MatSnackBarModule
   ],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
+  animations: [fadeInUp, scaleIn, shake]
 })
 /**
  * Handles user authentication and login functionality
