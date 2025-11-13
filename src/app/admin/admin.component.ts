@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../course/services/auth.service';
 import { QuizService } from '../course/services/quiz.service';
 import { CourseService } from '../course/services/course.service';
+import { NotificationService } from '../shared/services/notification.service';
 import { User } from '../course/models/user.interface';
 import { QuizAttempt } from '../course/models/quiz.interface';
 import { Course } from '../course/models/course.interface';
@@ -59,7 +60,8 @@ export class AdminComponent implements OnInit {
     private authService: AuthService,
     private quizService: QuizService,
     private courseService: CourseService,
-    private router: Router
+    private router: Router,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -135,22 +137,24 @@ export class AdminComponent implements OnInit {
 
       this.authService.updateUser(this.editingUser.id, updates).subscribe({
         next: () => {
+          this.notificationService.success(`User "${this.userForm.name}" updated successfully!`);
           this.loadUsers();
           this.closeUserForm();
         },
         error: (error) => {
-          alert(error.message);
+          this.notificationService.error(error.message || 'Failed to update user');
         }
       });
     } else {
       // Create new user
       this.authService.createUser(this.userForm).subscribe({
         next: () => {
+          this.notificationService.success(`User "${this.userForm.name}" created successfully!`);
           this.loadUsers();
           this.closeUserForm();
         },
         error: (error) => {
-          alert(error.message);
+          this.notificationService.error(error.message || 'Failed to create user');
         }
       });
     }
@@ -160,10 +164,11 @@ export class AdminComponent implements OnInit {
     if (confirm(`Are you sure you want to delete user "${user.name}"?`)) {
       this.authService.deleteUser(user.id).subscribe({
         next: () => {
+          this.notificationService.success(`User "${user.name}" deleted successfully`);
           this.loadUsers();
         },
         error: (error) => {
-          alert(error.message);
+          this.notificationService.error(error.message || 'Failed to delete user');
         }
       });
     }
@@ -271,7 +276,9 @@ export class AdminComponent implements OnInit {
   }
 
   logout(): void {
+    const userName = this.currentUser?.name || 'Admin';
     this.authService.logout();
+    this.notificationService.info(`Goodbye, ${userName}! See you next time. 👋`);
     this.router.navigate(['/login']);
   }
 

@@ -1,0 +1,176 @@
+/* Install Prompt Styles */
+.install-prompt,
+.ios-instructions {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  max-width: 400px;
+  z-index: 1000;
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.install-prompt-content,
+.ios-instructions-content {
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-xl);
+  border: 1px solid var(--border-color);
+  position: relative;
+}
+
+.close-button {
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-2);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--space-1);
+  color: var(--text-secondary);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.close-button:hover {
+  background: var(--background-secondary);
+  color: var(--text-primary);
+}
+
+.install-icon,
+.ios-icon {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--space-3);
+}
+
+.install-icon mat-icon,
+.ios-icon mat-icon {
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
+  color: white;
+}
+
+h3 {
+  margin: 0 0 var(--space-2);
+  font-size: var(--font-size-h3);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  text-align: center;
+}
+
+p {
+  margin: 0 0 var(--space-4);
+  font-size: var(--font-size-body);
+  color: var(--text-secondary);
+  line-height: var(--line-height-body);
+  text-align: center;
+}
+
+.install-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.install-button,
+.not-now-button,
+.got-it-button {
+  width: 100%;
+}
+
+.install-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+}
+
+/* iOS Instructions Styles */
+.ios-steps {
+  list-style: none;
+  padding: 0;
+  margin: var(--space-4) 0;
+  counter-reset: step-counter;
+}
+
+.ios-steps li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  background: var(--background-secondary);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-2);
+  position: relative;
+  counter-increment: step-counter;
+}
+
+.ios-steps li::before {
+  content: counter(step-counter);
+  position: absolute;
+  left: var(--space-2);
+  top: var(--space-2);
+  width: 24px;
+  height: 24px;
+  background: var(--primary-color);
+  color: white;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-body-small);
+  font-weight: var(--font-weight-bold);
+}
+
+.ios-steps li mat-icon {
+  color: var(--primary-color);
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+  margin-left: var(--space-4);
+}
+
+.ios-steps li span {
+  flex: 1;
+  font-size: var(--font-size-body);
+  color: var(--text-primary);
+  text-align: left;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .install-prompt,
+  .ios-instructions {
+    bottom: 0;
+    right: 0;
+    left: 0;
+    max-width: 100%;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  }
+
+  .install-prompt-content,
+  .ios-instructions-content {
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  }
+}

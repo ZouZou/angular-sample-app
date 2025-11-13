@@ -1,17 +1,23 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { MatDialog } from '@angular/material/dialog';
 import { Observable, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { CourseService } from '../../services/course.service';
 import { AuthService } from '../../services/auth.service';
 import { Course } from '../../models/course.interface';
+import { ConfirmationDialogComponent } from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
+import { NotificationService } from '../../../shared/services/notification.service';
+import { fadeInUp, staggerList } from '../../../shared/animations/animations';
 
 @Component({
   selector: 'app-course-list',
   templateUrl: './course-list.component.html',
   styleUrls: ['./course-list.component.css'],
-  standalone: false
+  standalone: false,
+  animations: [fadeInUp, staggerList],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 /**
  * Displays a filterable course catalog with administrative management actions
@@ -47,7 +53,10 @@ export class CourseListComponent implements OnInit, OnDestroy {
     private courseService: CourseService,
     private authService: AuthService,
     private router: Router,
-    private breakpointObserver: BreakpointObserver
+    private breakpointObserver: BreakpointObserver,
+    private dialog: MatDialog,
+    private notificationService: NotificationService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -57,6 +66,7 @@ export class CourseListComponent implements OnInit, OnDestroy {
   loadCourses(): void {
     this.isLoading = true;
     this.error = null;
+    this.cdr.markForCheck();
 
     this.courseService.getCourses()
       .pipe(takeUntil(this.destroy$))
@@ -65,11 +75,13 @@ export class CourseListComponent implements OnInit, OnDestroy {
           this.courses = courses;
           this.filteredCourses = courses;
           this.isLoading = false;
+          this.cdr.markForCheck();
         },
         error: (error) => {
           console.error('Error loading courses:', error);
           this.error = 'Failed to load courses. Please try again later.';
           this.isLoading = false;
+          this.cdr.markForCheck();
         }
       });
   }
@@ -118,19 +130,35 @@ export class CourseListComponent implements OnInit, OnDestroy {
     event.stopPropagation();
     if (!courseId) return;
 
-    if (confirm('Are you sure you want to delete this course? This action cannot be undone.')) {
-      this.courseService.deleteCourse(courseId)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe({
-          next: () => {
-            this.loadCourses();
-          },
-          error: (error) => {
-            console.error('Error deleting course:', error);
-            alert('Failed to delete course. Please try again.');
-          }
-        });
-    }
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '400px',
+      data: {
+        title: 'Delete Course',
+        message: 'Are you sure you want to delete this course? This action cannot be undone.',
+        confirmText: 'Delete',
+        cancelText: 'Cancel',
+        confirmColor: 'warn'
+      }
+    });
+
+    dialogRef.afterClosed()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(confirmed => {
+        if (confirmed) {
+          this.courseService.deleteCourse(courseId)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+              next: () => {
+                this.notificationService.success('Course deleted successfully');
+                this.loadCourses();
+              },
+              error: (error) => {
+                console.error('Error deleting course:', error);
+                this.notificationService.error('Failed to delete course. Please try again.');
+              }
+            });
+        }
+      });
   }
 
   /**
@@ -148,6 +176,24 @@ export class CourseListComponent implements OnInit, OnDestroy {
         return 'level-advanced';
       default:
         return 'level-default';
+    }
+  }
+
+  /**
+   * Returns color for course level badge
+   * @param level - The course difficulty level
+   * @returns Color value for styling
+   */
+  getLevelColor(level: string): string {
+    switch (level) {
+      case 'Beginner':
+        return '#4caf50';  // Green
+      case 'Intermediate':
+        return '#ff9800';  // Orange
+      case 'Advanced':
+        return '#f44336';  // Red
+      default:
+        return '#9e9e9e';  // Grey
     }
   }
 

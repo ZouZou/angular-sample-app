@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { TruncatePipe } from './truncate.pipe';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
+import { CacheInterceptor } from './core/interceptors/cache.interceptor';
 import { UserComponent } from './user/user.component';
 import { AdminComponent } from './admin/admin.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -31,8 +32,10 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MotorQuotationComponent } from './motor-quotation/motor-quotation.component';
 import { UserDashboardComponent } from './dashboard/user-dashboard.component';
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -70,12 +73,19 @@ import { UserDashboardComponent } from './dashboard/user-dashboard.component';
     MatTableModule,
     MatTooltipModule,
     MatSnackBarModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatCheckboxModule,
+    SharedModule
   ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: CacheInterceptor,
       multi: true
     }
   ],

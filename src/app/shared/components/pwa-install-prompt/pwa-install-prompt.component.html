@@ -1,0 +1,64 @@
+<!-- Standard Install Prompt (Android, Desktop) -->
+<div *ngIf="showPrompt" class="install-prompt" role="dialog" aria-labelledby="install-title" aria-describedby="install-description">
+  <div class="install-prompt-content">
+    <button type="button" class="close-button" (click)="dismiss()" aria-label="Close install prompt">
+      <mat-icon>close</mat-icon>
+    </button>
+
+    <div class="install-icon">
+      <mat-icon>get_app</mat-icon>
+    </div>
+
+    <h3 id="install-title">Install Learning Management System</h3>
+    <p id="install-description">
+      Install our app for a better experience! Access courses offline, get quick access from your home screen, and receive notifications.
+    </p>
+
+    <div class="install-actions">
+      <button mat-raised-button color="primary" (click)="install()" class="install-button">
+        <mat-icon>download</mat-icon>
+        Install App
+      </button>
+      <button mat-button (click)="dismiss()" class="not-now-button">
+        Not Now
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- iOS Installation Instructions -->
+<div *ngIf="showIOSInstructions" class="ios-instructions" role="dialog" aria-labelledby="ios-title" aria-describedby="ios-description">
+  <div class="ios-instructions-content">
+    <button type="button" class="close-button" (click)="dismissIOSInstructions()" aria-label="Close iOS instructions">
+      <mat-icon>close</mat-icon>
+    </button>
+
+    <div class="ios-icon">
+      <mat-icon>apple</mat-icon>
+    </div>
+
+    <h3 id="ios-title">Install on iOS</h3>
+    <p id="ios-description">
+      To install this app on your iPhone or iPad:
+    </p>
+
+    <ol class="ios-steps">
+      <li>
+        <mat-icon>ios_share</mat-icon>
+        <span>Tap the Share button in Safari</span>
+      </li>
+      <li>
+        <mat-icon>add_box</mat-icon>
+        <span>Scroll down and tap "Add to Home Screen"</span>
+      </li>
+      <li>
+        <mat-icon>check_circle</mat-icon>
+        <span>Tap "Add" to confirm</span>
+      </li>
+    </ol>
+
+    <button mat-button (click)="dismissIOSInstructions()" class="got-it-button">
+      Got it!
+    </button>
+  </div>
+</div>

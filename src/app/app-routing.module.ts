@@ -8,6 +8,7 @@ import { UserComponent } from './user/user.component';
 import { MotorQuotationComponent } from './motor-quotation/motor-quotation.component';
 import { AuthGuard } from './core/guards/auth.guard';
 import { AdminGuard } from './core/guards/admin.guard';
+import { SelectivePreloadStrategy } from './core/strategies/selective-preload-strategy';
 
 const routes: Routes = [
   {
@@ -47,12 +48,14 @@ const routes: Routes = [
   {
     path: 'customer',
     canActivate: [AuthGuard, BlockitGuard],
-    loadChildren: () => import('./customer/customer.module').then(m => m.CustomerModule)
+    loadChildren: () => import('./customer/customer.module').then(m => m.CustomerModule),
+    data: { preload: false } // Don't preload customer module
   },
   {
     path: 'courses',
     canActivate: [AuthGuard],
-    loadChildren: () => import('./course/course.module').then(m => m.CourseModule)
+    loadChildren: () => import('./course/course.module').then(m => m.CourseModule),
+    data: { preload: true, preloadDelay: 1000 } // Preload courses after 1 second
   },
   {
     path: '**',
@@ -61,7 +64,16 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { enableTracing: false })],
+  imports: [RouterModule.forRoot(routes, {
+    enableTracing: false,
+    preloadingStrategy: SelectivePreloadStrategy,
+    // Enable scroll position restoration
+    scrollPositionRestoration: 'enabled',
+    // Restore anchor scrolling
+    anchorScrolling: 'enabled',
+    // Configure initial navigation
+    initialNavigation: 'enabledBlocking'
+  })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

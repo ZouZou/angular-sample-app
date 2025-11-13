@@ -10,6 +10,8 @@ import { Course } from '../course/models/course.interface';
 import { QuizAttempt } from '../course/models/quiz.interface';
 import { forkJoin, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { NotificationService } from '../shared/services/notification.service';
+import { fadeInUp, staggerList, scaleIn } from '../shared/animations/animations';
 
 interface EnrolledCourseData {
   enrollment: Enrollment;
@@ -25,7 +27,8 @@ interface EnrolledCourseData {
   selector: 'app-user-dashboard',
   templateUrl: './user-dashboard.component.html',
   styleUrls: ['./user-dashboard.component.scss'],
-  standalone: false
+  standalone: false,
+  animations: [fadeInUp, staggerList, scaleIn]
 })
 /**
  * Displays the user learning dashboard with course progress and performance metrics
@@ -52,7 +55,8 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
     private enrollmentService: EnrollmentService,
     private courseService: CourseService,
     private quizService: QuizService,
-    private router: Router
+    private router: Router,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -193,7 +197,9 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
   }
 
   logout(): void {
+    const userName = this.currentUser?.name || 'User';
     this.authService.logout();
+    this.notificationService.info(`Goodbye, ${userName}! See you next time. 👋`);
     this.router.navigate(['/login']);
   }
 

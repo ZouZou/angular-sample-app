@@ -1,6 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { NotificationService } from '../shared/services/notification.service';
+import { FormStateService } from '../shared/services/form-state.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 interface QuoteResult {
   premium: number;
@@ -14,7 +18,7 @@ interface QuoteResult {
   templateUrl: './motor-quotation.component.html',
   styleUrls: ['./motor-quotation.component.css']
 })
-export class MotorQuotationComponent implements OnInit {
+export class MotorQuotationComponent implements OnInit, OnDestroy {
   currentStep = 0;
   isLinear = true;
   isMobile = false;
@@ -25,6 +29,10 @@ export class MotorQuotationComponent implements OnInit {
 
   quoteResult: QuoteResult | null = null;
   isCalculating = false;
+
+  // Auto-save status tracking
+  autoSaveStatus: 'idle' | 'saving' | 'saved' = 'idle';
+  private destroy$ = new Subject<void>();
 
   // Data for dropdowns
   vehicleMakes = ['Toyota', 'Honda', 'Ford', 'BMW', 'Mercedes', 'Audi', 'Volkswagen', 'Nissan', 'Mazda', 'Chevrolet'];
@@ -54,7 +62,9 @@ export class MotorQuotationComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private breakpointObserver: BreakpointObserver
+    private breakpointObserver: BreakpointObserver,
+    private notificationService: NotificationService,
+    private formStateService: FormStateService
   ) {
     // Generate years from current year back 25 years
     const currentYear = new Date().getFullYear();
@@ -66,6 +76,7 @@ export class MotorQuotationComponent implements OnInit {
   ngOnInit(): void {
     // Monitor screen size for responsive behavior
     this.breakpointObserver.observe([Breakpoints.Handset])
+      .pipe(takeUntil(this.destroy$))
       .subscribe(result => {
         this.isMobile = result.matches;
       });
@@ -92,13 +103,80 @@ export class MotorQuotationComponent implements OnInit {
       coverageType: ['comprehensive', Validators.required],
       deductible: [500, Validators.required],
       annualMileage: ['', [Validators.required, Validators.min(0), Validators.max(100000)]],
-      parkingType: ['', Validators.required]
+      parkingType: ['', Validators.required],
+      roadsideAssistance: [false],
+      rentalCarCoverage: [false]
     });
 
+    // Restore saved form state if available
+    this.restoreSavedFormState();
+
+    // Enable auto-save for all form groups
+    this.formStateService.enableAutoSave('motor-quote-vehicle', this.vehicleFormGroup);
+    this.formStateService.enableAutoSave('motor-quote-personal', this.personalFormGroup);
+    this.formStateService.enableAutoSave('motor-quote-coverage', this.coverageFormGroup);
+
+    // Subscribe to auto-save status updates
+    this.formStateService.autoSaveStatus$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(status => {
+        if (status.status === 'saving') {
+          this.autoSaveStatus = 'saving';
+          // Reset to saved after 1 second
+          setTimeout(() => {
+            this.autoSaveStatus = 'saved';
+            // Reset to idle after 2 more seconds
+            setTimeout(() => {
+              this.autoSaveStatus = 'idle';
+            }, 2000);
+          }, 1000);
+        }
+      });
+
     // Listen to make changes to update model dropdown
-    this.vehicleFormGroup.get('make')?.valueChanges.subscribe(make => {
-      this.onMakeChange(make);
-    });
+    this.vehicleFormGroup.get('make')?.valueChanges
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(make => {
+        this.onMakeChange(make);
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private restoreSavedFormState(): void {
+    // Check if there's saved state for each form group
+    const savedVehicleData = this.formStateService.restoreFormState('motor-quote-vehicle');
+    const savedPersonalData = this.formStateService.restoreFormState('motor-quote-personal');
+    const savedCoverageData = this.formStateService.restoreFormState('motor-quote-coverage');
+
+    let hasRestoredData = false;
+
+    if (savedVehicleData) {
+      this.vehicleFormGroup.patchValue(savedVehicleData);
+      // If make is restored, update the models dropdown
+      if (savedVehicleData.make) {
+        this.currentModels = this.vehicleModels[savedVehicleData.make] || [];
+      }
+      hasRestoredData = true;
+    }
+
+    if (savedPersonalData) {
+      this.personalFormGroup.patchValue(savedPersonalData);
+      hasRestoredData = true;
+    }
+
+    if (savedCoverageData) {
+      this.coverageFormGroup.patchValue(savedCoverageData);
+      hasRestoredData = true;
+    }
+
+    // Show notification if we restored saved data
+    if (hasRestoredData) {
+      this.notificationService.info('We\'ve restored your previous form data. 📋');
+    }
   }
 
   onMakeChange(make: string): void {
@@ -127,6 +205,10 @@ export class MotorQuotationComponent implements OnInit {
       case 3: return 'Your Quote';
       default: return '';
     }
+  }
+
+  getProgressPercentage(): number {
+    return Math.round(((this.currentStep + 1) / 4) * 100);
   }
 
   nextStep(): void {
@@ -197,7 +279,13 @@ export class MotorQuotationComponent implements OnInit {
         deductible
       };
 
+      // Clear saved form state after successful quote calculation
+      this.formStateService.clearFormState('motor-quote-vehicle');
+      this.formStateService.clearFormState('motor-quote-personal');
+      this.formStateService.clearFormState('motor-quote-coverage');
+
       this.isCalculating = false;
+      this.notificationService.success('Your quote has been calculated successfully!');
     }, 1500);
   }
 
@@ -215,6 +303,11 @@ export class MotorQuotationComponent implements OnInit {
       coverageType: 'comprehensive',
       deductible: 500
     });
+
+    // Clear saved form state when starting a new quote
+    this.formStateService.clearFormState('motor-quote-vehicle');
+    this.formStateService.clearFormState('motor-quote-personal');
+    this.formStateService.clearFormState('motor-quote-coverage');
   }
 
   getErrorMessage(formGroup: FormGroup, field: string): string {
@@ -225,18 +318,18 @@ export class MotorQuotationComponent implements OnInit {
       return 'This field is required';
     }
     if (control.hasError('email')) {
-      return 'Please enter a valid email';
+      return 'Please enter a valid email address';
     }
     if (control.hasError('pattern')) {
       if (field === 'registration') {
-        return 'Please enter a valid registration (alphanumeric, 2-10 characters)';
+        return 'Registration must be 2-10 alphanumeric characters';
       }
       if (field === 'phone') {
-        return 'Please enter a valid 10-digit phone number';
+        return 'Phone number must be exactly 10 digits';
       }
     }
     if (control.hasError('minlength')) {
-      return `Minimum length is ${control.errors?.['minlength'].requiredLength}`;
+      return `Must be at least ${control.errors?.['minlength'].requiredLength} characters`;
     }
     if (control.hasError('min')) {
       return `Minimum value is ${control.errors?.['min'].min}`;
@@ -245,5 +338,47 @@ export class MotorQuotationComponent implements OnInit {
       return `Maximum value is ${control.errors?.['max'].max}`;
     }
     return '';
+  }
+
+  /**
+   * Check if a form field is valid and has been touched
+   */
+  isFieldValid(formGroup: FormGroup, fieldName: string): boolean {
+    const field = formGroup.get(fieldName);
+    return field ? field.valid && (field.dirty || field.touched) : false;
+  }
+
+  /**
+   * Check if a form field should show error
+   */
+  shouldShowError(formGroup: FormGroup, fieldName: string): boolean {
+    const field = formGroup.get(fieldName);
+    return field ? field.invalid && (field.dirty || field.touched) : false;
+  }
+
+  /**
+   * Check if comprehensive coverage is selected
+   */
+  isComprehensiveCoverage(): boolean {
+    return this.coverageFormGroup?.get('coverageType')?.value === 'comprehensive';
+  }
+
+  /**
+   * Check if vehicle is older than 10 years
+   */
+  isVehicleOld(): boolean {
+    const year = this.vehicleFormGroup?.get('year')?.value;
+    if (!year) return false;
+    const vehicleAge = new Date().getFullYear() - year;
+    return vehicleAge > 10;
+  }
+
+  /**
+   * Get vehicle age in years
+   */
+  getVehicleAge(): number {
+    const year = this.vehicleFormGroup?.get('year')?.value;
+    if (!year) return 0;
+    return new Date().getFullYear() - year;
   }
 }

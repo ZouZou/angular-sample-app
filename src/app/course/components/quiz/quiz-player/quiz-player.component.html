@@ -1,9 +1,6 @@
 <div class="quiz-player-container">
   <!-- Loading State -->
-  <div *ngIf="isLoading" class="loading">
-    <mat-spinner></mat-spinner>
-    <p>Loading quiz...</p>
-  </div>
+  <app-loading-spinner *ngIf="isLoading" message="Loading quiz..."></app-loading-spinner>
 
   <!-- Error State -->
   <div *ngIf="error && !isLoading" class="error">
@@ -15,6 +12,11 @@
   <div *ngIf="!isLoading && !error && quiz" class="quiz-content">
     <!-- Quiz Header -->
     <div class="quiz-header">
+      <div class="quiz-header-top">
+        <button mat-icon-button (click)="exitQuiz()" aria-label="Exit quiz" class="exit-button">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
       <div class="quiz-info">
         <h1>{{ quiz.title }}</h1>
         <p *ngIf="quiz.description">{{ quiz.description }}</p>

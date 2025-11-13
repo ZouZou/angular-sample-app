@@ -1,7 +1,7 @@
 <div class="login-container">
   <div class="login-wrapper">
-    <mat-card class="login-card">
-      <mat-card-header>
+    <mat-card class="login-card" @scaleIn>
+      <mat-card-header @fadeInUp>
         <mat-card-title>
           <h1 class="login-title">Learning Management System</h1>
         </mat-card-title>
@@ -63,19 +63,21 @@
         </form>
 
         <!-- Demo Credentials Section -->
-        <div class="demo-section">
+        <div class="demo-section" role="region" aria-label="Demo login accounts">
           <div class="divider">
             <span>Demo Accounts</span>
           </div>
 
           <div class="demo-credentials">
-            <div
+            <button
               *ngFor="let cred of demoCredentials"
+              type="button"
               class="demo-card"
               (click)="quickLogin(cred.email, cred.password)"
+              [attr.aria-label]="'Quick login as ' + cred.role + ' with email ' + cred.email"
             >
               <div class="demo-role">
-                <mat-icon [class]="'role-icon ' + cred.role.toLowerCase()">
+                <mat-icon [class]="'role-icon ' + cred.role.toLowerCase()" aria-hidden="true">
                   {{ cred.role === 'Admin' ? 'admin_panel_settings' :
                      cred.role === 'Instructor' ? 'school' : 'person' }}
                 </mat-icon>
@@ -85,15 +87,15 @@
                 <div class="demo-email">{{ cred.email }}</div>
                 <div class="demo-password">{{ cred.password }}</div>
               </div>
-              <mat-icon class="login-icon">login</mat-icon>
-            </div>
+              <mat-icon class="login-icon" aria-hidden="true">login</mat-icon>
+            </button>
           </div>
         </div>
       </mat-card-content>
     </mat-card>
 
-    <div class="info-note">
-      <mat-icon>info</mat-icon>
+    <div class="info-note" role="note" aria-label="User registration information">
+      <mat-icon aria-hidden="true">info</mat-icon>
       <span>Note: User registration is disabled. Only administrators can create new user accounts.</span>
     </div>
   </div>

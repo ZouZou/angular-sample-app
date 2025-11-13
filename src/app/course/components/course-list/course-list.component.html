@@ -1,12 +1,12 @@
 <div class="course-list-container">
   <!-- Header -->
-  <div class="course-list-header">
+  <header class="course-list-header">
     <div class="header-content">
       <div class="welcome-section">
         <h1>Course Catalog</h1>
         <p>Explore our collection of courses and start learning</p>
       </div>
-      <div class="header-actions">
+      <nav class="header-actions" aria-label="Course catalog actions">
         <button mat-button (click)="navigateToDashboard()">
           <mat-icon>dashboard</mat-icon>
           Dashboard
@@ -23,14 +23,14 @@
           <mat-icon>logout</mat-icon>
           Sign out
         </button>
-      </div>
+      </nav>
     </div>
-  </div>
+  </header>
 
   <!-- Content Section -->
-  <div class="content-section">
+  <main class="content-section">
     <!-- Filters -->
-    <div class="filters">
+    <section class="filters" role="search" aria-label="Course filters">
       <mat-form-field appearance="outline">
         <mat-label>Category</mat-label>
         <mat-select [(value)]="selectedCategory" (selectionChange)="applyFilters()">
@@ -48,12 +48,11 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
-    </div>
+    </section>
 
-    <!-- Loading State -->
-    <div *ngIf="isLoading" class="loading-container">
-      <mat-spinner></mat-spinner>
-      <p>Loading courses...</p>
+    <!-- Loading State with Skeleton Cards -->
+    <div *ngIf="isLoading" class="courses-grid" @fadeInUp>
+      <app-skeleton-course-card *ngFor="let item of [1,2,3,4,5,6]" @fadeInUp></app-skeleton-course-card>
     </div>
 
     <!-- Error State -->
@@ -71,8 +70,16 @@
     </div>
 
     <!-- Course Grid -->
-    <div *ngIf="!isLoading && !error && filteredCourses.length > 0" class="courses-grid">
-      <mat-card *ngFor="let course of filteredCourses" class="course-card" (click)="navigateToDetail(course.id)">
+    <div *ngIf="!isLoading && !error && filteredCourses.length > 0" class="courses-grid" [@staggerList]="filteredCourses.length">
+      <mat-card *ngFor="let course of filteredCourses"
+                class="course-card"
+                @fadeInUp
+                tabindex="0"
+                role="button"
+                [attr.aria-label]="'View details for ' + course.title + ' course by ' + course.instructor"
+                (click)="navigateToDetail(course.id)"
+                (keydown.enter)="navigateToDetail(course.id)"
+                (keydown.space)="navigateToDetail(course.id); $event.preventDefault()">
         <!-- Course Thumbnail -->
         <div class="course-thumbnail" [style.background-image]="'url(' + (course.thumbnailUrl || 'https://via.placeholder.com/400x250?text=Course') + ')'">
           <div class="level-badge" [style.background-color]="getLevelColor(course.level)">
