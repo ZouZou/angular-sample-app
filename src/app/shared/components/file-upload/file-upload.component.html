@@ -1,0 +1,108 @@
+<div class="file-upload-container">
+  <!-- Drop Zone -->
+  <div
+    class="drop-zone"
+    [class.drag-over]="isDragOver"
+    (click)="fileInput.click()"
+    role="button"
+    tabindex="0"
+    [attr.aria-label]="'Upload files. Drag and drop or click to browse'"
+  >
+    <input
+      #fileInput
+      type="file"
+      [accept]="accept"
+      [multiple]="multiple"
+      (change)="onFileSelected($event)"
+      style="display: none"
+    />
+
+    <div class="drop-zone-content">
+      <mat-icon class="upload-icon">cloud_upload</mat-icon>
+      <h3>Drag & Drop Files Here</h3>
+      <p>or click to browse</p>
+      <div class="file-info">
+        <span *ngIf="maxSize">Max size: {{ formatFileSize(maxSize) }}</span>
+        <span *ngIf="multiple">• Up to {{ maxFiles }} files</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- File List -->
+  <div class="file-list" *ngIf="uploadedFiles.length > 0" role="list" aria-label="Uploaded files">
+    <div
+      *ngFor="let uploadedFile of uploadedFiles"
+      class="file-item"
+      [class.uploading]="uploadedFile.status === 'uploading'"
+      [class.success]="uploadedFile.status === 'success'"
+      [class.error]="uploadedFile.status === 'error'"
+      role="listitem"
+    >
+      <!-- File Preview/Icon -->
+      <div class="file-preview">
+        <img
+          *ngIf="uploadedFile.preview"
+          [src]="uploadedFile.preview"
+          [alt]="uploadedFile.file.name"
+          class="preview-image"
+        />
+        <mat-icon *ngIf="!uploadedFile.preview" class="file-type-icon">
+          {{ getFileIcon(uploadedFile.file) }}
+        </mat-icon>
+      </div>
+
+      <!-- File Info -->
+      <div class="file-info-section">
+        <div class="file-name">{{ uploadedFile.file.name }}</div>
+        <div class="file-size">{{ formatFileSize(uploadedFile.file.size) }}</div>
+
+        <!-- Progress Bar -->
+        <div
+          *ngIf="uploadedFile.status === 'uploading'"
+          class="progress-bar"
+          role="progressbar"
+          [attr.aria-valuenow]="uploadedFile.progress"
+          [attr.aria-valuemin]="0"
+          [attr.aria-valuemax]="100"
+        >
+          <div class="progress-fill" [style.width.%]="uploadedFile.progress"></div>
+        </div>
+
+        <!-- Status Messages -->
+        <div class="status-message">
+          <span *ngIf="uploadedFile.status === 'uploading'" class="uploading-text">
+            <mat-spinner diameter="16" class="inline-spinner"></mat-spinner>
+            Uploading... {{ uploadedFile.progress }}%
+          </span>
+          <span *ngIf="uploadedFile.status === 'success'" class="success-text">
+            <mat-icon>check_circle</mat-icon>
+            Upload complete
+          </span>
+          <span *ngIf="uploadedFile.status === 'error'" class="error-text">
+            <mat-icon>error</mat-icon>
+            {{ uploadedFile.error || 'Upload failed' }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Remove Button -->
+      <button
+        type="button"
+        mat-icon-button
+        class="remove-button"
+        (click)="removeFile(uploadedFile)"
+        [attr.aria-label]="'Remove file ' + uploadedFile.file.name"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- Clear All Button -->
+  <div class="upload-actions" *ngIf="uploadedFiles.length > 1">
+    <button mat-button color="warn" (click)="clearAll()">
+      <mat-icon>delete</mat-icon>
+      Clear All
+    </button>
+  </div>
+</div>

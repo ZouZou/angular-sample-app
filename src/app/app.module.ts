@@ -31,6 +31,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MotorQuotationComponent } from './motor-quotation/motor-quotation.component';
 import { UserDashboardComponent } from './dashboard/user-dashboard.component';
 import { SharedModule } from './shared/shared.module';
@@ -72,6 +73,7 @@ import { SharedModule } from './shared/shared.module';
     MatTooltipModule,
     MatSnackBarModule,
     MatProgressBarModule,
+    MatCheckboxModule,
     SharedModule
   ],
   providers: [

@@ -661,3 +661,225 @@
 ::ng-deep .mat-progress-spinner circle {
   stroke: var(--primary-color);
 }
+
+/* Auto-save Indicator */
+.auto-save-indicator {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 1000;
+  transition: all 0.3s ease;
+  animation: slideInRight 0.3s ease;
+}
+
+.auto-save-indicator.saving {
+  background: #FFF9C4;
+  color: #F57C00;
+}
+
+.auto-save-indicator.saving mat-icon {
+  animation: rotate 1s linear infinite;
+}
+
+.auto-save-indicator.saved {
+  background: #C8E6C9;
+  color: #2E7D32;
+}
+
+.auto-save-indicator mat-icon {
+  width: 20px;
+  height: 20px;
+  font-size: 20px;
+}
+
+.auto-save-indicator span {
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Mobile adjustments for auto-save indicator */
+@media (max-width: 768px) {
+  .auto-save-indicator {
+    top: 10px;
+    right: 10px;
+    padding: 8px 16px;
+    font-size: 0.85rem;
+  }
+
+  .auto-save-indicator mat-icon {
+    width: 18px;
+    height: 18px;
+    font-size: 18px;
+  }
+}
+
+/* Conditional Extra Coverage Options */
+.extra-coverage {
+  margin-top: 30px;
+  padding: 20px;
+  background: linear-gradient(135deg, #E8F5E9 0%, #F1F8E9 100%);
+  border-radius: 12px;
+  border: 2px solid var(--color-success);
+  animation: slideIn 0.3s ease;
+}
+
+.extra-coverage-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 8px 0;
+  color: var(--color-success);
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.extra-coverage-title mat-icon {
+  font-size: 28px;
+  width: 28px;
+  height: 28px;
+}
+
+.extra-coverage-subtitle {
+  margin: 0 0 20px 0;
+  color: #555;
+  font-size: 0.95rem;
+}
+
+.extra-coverage-options {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.coverage-checkbox {
+  background: white;
+  padding: 16px;
+  border-radius: 8px;
+  border: 2px solid #E0E0E0;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.coverage-checkbox:hover {
+  border-color: var(--color-success);
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.2);
+}
+
+.coverage-checkbox.mat-checkbox-checked {
+  border-color: var(--color-success);
+  background: linear-gradient(135deg, #E8F5E9 0%, white 100%);
+}
+
+.checkbox-content {
+  margin-left: 32px;
+}
+
+.checkbox-title {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.checkbox-description {
+  font-size: 0.85rem;
+  color: #666;
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.checkbox-price {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--color-success);
+}
+
+/* Vehicle Age Warning */
+.vehicle-age-note {
+  margin-top: 20px;
+  padding: 16px;
+  background: linear-gradient(135deg, #FFF9C4 0%, #FFF59D 100%);
+  border-radius: 8px;
+  border-left: 4px solid #FBC02D;
+  display: flex;
+  align-items: start;
+  gap: 12px;
+  animation: slideIn 0.3s ease;
+}
+
+.vehicle-age-note mat-icon {
+  color: #F57C00;
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.vehicle-age-note div {
+  color: #795548;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.vehicle-age-note strong {
+  color: #F57C00;
+  font-weight: 600;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mobile adjustments for conditional fields */
+@media (max-width: 768px) {
+  .extra-coverage {
+    padding: 16px;
+  }
+
+  .extra-coverage-title {
+    font-size: 1.1rem;
+  }
+
+  .checkbox-content {
+    margin-left: 28px;
+  }
+
+  .vehicle-age-note {
+    padding: 12px;
+  }
+}

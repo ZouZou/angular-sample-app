@@ -45,6 +45,13 @@
 
   <!-- Form Content -->
   <div class="form-container">
+    <!-- Auto-save Indicator -->
+    <div class="auto-save-indicator" *ngIf="autoSaveStatus !== 'idle'" [class.saving]="autoSaveStatus === 'saving'" [class.saved]="autoSaveStatus === 'saved'">
+      <mat-icon *ngIf="autoSaveStatus === 'saving'">sync</mat-icon>
+      <mat-icon *ngIf="autoSaveStatus === 'saved'">check_circle</mat-icon>
+      <span>{{ autoSaveStatus === 'saving' ? 'Saving...' : 'Saved' }}</span>
+    </div>
+
     <mat-card class="form-card">
       <!-- Step 1: Vehicle Information -->
       <div *ngIf="currentStep === 0" class="step-content" @slideIn>
@@ -248,7 +255,43 @@
             <mat-icon matPrefix>local_parking</mat-icon>
             <mat-hint>Where you usually park your vehicle</mat-hint>
           </mat-form-field>
+
+          <!-- Conditional Extra Coverage Options - Only for Comprehensive -->
+          <div *ngIf="isComprehensiveCoverage()" class="extra-coverage full-width">
+            <h3 class="extra-coverage-title">
+              <mat-icon>add_circle</mat-icon>
+              Optional Add-ons
+            </h3>
+            <p class="extra-coverage-subtitle">Enhance your comprehensive coverage with these optional benefits</p>
+
+            <div class="extra-coverage-options">
+              <mat-checkbox formControlName="roadsideAssistance" class="coverage-checkbox">
+                <div class="checkbox-content">
+                  <div class="checkbox-title">24/7 Roadside Assistance</div>
+                  <div class="checkbox-description">Towing, battery jump-start, fuel delivery, and lockout service</div>
+                  <div class="checkbox-price">+$50/year</div>
+                </div>
+              </mat-checkbox>
+
+              <mat-checkbox formControlName="rentalCarCoverage" class="coverage-checkbox">
+                <div class="checkbox-content">
+                  <div class="checkbox-title">Rental Car Coverage</div>
+                  <div class="checkbox-description">Up to $40/day for rental while your car is being repaired</div>
+                  <div class="checkbox-price">+$75/year</div>
+                </div>
+              </mat-checkbox>
+            </div>
+          </div>
         </form>
+
+        <!-- Conditional Vehicle Age Warning -->
+        <div *ngIf="isVehicleOld()" class="vehicle-age-note">
+          <mat-icon>info</mat-icon>
+          <div>
+            <strong>Note:</strong> Your vehicle is {{ getVehicleAge() }} years old.
+            Older vehicles may have adjusted coverage options and premiums.
+          </div>
+        </div>
       </div>
 
       <!-- Step 4: Quote Result -->

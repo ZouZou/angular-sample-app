@@ -9,13 +9,19 @@ import { LoadingSpinnerComponent } from './components/loading-spinner/loading-sp
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
 import { SkeletonCourseCardComponent } from './components/skeleton-course-card/skeleton-course-card.component';
 import { PwaInstallPromptComponent } from './components/pwa-install-prompt/pwa-install-prompt.component';
+import { FileUploadComponent } from './components/file-upload/file-upload.component';
+import { CharacterCounterDirective } from './directives/character-counter.directive';
+import { PhoneMaskDirective } from './directives/phone-mask.directive';
 
 @NgModule({
   declarations: [
     LoadingSpinnerComponent,
     ConfirmationDialogComponent,
     SkeletonCourseCardComponent,
-    PwaInstallPromptComponent
+    PwaInstallPromptComponent,
+    FileUploadComponent,
+    CharacterCounterDirective,
+    PhoneMaskDirective
   ],
   imports: [
     CommonModule,
@@ -29,7 +35,10 @@ import { PwaInstallPromptComponent } from './components/pwa-install-prompt/pwa-i
     LoadingSpinnerComponent,
     ConfirmationDialogComponent,
     SkeletonCourseCardComponent,
-    PwaInstallPromptComponent
+    PwaInstallPromptComponent,
+    FileUploadComponent,
+    CharacterCounterDirective,
+    PhoneMaskDirective
   ]
 })
 export class SharedModule { }
