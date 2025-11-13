@@ -101,6 +101,26 @@ export class AddressComponent {
       this.hasUnitNumber = false;
     } else {
       this.notificationService.error('Please fill in all required fields');
+      // Mark all fields as touched to show validation errors
+      Object.keys(this.addressForm.controls).forEach(key => {
+        this.addressForm.get(key)?.markAsTouched();
+      });
     }
+  }
+
+  /**
+   * Check if a form field is valid and has been touched
+   */
+  isFieldValid(fieldName: string): boolean {
+    const field = this.addressForm.get(fieldName);
+    return field ? field.valid && (field.dirty || field.touched) : false;
+  }
+
+  /**
+   * Check if a form field should show error
+   */
+  shouldShowError(fieldName: string): boolean {
+    const field = this.addressForm.get(fieldName);
+    return field ? field.invalid && (field.dirty || field.touched) : false;
   }
 }

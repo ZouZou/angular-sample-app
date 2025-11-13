@@ -228,18 +228,18 @@ export class MotorQuotationComponent implements OnInit {
       return 'This field is required';
     }
     if (control.hasError('email')) {
-      return 'Please enter a valid email';
+      return 'Please enter a valid email address';
     }
     if (control.hasError('pattern')) {
       if (field === 'registration') {
-        return 'Please enter a valid registration (alphanumeric, 2-10 characters)';
+        return 'Registration must be 2-10 alphanumeric characters';
       }
       if (field === 'phone') {
-        return 'Please enter a valid 10-digit phone number';
+        return 'Phone number must be exactly 10 digits';
       }
     }
     if (control.hasError('minlength')) {
-      return `Minimum length is ${control.errors?.['minlength'].requiredLength}`;
+      return `Must be at least ${control.errors?.['minlength'].requiredLength} characters`;
     }
     if (control.hasError('min')) {
       return `Minimum value is ${control.errors?.['min'].min}`;
@@ -248,5 +248,21 @@ export class MotorQuotationComponent implements OnInit {
       return `Maximum value is ${control.errors?.['max'].max}`;
     }
     return '';
+  }
+
+  /**
+   * Check if a form field is valid and has been touched
+   */
+  isFieldValid(formGroup: FormGroup, fieldName: string): boolean {
+    const field = formGroup.get(fieldName);
+    return field ? field.valid && (field.dirty || field.touched) : false;
+  }
+
+  /**
+   * Check if a form field should show error
+   */
+  shouldShowError(formGroup: FormGroup, fieldName: string): boolean {
+    const field = formGroup.get(fieldName);
+    return field ? field.invalid && (field.dirty || field.touched) : false;
   }
 }

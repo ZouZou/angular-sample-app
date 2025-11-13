@@ -53,3 +53,46 @@ body {
   background-color: var(--color-warning) !important;
   color: var(--text-primary) !important;
 }
+
+/* Form Validation Enhancements */
+/* Success indicators for valid fields */
+.mat-form-field.field-valid .mat-form-field-suffix .mat-icon.success-indicator {
+  color: var(--color-success);
+  animation: fadeIn 0.3s ease-in;
+}
+
+/* Enhanced error styling */
+.mat-form-field.mat-form-field-invalid .mat-form-field-outline-thick {
+  color: var(--color-error) !important;
+}
+
+/* Success state for form fields */
+.mat-form-field.field-valid:not(.mat-form-field-invalid) .mat-form-field-outline-thick {
+  color: var(--color-success) !important;
+}
+
+/* Hint text styling */
+.mat-hint {
+  color: var(--text-secondary);
+  font-size: var(--font-size-caption);
+}
+
+/* Help text for fields */
+.field-help {
+  display: block;
+  font-size: var(--font-size-caption);
+  color: var(--text-secondary);
+  margin-top: var(--space-1);
+  line-height: var(--line-height-caption);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

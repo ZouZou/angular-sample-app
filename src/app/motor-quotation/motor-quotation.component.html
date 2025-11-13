@@ -46,7 +46,7 @@
         </div>
 
         <form [formGroup]="vehicleFormGroup" class="form-grid">
-          <mat-form-field appearance="outline" class="full-width">
+          <mat-form-field appearance="outline" class="full-width" [ngClass]="{'field-valid': isFieldValid(vehicleFormGroup, 'make')}">
             <mat-label>Vehicle Make</mat-label>
             <mat-select formControlName="make" required>
               <mat-option *ngFor="let make of vehicleMakes" [value]="make">
@@ -54,12 +54,14 @@
               </mat-option>
             </mat-select>
             <mat-icon matPrefix>business</mat-icon>
+            <mat-icon matSuffix *ngIf="isFieldValid(vehicleFormGroup, 'make')" class="success-indicator">check_circle</mat-icon>
+            <mat-hint>Select the manufacturer of your vehicle</mat-hint>
             <mat-error *ngIf="vehicleFormGroup.get('make')?.invalid">
               {{ getErrorMessage(vehicleFormGroup, 'make') }}
             </mat-error>
           </mat-form-field>
 
-          <mat-form-field appearance="outline" class="full-width">
+          <mat-form-field appearance="outline" class="full-width" [ngClass]="{'field-valid': isFieldValid(vehicleFormGroup, 'model')}">
             <mat-label>Vehicle Model</mat-label>
             <mat-select formControlName="model" required [disabled]="!currentModels.length">
               <mat-option *ngFor="let model of currentModels" [value]="model">
@@ -67,6 +69,8 @@
               </mat-option>
             </mat-select>
             <mat-icon matPrefix>drive_eta</mat-icon>
+            <mat-icon matSuffix *ngIf="isFieldValid(vehicleFormGroup, 'model')" class="success-indicator">check_circle</mat-icon>
+            <mat-hint>Select your vehicle model</mat-hint>
             <mat-error *ngIf="vehicleFormGroup.get('model')?.invalid">
               {{ getErrorMessage(vehicleFormGroup, 'model') }}
             </mat-error>
