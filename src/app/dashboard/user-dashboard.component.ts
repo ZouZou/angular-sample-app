@@ -196,6 +196,17 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
     return 'score-low';
   }
 
+  /**
+   * Returns actual color value for score based on performance
+   * @param score - The score percentage (0-100)
+   * @returns Color value (hex or named color)
+   */
+  getScoreColor(score: number): string {
+    if (score >= 80) return '#4caf50'; // Green
+    if (score >= 60) return '#ff9800'; // Orange
+    return '#f44336'; // Red
+  }
+
   logout(): void {
     const userName = this.currentUser?.name || 'User';
     this.authService.logout();

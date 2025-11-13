@@ -9,7 +9,8 @@ import { Directive, ElementRef, Input, OnInit, Renderer2, OnDestroy } from '@ang
  * <img [appLazyLoadImage]="imageUrl" alt="Description">
  */
 @Directive({
-  selector: '[appLazyLoadImage]'
+  selector: '[appLazyLoadImage]',
+  standalone: true
 })
 export class LazyLoadImageDirective implements OnInit, OnDestroy {
   @Input() appLazyLoadImage: string = '';
