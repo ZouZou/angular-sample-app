@@ -72,7 +72,14 @@
 
     <!-- Course Grid -->
     <div *ngIf="!isLoading && !error && filteredCourses.length > 0" class="courses-grid">
-      <mat-card *ngFor="let course of filteredCourses" class="course-card" (click)="navigateToDetail(course.id)">
+      <mat-card *ngFor="let course of filteredCourses"
+                class="course-card"
+                tabindex="0"
+                role="button"
+                [attr.aria-label]="'View details for ' + course.title + ' course by ' + course.instructor"
+                (click)="navigateToDetail(course.id)"
+                (keydown.enter)="navigateToDetail(course.id)"
+                (keydown.space)="navigateToDetail(course.id); $event.preventDefault()">
         <!-- Course Thumbnail -->
         <div class="course-thumbnail" [style.background-image]="'url(' + (course.thumbnailUrl || 'https://via.placeholder.com/400x250?text=Course') + ')'">
           <div class="level-badge" [style.background-color]="getLevelColor(course.level)">

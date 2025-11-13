@@ -54,7 +54,11 @@
     <h2>My Courses ({{ enrolledCourses.length }})</h2>
 
     <div class="courses-grid">
-      <mat-card *ngFor="let data of enrolledCourses" class="course-card">
+      <mat-card *ngFor="let data of enrolledCourses"
+                class="course-card"
+                tabindex="0"
+                role="article"
+                [attr.aria-label]="'Course: ' + data.course.title + ' by ' + data.course.instructor + ', ' + data.enrollment.progress + '% complete'">
         <!-- Course Thumbnail -->
         <div class="course-thumbnail" [style.background-image]="'url(' + (data.course.thumbnailUrl || 'https://via.placeholder.com/400x250?text=Course') + ')'">
           <div class="status-badge" [ngClass]="'status-' + data.enrollment.status">
@@ -116,8 +120,11 @@
                 <div class="attempt-info">
                   <span class="attempt-score" [style.color]="getScoreColor(attempt.percentage)">
                     {{ attempt.percentage }}%
+                    <span class="sr-only">{{ attempt.passed ? '(Passed)' : '(Failed)' }}</span>
                   </span>
-                  <mat-icon class="attempt-icon" [style.color]="getScoreColor(attempt.percentage)">
+                  <mat-icon class="attempt-icon"
+                            [style.color]="getScoreColor(attempt.percentage)"
+                            [attr.aria-label]="attempt.passed ? 'Passed' : 'Failed'">
                     {{ attempt.passed ? 'check_circle' : 'cancel' }}
                   </mat-icon>
                 </div>

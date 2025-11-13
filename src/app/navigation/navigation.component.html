@@ -5,20 +5,20 @@
       [opened]="(isHandset$ | async) === false">
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list>
-      <a mat-list-item routerLink="/motor-quote">
-        <mat-icon>directions_car</mat-icon>
+      <a mat-list-item routerLink="/motor-quote" aria-label="Motor Quote - Get insurance quotations">
+        <mat-icon aria-hidden="true">directions_car</mat-icon>
         Motor Quote
       </a>
-      <a mat-list-item routerLink="/courses">
-        <mat-icon>school</mat-icon>
+      <a mat-list-item routerLink="/courses" aria-label="Courses - Browse and manage courses">
+        <mat-icon aria-hidden="true">school</mat-icon>
         Courses
       </a>
-      <a mat-list-item routerLink="/customer">
-        <mat-icon>people</mat-icon>
+      <a mat-list-item routerLink="/customer" aria-label="Customers - View and manage customers">
+        <mat-icon aria-hidden="true">people</mat-icon>
         Customers
       </a>
-      <a mat-list-item routerLink="/Navigation">
-        <mat-icon>dashboard</mat-icon>
+      <a mat-list-item routerLink="/Navigation" aria-label="Dashboard - View your dashboard">
+        <mat-icon aria-hidden="true">dashboard</mat-icon>
         Dashboard
       </a>
     </mat-nav-list>

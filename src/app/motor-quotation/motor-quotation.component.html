@@ -12,16 +12,22 @@
 
   <!-- Progress Stepper -->
   <div class="stepper-container">
-    <div class="stepper">
+    <div class="stepper"
+         role="progressbar"
+         [attr.aria-valuenow]="currentStep + 1"
+         [attr.aria-valuemin]="1"
+         [attr.aria-valuemax]="4"
+         [attr.aria-label]="'Step ' + (currentStep + 1) + ' of 4: ' + getStepLabel(currentStep)">
       <div *ngFor="let i of [0, 1, 2, 3]"
            class="step"
            [class.active]="currentStep === i"
-           [class.completed]="currentStep > i">
+           [class.completed]="currentStep > i"
+           [attr.aria-current]="currentStep === i ? 'step' : null">
         <div class="step-icon">
-          <mat-icon>{{ getStepIcon(i) }}</mat-icon>
+          <mat-icon aria-hidden="true">{{ getStepIcon(i) }}</mat-icon>
         </div>
         <div class="step-label">{{ getStepLabel(i) }}</div>
-        <div class="step-line" *ngIf="i < 3"></div>
+        <div class="step-line" *ngIf="i < 3" aria-hidden="true"></div>
       </div>
     </div>
   </div>
