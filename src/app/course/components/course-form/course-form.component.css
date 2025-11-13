@@ -203,7 +203,7 @@ mat-form-field mat-icon[matPrefix] {
   padding: 24px;
   border-radius: 8px;
   margin-bottom: 24px;
-  border-left: 4px solid #673ab7;
+  border-left: 4px solid var(--primary-color);
 }
 
 .section-form h3 {
@@ -260,7 +260,7 @@ mat-panel-title {
 }
 
 .section-icon {
-  color: #673ab7;
+  color: var(--primary-color);
 }
 
 .section-title {
@@ -333,7 +333,7 @@ mat-panel-description {
 
 .lesson-item:hover {
   background-color: #f5f5f5;
-  border-color: #673ab7;
+  border-color: var(--primary-color);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
