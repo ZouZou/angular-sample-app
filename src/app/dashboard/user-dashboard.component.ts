@@ -11,6 +11,7 @@ import { QuizAttempt } from '../course/models/quiz.interface';
 import { forkJoin, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { NotificationService } from '../shared/services/notification.service';
+import { LoggerService } from '../shared/services/logger.service';
 import { fadeInUp, staggerList, scaleIn } from '../shared/animations/animations';
 
 interface EnrolledCourseData {
@@ -56,7 +57,8 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
     private courseService: CourseService,
     private quizService: QuizService,
     private router: Router,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private logger: LoggerService
   ) {}
 
   ngOnInit(): void {
@@ -128,7 +130,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
                       this.isLoading = false;
                     },
                     error: (error) => {
-                      console.error('Error loading quiz attempts:', error);
+                      this.logger.error('Error loading quiz attempts:', error);
                       // Still show courses even if quiz attempts fail to load
                       this.enrolledCourses = enrollments.map((enrollment, index) => ({
                         enrollment,
@@ -142,14 +144,14 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
                   });
               },
               error: (error) => {
-                console.error('Error loading courses:', error);
+                this.logger.error('Error loading courses:', error);
                 this.error = 'Failed to load course details';
                 this.isLoading = false;
               }
             });
         },
         error: (error) => {
-          console.error('Error loading enrollments:', error);
+          this.logger.error('Error loading enrollments:', error);
           this.error = 'Failed to load your enrolled courses';
           this.isLoading = false;
         }

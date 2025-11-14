@@ -9,6 +9,7 @@ import { AuthService } from '../../services/auth.service';
 import { Course } from '../../models/course.interface';
 import { ConfirmationDialogComponent } from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import { NotificationService } from '../../../shared/services/notification.service';
+import { LoggerService } from '../../../shared/services/logger.service';
 import { fadeInUp, staggerList } from '../../../shared/animations/animations';
 
 @Component({
@@ -56,7 +57,8 @@ export class CourseListComponent implements OnInit, OnDestroy {
     private breakpointObserver: BreakpointObserver,
     private dialog: MatDialog,
     private notificationService: NotificationService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private logger: LoggerService
   ) {}
 
   ngOnInit(): void {
@@ -78,7 +80,7 @@ export class CourseListComponent implements OnInit, OnDestroy {
           this.cdr.markForCheck();
         },
         error: (error) => {
-          console.error('Error loading courses:', error);
+          this.logger.error('Error loading courses:', error);
           this.error = 'Failed to load courses. Please try again later.';
           this.isLoading = false;
           this.cdr.markForCheck();
@@ -153,7 +155,7 @@ export class CourseListComponent implements OnInit, OnDestroy {
                 this.loadCourses();
               },
               error: (error) => {
-                console.error('Error deleting course:', error);
+                this.logger.error('Error deleting course:', error);
                 this.notificationService.error('Failed to delete course. Please try again.');
               }
             });

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { NotificationService } from '../shared/services/notification.service';
+import { LoggerService } from '../shared/services/logger.service';
 
 @Component({
   standalone: false,
@@ -90,7 +91,8 @@ export class AddressComponent {
 
   constructor(
     private fb: FormBuilder,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private logger: LoggerService
   ) {}
 
   onSubmit(): void {
@@ -100,7 +102,7 @@ export class AddressComponent {
       // Simulate API call with setTimeout
       setTimeout(() => {
         // In a real app, you would send this to a server
-        console.log('Address form submitted:', this.addressForm.value);
+        this.logger.debug('Address form submitted:', this.addressForm.value);
         this.notificationService.success('Address saved successfully!');
         this.addressForm.reset({ shipping: 'free' });
         this.hasUnitNumber = false;

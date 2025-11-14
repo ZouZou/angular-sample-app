@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CourseService } from '../../services/course.service';
 import { CourseFormService } from '../../services/course-form.service';
 import { Course } from '../../models/course.interface';
+import { LoggerService } from '../../../shared/services/logger.service';
 
 @Component({
   selector: 'app-course-form',
@@ -26,7 +27,8 @@ export class CourseFormComponent implements OnInit {
     private courseService: CourseService,
     private courseFormService: CourseFormService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private logger: LoggerService
   ) {}
 
   ngOnInit(): void {
@@ -58,7 +60,7 @@ export class CourseFormComponent implements OnInit {
         this.isLoading = false;
       },
       error: (error) => {
-        console.error('Error loading course:', error);
+        this.logger.error('Error loading course:', error);
         this.error = 'Failed to load course. Please try again.';
         this.isLoading = false;
       }
@@ -86,7 +88,7 @@ export class CourseFormComponent implements OnInit {
         this.router.navigate(['/courses', course.id]);
       },
       error: (error) => {
-        console.error('Error saving course:', error);
+        this.logger.error('Error saving course:', error);
         this.error = `Failed to ${this.isEditMode ? 'update' : 'create'} course. Please try again.`;
         this.isSaving = false;
       }

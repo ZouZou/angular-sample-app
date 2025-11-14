@@ -3,6 +3,7 @@ import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms'
 import { Router } from '@angular/router';
 import { HttpService } from './http.service';
 import { Observable } from 'rxjs';
+import { LoggerService } from './shared/services/logger.service';
 
 interface Post {
   userId: number;
@@ -44,9 +45,14 @@ export class AppComponent implements OnInit{
     lastName: ['']
   });
 
-  constructor(private httpService: HttpService, private router: Router, private fb: FormBuilder){
+  constructor(
+    private httpService: HttpService,
+    private router: Router,
+    private fb: FormBuilder,
+    private logger: LoggerService
+  ) {
     // this.router.events.subscribe((e) => {
-    //   console.log(e);
+    //   this.logger.debug('Router event', e);
     // });
   }
   ngOnInit(): void {
@@ -56,7 +62,7 @@ export class AppComponent implements OnInit{
   handleEvent(event: Event): void {
     // this.httpService.getRequest('http://jsonplaceholder.typicode.com/todos/1')
     // .subscribe((response: any) => this.jsonValue = response);
-    console.log(event);
+    this.logger.debug('Event handled', event);
   }
 
   getPosts(): void {
@@ -68,7 +74,7 @@ export class AppComponent implements OnInit{
 
   goToRoute(route: string = '/customer'): void {
     this.router.navigateByUrl(route).then(() => {
-      console.log(this.router.url);
+      this.logger.debug('Navigated to route', this.router.url);
     });
   }
 

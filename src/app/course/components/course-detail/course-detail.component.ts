@@ -10,6 +10,7 @@ import { Enrollment } from '../../models/enrollment.interface';
 import { CourseSection } from '../../models/curriculum.interface';
 import { ConfirmationDialogComponent } from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import { NotificationService } from '../../../shared/services/notification.service';
+import { LoggerService } from '../../../shared/services/logger.service';
 
 @Component({
   selector: 'app-course-detail',
@@ -34,7 +35,8 @@ export class CourseDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private dialog: MatDialog,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private logger: LoggerService
   ) {}
 
   ngOnInit(): void {
@@ -59,7 +61,7 @@ export class CourseDetailComponent implements OnInit {
         this.isLoading = false;
       },
       error: (error) => {
-        console.error('Error loading course:', error);
+        this.logger.error('Error loading course:', error);
         this.error = 'Failed to load course. The course may not exist.';
         this.isLoading = false;
       }
@@ -79,7 +81,7 @@ export class CourseDetailComponent implements OnInit {
         this.isLoadingCurriculum = false;
       },
       error: (error) => {
-        console.error('Error loading curriculum:', error);
+        this.logger.error('Error loading curriculum:', error);
         this.isLoadingCurriculum = false;
       }
     });
@@ -93,7 +95,7 @@ export class CourseDetailComponent implements OnInit {
           this.enrollment = enrollment;
         },
         error: (error) => {
-          console.error('Error checking enrollment:', error);
+          this.logger.error('Error checking enrollment:', error);
         }
       });
     }
@@ -131,7 +133,7 @@ export class CourseDetailComponent implements OnInit {
             this.router.navigate(['/courses']);
           },
           error: (error) => {
-            console.error('Error deleting course:', error);
+            this.logger.error('Error deleting course:', error);
             this.notificationService.error('Failed to delete course. Please try again.');
           }
         });
@@ -179,7 +181,7 @@ export class CourseDetailComponent implements OnInit {
         this.router.navigate(['/courses', this.course!.id, 'learn']);
       },
       error: (error) => {
-        console.error('Error enrolling in course:', error);
+        this.logger.error('Error enrolling in course:', error);
         this.notificationService.error(error.message || 'Failed to enroll in course. Please try again.');
         this.isEnrolling = false;
       }

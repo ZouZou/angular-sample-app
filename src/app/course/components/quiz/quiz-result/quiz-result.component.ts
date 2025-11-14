@@ -5,6 +5,7 @@ import { takeUntil } from 'rxjs/operators';
 import { QuizService } from '../../../services/quiz.service';
 import { Quiz, QuizAttempt } from '../../../models/quiz.interface';
 import { NotificationService } from '../../../../shared/services/notification.service';
+import { LoggerService } from '../../../../shared/services/logger.service';
 
 @Component({
   selector: 'app-quiz-result',
@@ -27,7 +28,8 @@ export class QuizResultComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private quizService: QuizService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private logger: LoggerService
   ) {}
 
   ngOnInit(): void {
@@ -63,7 +65,7 @@ export class QuizResultComponent implements OnInit, OnDestroy {
           this.loadAttempt();
         },
         error: (error) => {
-          console.error('Error loading quiz:', error);
+          this.logger.error('Error loading quiz:', error);
           this.error = 'Failed to load quiz';
           this.isLoading = false;
         }
@@ -85,7 +87,7 @@ export class QuizResultComponent implements OnInit, OnDestroy {
           }
         },
         error: (error) => {
-          console.error('Error loading attempt:', error);
+          this.logger.error('Error loading attempt:', error);
           this.error = 'Failed to load results';
           this.isLoading = false;
         }

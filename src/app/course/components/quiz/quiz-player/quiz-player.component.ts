@@ -5,6 +5,7 @@ import { takeUntil } from 'rxjs/operators';
 import { QuizService } from '../../../services/quiz.service';
 import { EnrollmentService } from '../../../services/enrollment.service';
 import { AuthService } from '../../../services/auth.service';
+import { LoggerService } from '../../../../shared/services/logger.service';
 import { Quiz, QuizQuestion, QuizAttempt, UserAnswer } from '../../../models/quiz.interface';
 
 @Component({
@@ -35,7 +36,8 @@ export class QuizPlayerComponent implements OnInit, OnDestroy {
     private router: Router,
     private quizService: QuizService,
     private enrollmentService: EnrollmentService,
-    private authService: AuthService
+    private authService: AuthService,
+    private logger: LoggerService
   ) {}
 
   ngOnInit(): void {
@@ -93,7 +95,7 @@ export class QuizPlayerComponent implements OnInit, OnDestroy {
           }
         },
         error: (error) => {
-          console.error('Error loading enrollment:', error);
+          this.logger.error('Error loading enrollment:', error);
           this.error = 'Failed to verify enrollment';
           this.isLoading = false;
         }
@@ -110,7 +112,7 @@ export class QuizPlayerComponent implements OnInit, OnDestroy {
           this.isLoading = false;
         },
         error: (error) => {
-          console.error('Error loading quiz:', error);
+          this.logger.error('Error loading quiz:', error);
           this.error = 'Failed to load quiz';
           this.isLoading = false;
         }
@@ -131,7 +133,7 @@ export class QuizPlayerComponent implements OnInit, OnDestroy {
           }
         },
         error: (error) => {
-          console.error('Error starting quiz attempt:', error);
+          this.logger.error('Error starting quiz attempt:', error);
           this.error = 'Failed to start quiz';
         }
       });
@@ -248,7 +250,7 @@ export class QuizPlayerComponent implements OnInit, OnDestroy {
           this.router.navigate(['/courses', this.courseId, 'learn', 'quiz', this.quizId, 'result', gradedAttempt.id]);
         },
         error: (error) => {
-          console.error('Error submitting quiz:', error);
+          this.logger.error('Error submitting quiz:', error);
           alert('Failed to submit quiz. Please try again.');
           this.isSubmitting = false;
         }

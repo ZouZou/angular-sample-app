@@ -8,6 +8,7 @@ import { ProgressService } from '../../../services/progress.service';
 import { EnrollmentService } from '../../../services/enrollment.service';
 import { AuthService } from '../../../services/auth.service';
 import { NotificationService } from '../../../../shared/services/notification.service';
+import { LoggerService } from '../../../../shared/services/logger.service';
 import { Lesson } from '../../../models/curriculum.interface';
 
 @Component({
@@ -39,7 +40,8 @@ export class LessonViewerComponent implements OnInit, OnDestroy {
     private enrollmentService: EnrollmentService,
     private authService: AuthService,
     private sanitizer: DomSanitizer,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private logger: LoggerService
   ) {}
 
   ngOnInit(): void {
@@ -94,7 +96,7 @@ export class LessonViewerComponent implements OnInit, OnDestroy {
           }
         },
         error: (error) => {
-          console.error('Error loading enrollment:', error);
+          this.logger.error('Error loading enrollment:', error);
           this.error = 'Failed to verify enrollment';
           this.isLoading = false;
         }
@@ -123,7 +125,7 @@ export class LessonViewerComponent implements OnInit, OnDestroy {
           }
         },
         error: (error) => {
-          console.error('Error loading lesson:', error);
+          this.logger.error('Error loading lesson:', error);
           this.error = 'Failed to load lesson';
           this.isLoading = false;
         }
@@ -139,7 +141,7 @@ export class LessonViewerComponent implements OnInit, OnDestroy {
           this.lessonNotes = progress?.notes || '';
         },
         error: (error) => {
-          console.error('Error checking completion:', error);
+          this.logger.error('Error checking completion:', error);
           this.isCompleted = false;
           this.lessonNotes = '';
         }
@@ -159,7 +161,7 @@ export class LessonViewerComponent implements OnInit, OnDestroy {
           this.updateEnrollmentProgress();
         },
         error: (error) => {
-          console.error('Error marking lesson as complete:', error);
+          this.logger.error('Error marking lesson as complete:', error);
           alert('Failed to mark lesson as complete. Please try again.');
         }
       });
@@ -173,7 +175,7 @@ export class LessonViewerComponent implements OnInit, OnDestroy {
           this.notificationService.success('Notes saved successfully! 📝');
         },
         error: (error) => {
-          console.error('Error saving notes:', error);
+          this.logger.error('Error saving notes:', error);
           this.notificationService.error('Failed to save notes. Please try again.');
         }
       });
