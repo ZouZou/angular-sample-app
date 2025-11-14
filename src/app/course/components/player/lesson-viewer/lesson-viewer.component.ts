@@ -29,7 +29,7 @@ export class LessonViewerComponent implements OnInit, OnDestroy {
   private courseId!: number;
   private lessonId!: number;
   private userId!: number;
-  private enrollmentId!: number;
+  enrollmentId!: number;
 
   constructor(
     private route: ActivatedRoute,
