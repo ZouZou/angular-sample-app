@@ -1,22 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-
-// Angular Material Modules
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatGridListModule } from '@angular/material/grid-list';
-import { MatExpansionModule } from '@angular/material/expansion';
-import { MatListModule } from '@angular/material/list';
-import { MatRadioModule } from '@angular/material/radio';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatTooltipModule } from '@angular/material/tooltip';
+import { LayoutModule } from '@angular/cdk/layout';
 
 // Course Module Components
 import { CourseRoutingModule } from './course-routing.module';
@@ -34,11 +19,9 @@ import { LessonFormComponent } from './components/course-form/lesson-form/lesson
 // Pipes
 import { MarkdownPipe } from './pipes/markdown.pipe';
 
-// Layout
-import { LayoutModule } from '@angular/cdk/layout';
-
-// Shared Module
+// Shared Modules
 import { SharedModule } from '../shared/shared.module';
+import { MaterialModule } from '../shared/material.module';
 
 @NgModule({
   declarations: [
@@ -60,22 +43,8 @@ import { SharedModule } from '../shared/shared.module';
     FormsModule,
     CourseRoutingModule,
     LayoutModule,
-    SharedModule,
-    // Material Modules
-    MatCardModule,
-    MatButtonModule,
-    MatIconModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatProgressSpinnerModule,
-    MatProgressBarModule,
-    MatGridListModule,
-    MatExpansionModule,
-    MatListModule,
-    MatRadioModule,
-    MatCheckboxModule,
-    MatTooltipModule
+    MaterialModule,
+    SharedModule
   ]
 })
 export class CourseModule { }
