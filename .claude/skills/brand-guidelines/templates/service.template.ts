@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal, computed } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject, throwError } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
@@ -13,7 +13,13 @@ import { environment } from '@environments/environment';
  * ```typescript
  * constructor(private exampleService: ExampleService) {}
  *
+ * // Using signals (Angular 16+)
  * loadData(): void {
+ *   console.log(this.exampleService.data()); // Access signal value
+ * }
+ *
+ * // Or using observables
+ * loadDataWithObservable(): void {
  *   this.exampleService.getData().subscribe({
  *     next: (data) => console.log(data),
  *     error: (err) => console.error(err)
@@ -28,7 +34,21 @@ export class ExampleService {
   // API base URL from environment
   private readonly API_URL = environment.apiUrl;
 
-  // State management with BehaviorSubject
+  // State management with Signals (Angular 16+) - Preferred
+  private _data = signal<any[]>([]);
+  private _loading = signal<boolean>(false);
+  private _error = signal<string | null>(null);
+
+  // Public readonly signals
+  readonly data = this._data.asReadonly();
+  readonly loading = this._loading.asReadonly();
+  readonly error = this._error.asReadonly();
+
+  // Computed signals
+  readonly hasData = computed(() => this._data().length > 0);
+  readonly isEmpty = computed(() => this._data().length === 0 && !this._loading());
+
+  // Alternative: State management with BehaviorSubject (for backward compatibility)
   private dataSubject = new BehaviorSubject<any[]>([]);
   public data$ = this.dataSubject.asObservable();
 
@@ -55,14 +75,22 @@ export class ExampleService {
    * @returns Observable array of items
    */
   public getAll(): Observable<any[]> {
+    // Update both signal and subject for compatibility
+    this._loading.set(true);
     this.loadingSubject.next(true);
 
     return this.http.get<any[]>(`${this.API_URL}/items`).pipe(
       tap((data) => {
+        this._data.set(data);
+        this._loading.set(false);
+        this._error.set(null);
+        // Also update subjects for backward compatibility
         this.dataSubject.next(data);
         this.loadingSubject.next(false);
       }),
       catchError((error) => {
+        this._loading.set(false);
+        this._error.set(error.message);
         this.loadingSubject.next(false);
         return this.handleError(error);
       })
