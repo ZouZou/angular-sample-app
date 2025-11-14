@@ -1,10 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatIconModule } from '@angular/material/icon';
+import { MaterialModule } from './material.module';
 import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
 import { SkeletonCourseCardComponent } from './components/skeleton-course-card/skeleton-course-card.component';
@@ -23,11 +19,7 @@ import { LazyLoadImageDirective } from './directives/lazy-load-image.directive';
   ],
   imports: [
     CommonModule,
-    MatProgressSpinnerModule,
-    MatDialogModule,
-    MatButtonModule,
-    MatCardModule,
-    MatIconModule,
+    MaterialModule,
     LoadingSpinnerComponent,
     ConfirmationDialogComponent,
     SkeletonCourseCardComponent,
