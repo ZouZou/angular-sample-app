@@ -1,0 +1,23 @@
+<div class="section-form">
+  <h3>{{ section?.id ? 'Edit Section' : 'Add New Section' }}</h3>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Section Title</mat-label>
+    <input matInput [(ngModel)]="sectionForm.title" placeholder="e.g., Introduction to Angular">
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Section Description (Optional)</mat-label>
+    <textarea matInput [(ngModel)]="sectionForm.description" rows="2"
+              placeholder="Brief description of this section"></textarea>
+  </mat-form-field>
+
+  <div class="form-actions">
+    <button mat-button (click)="onCancel()">Cancel</button>
+    <button mat-raised-button color="primary" (click)="onSave()"
+            [disabled]="!sectionForm.title.trim()">
+      <mat-icon>save</mat-icon>
+      {{ section?.id ? 'Update' : 'Create' }} Section
+    </button>
+  </div>
+</div>

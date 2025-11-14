@@ -1,0 +1,138 @@
+.curriculum-card {
+  margin-top: 24px;
+}
+
+.curriculum-card mat-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.loading-curriculum {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+
+.loading-curriculum p {
+  margin-top: 16px;
+  color: #666;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+}
+
+.empty-state mat-icon {
+  font-size: 64px;
+  width: 64px;
+  height: 64px;
+  color: #ccc;
+  margin-bottom: 16px;
+}
+
+.section-panel {
+  margin-bottom: 16px;
+}
+
+.section-icon {
+  margin-right: 8px;
+}
+
+.section-title {
+  font-weight: 500;
+  margin-right: 8px;
+}
+
+.lesson-count {
+  color: #666;
+  font-size: 0.9em;
+}
+
+.section-content {
+  padding: 16px 0;
+}
+
+.section-actions {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.lessons-list {
+  margin: 16px 0;
+}
+
+.empty-lessons {
+  text-align: center;
+  padding: 20px;
+  color: #999;
+  font-style: italic;
+}
+
+.lesson-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  margin-bottom: 8px;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.lesson-item:hover {
+  background-color: #eeeeee;
+}
+
+.lesson-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.lesson-icon {
+  color: #666;
+}
+
+.lesson-details {
+  flex: 1;
+}
+
+.lesson-title {
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.lesson-meta {
+  display: flex;
+  gap: 12px;
+  font-size: 0.85em;
+  color: #666;
+}
+
+.lesson-type {
+  text-transform: capitalize;
+}
+
+.lesson-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.add-lesson-btn {
+  margin-top: 16px;
+  width: 100%;
+}
+
+.add-lesson-btn mat-icon {
+  margin-right: 8px;
+}

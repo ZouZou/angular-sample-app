@@ -1,0 +1,258 @@
+{
+  "sections": [
+    {
+      "title": "Getting Started",
+      "description": "Learn the basics of Angular and set up your development environment",
+      "order": 1,
+      "lessons": [
+        {
+          "title": "Welcome to Angular",
+          "description": "Introduction to the course and what you'll learn",
+          "type": "video",
+          "duration": 10,
+          "order": 1,
+          "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ"
+        },
+        {
+          "title": "Setting Up Your Environment",
+          "description": "Install Node.js, npm, and Angular CLI",
+          "type": "text",
+          "duration": 15,
+          "order": 2,
+          "content": "<h3>Prerequisites</h3><p>Before starting with Angular, you need:</p><ul><li>Node.js (v18 or higher)</li><li>npm (comes with Node.js)</li><li>A code editor (VS Code recommended)</li></ul><h3>Installation Steps</h3><ol><li>Download and install Node.js from nodejs.org</li><li>Verify installation: <code>node --version</code></li><li>Install Angular CLI: <code>npm install -g @angular/cli</code></li><li>Verify Angular CLI: <code>ng version</code></li></ol>"
+        },
+        {
+          "title": "Your First Angular App",
+          "description": "Create and run your first Angular application",
+          "type": "video",
+          "duration": 20,
+          "order": 3,
+          "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ"
+        },
+        {
+          "title": "Quiz: Getting Started",
+          "description": "Test your understanding of Angular basics",
+          "type": "quiz",
+          "duration": 10,
+          "order": 4,
+          "quizId": 0
+        }
+      ]
+    },
+    {
+      "title": "TypeScript Fundamentals",
+      "description": "Master TypeScript, the language behind Angular",
+      "order": 2,
+      "lessons": [
+        {
+          "title": "Introduction to TypeScript",
+          "description": "Why TypeScript and its benefits",
+          "type": "video",
+          "duration": 15,
+          "order": 1,
+          "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ"
+        },
+        {
+          "title": "Types and Interfaces",
+          "description": "Learn about TypeScript's type system",
+          "type": "text",
+          "duration": 25,
+          "order": 2,
+          "content": "<h3>Basic Types</h3><p>TypeScript provides several basic types:</p><pre><code>let name: string = 'Angular';\nlet version: number = 20;\nlet isActive: boolean = true;</code></pre><h3>Interfaces</h3><p>Interfaces define the structure of objects:</p><pre><code>interface User {\n  id: number;\n  name: string;\n  email: string;\n}</code></pre>"
+        },
+        {
+          "title": "Classes and OOP",
+          "description": "Object-oriented programming in TypeScript",
+          "type": "video",
+          "duration": 30,
+          "order": 3,
+          "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ"
+        }
+      ]
+    },
+    {
+      "title": "Components & Templates",
+      "description": "Build reusable components and dynamic templates",
+      "order": 3,
+      "lessons": [
+        {
+          "title": "Understanding Components",
+          "description": "Learn about Angular components",
+          "type": "video",
+          "duration": 20,
+          "order": 1,
+          "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ"
+        },
+        {
+          "title": "Component Templates",
+          "description": "Work with component templates and data binding",
+          "type": "text",
+          "duration": 30,
+          "order": 2,
+          "content": "<h3>Template Syntax</h3><p>Angular provides powerful template syntax:</p><pre><code>&lt;h1&gt;{{ title }}&lt;/h1&gt;\n&lt;button (click)=\"handleClick()\"&gt;Click Me&lt;/button&gt;\n&lt;input [(ngModel)]=\"userName\"&gt;</code></pre>"
+        },
+        {
+          "title": "Quiz: Components",
+          "description": "Test your knowledge of Angular components",
+          "type": "quiz",
+          "duration": 15,
+          "order": 3,
+          "quizId": 1
+        }
+      ]
+    }
+  ],
+  "quizzes": [
+    {
+      "title": "Getting Started Quiz",
+      "description": "Test your understanding of Angular basics",
+      "passingScore": 70,
+      "timeLimit": 10,
+      "questions": [
+        {
+          "question": "What is Angular?",
+          "type": "multiple-choice",
+          "points": 10,
+          "order": 1,
+          "options": [
+            {
+              "text": "A JavaScript library",
+              "isCorrect": false,
+              "order": 1
+            },
+            {
+              "text": "A TypeScript-based web application framework",
+              "isCorrect": true,
+              "order": 2
+            },
+            {
+              "text": "A CSS framework",
+              "isCorrect": false,
+              "order": 3
+            },
+            {
+              "text": "A database management system",
+              "isCorrect": false,
+              "order": 4
+            }
+          ],
+          "explanation": "Angular is a TypeScript-based web application framework developed by Google."
+        },
+        {
+          "question": "Which command is used to create a new Angular project?",
+          "type": "multiple-choice",
+          "points": 10,
+          "order": 2,
+          "options": [
+            {
+              "text": "npm create angular-app",
+              "isCorrect": false,
+              "order": 1
+            },
+            {
+              "text": "ng new project-name",
+              "isCorrect": true,
+              "order": 2
+            },
+            {
+              "text": "angular init project-name",
+              "isCorrect": false,
+              "order": 3
+            },
+            {
+              "text": "npx create-angular-app",
+              "isCorrect": false,
+              "order": 4
+            }
+          ],
+          "explanation": "The 'ng new' command is used with Angular CLI to create a new Angular project."
+        },
+        {
+          "question": "TypeScript is required for Angular development.",
+          "type": "true-false",
+          "points": 5,
+          "order": 3,
+          "options": [
+            {
+              "text": "True",
+              "isCorrect": true,
+              "order": 1
+            },
+            {
+              "text": "False",
+              "isCorrect": false,
+              "order": 2
+            }
+          ],
+          "explanation": "Yes, Angular is built with and requires TypeScript for development."
+        }
+      ]
+    },
+    {
+      "title": "Components Quiz",
+      "description": "Test your knowledge of Angular components",
+      "passingScore": 70,
+      "timeLimit": 15,
+      "questions": [
+        {
+          "question": "What is a component in Angular?",
+          "type": "multiple-choice",
+          "points": 10,
+          "order": 1,
+          "options": [
+            {
+              "text": "A reusable piece of UI with logic and template",
+              "isCorrect": true,
+              "order": 1
+            },
+            {
+              "text": "A CSS stylesheet",
+              "isCorrect": false,
+              "order": 2
+            },
+            {
+              "text": "A backend service",
+              "isCorrect": false,
+              "order": 3
+            },
+            {
+              "text": "A database table",
+              "isCorrect": false,
+              "order": 4
+            }
+          ],
+          "explanation": "A component is a TypeScript class with a template and styles that controls a part of the UI."
+        },
+        {
+          "question": "What decorator is used to define a component?",
+          "type": "multiple-choice",
+          "points": 10,
+          "order": 2,
+          "options": [
+            {
+              "text": "@Injectable",
+              "isCorrect": false,
+              "order": 1
+            },
+            {
+              "text": "@Component",
+              "isCorrect": true,
+              "order": 2
+            },
+            {
+              "text": "@Directive",
+              "isCorrect": false,
+              "order": 3
+            },
+            {
+              "text": "@Module",
+              "isCorrect": false,
+              "order": 4
+            }
+          ],
+          "explanation": "The @Component decorator is used to define an Angular component."
+        }
+      ]
+    }
+  ]
+}

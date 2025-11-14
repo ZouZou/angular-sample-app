@@ -27,6 +27,9 @@ import { CoursePlayerComponent } from './components/player/course-player/course-
 import { LessonViewerComponent } from './components/player/lesson-viewer/lesson-viewer.component';
 import { QuizPlayerComponent } from './components/quiz/quiz-player/quiz-player.component';
 import { QuizResultComponent } from './components/quiz/quiz-result/quiz-result.component';
+import { CurriculumManagerComponent } from './components/course-form/curriculum-manager/curriculum-manager.component';
+import { SectionFormComponent } from './components/course-form/section-form/section-form.component';
+import { LessonFormComponent } from './components/course-form/lesson-form/lesson-form.component';
 
 // Pipes
 import { MarkdownPipe } from './pipes/markdown.pipe';
@@ -46,6 +49,9 @@ import { SharedModule } from '../shared/shared.module';
     LessonViewerComponent,
     QuizPlayerComponent,
     QuizResultComponent,
+    CurriculumManagerComponent,
+    SectionFormComponent,
+    LessonFormComponent,
     MarkdownPipe
   ],
   imports: [
