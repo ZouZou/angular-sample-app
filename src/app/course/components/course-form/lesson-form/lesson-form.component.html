@@ -1,0 +1,57 @@
+<div class="lesson-form">
+  <h4>{{ lesson?.id ? 'Edit Lesson' : 'Add New Lesson' }}</h4>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Lesson Title</mat-label>
+    <input matInput [(ngModel)]="lessonForm.title" placeholder="e.g., Introduction to Components">
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Lesson Type</mat-label>
+    <mat-select [(ngModel)]="lessonForm.type">
+      <mat-option *ngFor="let type of lessonTypes" [value]="type">
+        <mat-icon>{{ getLessonTypeIcon(type) }}</mat-icon>
+        {{ type | titlecase }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Description (Optional)</mat-label>
+    <textarea matInput [(ngModel)]="lessonForm.description" rows="2"></textarea>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Duration (minutes)</mat-label>
+    <input matInput type="number" [(ngModel)]="lessonForm.duration" min="0">
+  </mat-form-field>
+
+  <!-- Type-specific fields -->
+  <mat-form-field appearance="outline" class="full-width" *ngIf="lessonForm.type === 'video'">
+    <mat-label>Video URL</mat-label>
+    <input matInput [(ngModel)]="lessonForm.videoUrl" placeholder="https://www.youtube.com/embed/...">
+    <mat-hint>Use YouTube embed URL format</mat-hint>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width" *ngIf="lessonForm.type === 'text' || lessonForm.type === 'assignment'">
+    <mat-label>Content (HTML)</mat-label>
+    <textarea matInput [(ngModel)]="lessonForm.content" rows="6"
+              placeholder="<p>Your content here...</p>"></textarea>
+    <mat-hint>You can use HTML formatting</mat-hint>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width" *ngIf="lessonForm.type === 'quiz'">
+    <mat-label>Quiz ID</mat-label>
+    <input matInput type="number" [(ngModel)]="lessonForm.quizId" placeholder="Enter quiz ID">
+    <mat-hint>Create the quiz first, then enter its ID here</mat-hint>
+  </mat-form-field>
+
+  <div class="form-actions">
+    <button mat-button (click)="onCancel()">Cancel</button>
+    <button mat-raised-button color="primary" (click)="onSave()"
+            [disabled]="!lessonForm.title?.trim()">
+      <mat-icon>save</mat-icon>
+      {{ lesson?.id ? 'Update' : 'Create' }} Lesson
+    </button>
+  </div>
+</div>
