@@ -1,4 +1,7 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ChangeDetectionStrategy, signal, computed } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -6,11 +9,24 @@ import { takeUntil } from 'rxjs/operators';
  * [Component Description]
  *
  * [Detailed explanation of what this component does and when to use it]
+ *
+ * @example
+ * <app-component-name
+ *   [exampleInput]="'Hello'"
+ *   (exampleEvent)="handleEvent($event)">
+ * </app-component-name>
  */
 @Component({
   selector: 'app-component-name',
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatButtonModule,
+    MatProgressSpinnerModule
+  ],
   templateUrl: './component-name.component.html',
-  styleUrls: ['./component-name.component.scss']
+  styleUrls: ['./component-name.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ComponentNameComponent implements OnInit, OnDestroy {
   // Inputs
@@ -20,9 +36,14 @@ export class ComponentNameComponent implements OnInit, OnDestroy {
   // Outputs
   @Output() exampleEvent = new EventEmitter<string>();
 
-  // Public properties
-  isLoading = false;
-  errorMessage: string | null = null;
+  // Signals (Angular 16+) - Preferred for reactive state
+  isLoading = signal(false);
+  errorMessage = signal<string | null>(null);
+  data = signal<any[]>([]);
+
+  // Computed signals - Automatically updated when dependencies change
+  hasData = computed(() => this.data().length > 0);
+  isReady = computed(() => !this.isLoading() && !this.errorMessage());
 
   // Private properties
   private destroy$ = new Subject<void>();
@@ -61,23 +82,31 @@ export class ComponentNameComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * TrackBy function for *ngFor optimization
+   */
+  trackByItemId(index: number, item: any): number {
+    return item.id;
+  }
+
+  /**
    * [Private method description]
    */
   private loadData(): void {
-    this.isLoading = true;
+    this.isLoading.set(true);
+    this.errorMessage.set(null);
 
     // Example subscription with cleanup
     // this.exampleService.getData()
     //   .pipe(takeUntil(this.destroy$))
     //   .subscribe({
     //     next: (data) => {
-    //       // Handle success
-    //       this.isLoading = false;
+    //       this.data.set(data);
+    //       this.isLoading.set(false);
     //     },
     //     error: (error) => {
-    //       this.errorMessage = 'Failed to load data';
-    //       this.isLoading = false;
-    //       console.error('Error loading data', error);
+    //       this.errorMessage.set('Failed to load data');
+    //       this.isLoading.set(false);
+    //       console.error('Error loading data:', error);
     //     }
     //   });
   }

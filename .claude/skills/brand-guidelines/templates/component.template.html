@@ -4,62 +4,73 @@
     <h2>{{ exampleInput }}</h2>
   </header>
 
-  <!-- Loading State -->
-  <div *ngIf="isLoading" class="loading-spinner">
-    <p>Loading data...</p>
-  </div>
+  <!-- Loading State (using signal) -->
+  @if (isLoading()) {
+    <div class="loading-spinner">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Loading data...</p>
+    </div>
+  }
 
-  <!-- Error State -->
-  <div *ngIf="errorMessage" class="error-message" role="alert">
-    <p>{{ errorMessage }}</p>
-    <button (click)="loadData()" class="btn btn-secondary">
-      Try Again
-    </button>
-  </div>
+  <!-- Error State (using signal) -->
+  @if (errorMessage()) {
+    <div class="error-message" role="alert" aria-live="polite">
+      <p>{{ errorMessage() }}</p>
+      <button mat-raised-button color="primary" (click)="loadData()">
+        Try Again
+      </button>
+    </div>
+  }
 
-  <!-- Content (shown when not loading and no error) -->
-  <div *ngIf="!isLoading && !errorMessage" class="component-content">
-    <!-- Main content here -->
-    <p>Content goes here</p>
-
-    <!-- Example list with trackBy -->
-    <!-- <ul class="item-list">
-      <li *ngFor="let item of items; trackBy: trackByItemId" class="item-list__item">
-        {{ item.name }}
-      </li>
-    </ul> -->
-
-    <!-- Example with ng-container for conditional rendering -->
-    <!-- <ng-container *ngIf="data$ | async as data; else noData">
-      <div class="data-display">
-        {{ data.value }}
-      </div>
-    </ng-container>
-
-    <ng-template #noData>
-      <div class="empty-state">
-        <p>No data available</p>
-        <button (click)="onExampleAction('refresh')" class="btn btn-primary">
-          Refresh
-        </button>
-      </div>
-    </ng-template> -->
-  </div>
+  <!-- Content (using computed signal isReady) -->
+  @if (isReady()) {
+    <div class="component-content">
+      <!-- Example: Display when data is available -->
+      @if (hasData()) {
+        <ul class="item-list" role="list">
+          @for (item of data(); track item.id) {
+            <li class="item-list__item" role="listitem">
+              {{ item.name }}
+            </li>
+          }
+        </ul>
+      } @else {
+        <!-- Empty state -->
+        <div class="empty-state">
+          <p>No data available</p>
+          <button mat-raised-button color="primary" (click)="onExampleAction('refresh')">
+            Refresh
+          </button>
+        </div>
+      }
+    </div>
+  }
 
   <!-- Footer/Actions -->
   <footer class="component-actions">
     <button
+      mat-raised-button
+      color="primary"
       (click)="onExampleAction('save')"
-      class="btn btn-primary"
-      [disabled]="isLoading"
+      [disabled]="isLoading()"
       aria-label="Save changes">
       Save Changes
     </button>
     <button
+      mat-button
       (click)="onExampleAction('cancel')"
-      class="btn btn-secondary"
       aria-label="Cancel action">
       Cancel
     </button>
   </footer>
 </div>
+
+<!--
+  NOTES:
+  - Using @if/@for (Angular 17+) control flow syntax instead of *ngIf/*ngFor
+  - Using signals() to access signal values in template
+  - Using Material buttons (mat-raised-button, mat-button)
+  - Using mat-spinner for loading state
+  - ARIA attributes for accessibility (role, aria-label, aria-live)
+  - trackBy optimization built into @for with 'track item.id'
+-->
