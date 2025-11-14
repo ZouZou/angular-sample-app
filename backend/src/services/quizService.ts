@@ -165,57 +165,112 @@ export class QuizService {
       throw new AppError('Quiz attempt already submitted', 400);
     }
 
-    const quiz = attempt.quiz;
-    let totalScore = 0;
-    let totalPoints = 0;
+    const { totalScore, totalPoints } = await this.gradeQuizAnswers(attemptId, attempt.quiz, answers);
+    const { percentage, passed } = this.calculatePercentageAndStatus(totalScore, totalPoints, attempt.quiz.passingScore);
 
-    // Grade each answer
-    for (const answer of answers) {
-      const question = quiz.questions.find(q => q.id === answer.questionId);
-      if (!question) continue;
-
-      totalPoints += question.points;
-
-      // Get correct options
-      const correctOptions = question.options
-        .filter(o => o.isCorrect)
-        .map(o => o.id)
-        .sort();
-
-      const selectedOptions = answer.selectedOptionIds.sort();
-
-      // Check if answer is correct
-      const isCorrect = JSON.stringify(correctOptions) === JSON.stringify(selectedOptions);
-      const pointsEarned = isCorrect ? question.points : 0;
-
-      totalScore += pointsEarned;
-
-      // Save user answer
-      const userAnswer = this.answerRepository.create({
-        attemptId,
-        questionId: question.id,
-        selectedOptionIds: answer.selectedOptionIds,
-        isCorrect,
-        pointsEarned
-      });
-
-      await this.answerRepository.save(userAnswer);
-    }
-
-    // Calculate percentage and pass/fail
-    const percentage = totalPoints > 0 ? (totalScore / totalPoints) * 100 : 0;
-    const passed = percentage >= quiz.passingScore;
-
-    // Update attempt
+    // Update attempt with grading results
     attempt.score = totalScore;
     attempt.totalPoints = totalPoints;
-    attempt.percentage = Math.round(percentage * 100) / 100;
+    attempt.percentage = percentage;
     attempt.passed = passed;
     attempt.completedAt = new Date();
 
     await this.attemptRepository.save(attempt);
 
     return attempt;
+  }
+
+  /**
+   * Grade all answers for a quiz attempt
+   */
+  private async gradeQuizAnswers(
+    attemptId: number,
+    quiz: Quiz,
+    answers: Array<{ questionId: number; selectedOptionIds: number[] }>
+  ): Promise<{ totalScore: number; totalPoints: number }> {
+    let totalScore = 0;
+    let totalPoints = 0;
+
+    for (const answer of answers) {
+      const question = quiz.questions.find(q => q.id === answer.questionId);
+      if (!question) continue;
+
+      totalPoints += question.points;
+
+      const { isCorrect, pointsEarned } = this.gradeAnswer(question, answer.selectedOptionIds);
+      totalScore += pointsEarned;
+
+      await this.saveUserAnswer(attemptId, question.id, answer.selectedOptionIds, isCorrect, pointsEarned);
+    }
+
+    return { totalScore, totalPoints };
+  }
+
+  /**
+   * Grade a single answer against the correct options
+   */
+  private gradeAnswer(
+    question: QuizQuestion,
+    selectedOptionIds: number[]
+  ): { isCorrect: boolean; pointsEarned: number } {
+    const correctOptionIds = question.options
+      .filter(option => option.isCorrect)
+      .map(option => option.id);
+
+    const isCorrect = this.areOptionsEqual(correctOptionIds, selectedOptionIds);
+    const pointsEarned = isCorrect ? question.points : 0;
+
+    return { isCorrect, pointsEarned };
+  }
+
+  /**
+   * Compare two sets of option IDs for equality
+   */
+  private areOptionsEqual(correctIds: number[], selectedIds: number[]): boolean {
+    if (correctIds.length !== selectedIds.length) {
+      return false;
+    }
+
+    const sortedCorrect = [...correctIds].sort((a, b) => a - b);
+    const sortedSelected = [...selectedIds].sort((a, b) => a - b);
+
+    return sortedCorrect.every((id, index) => id === sortedSelected[index]);
+  }
+
+  /**
+   * Save a user's answer to the database
+   */
+  private async saveUserAnswer(
+    attemptId: number,
+    questionId: number,
+    selectedOptionIds: number[],
+    isCorrect: boolean,
+    pointsEarned: number
+  ): Promise<void> {
+    const userAnswer = this.answerRepository.create({
+      attemptId,
+      questionId,
+      selectedOptionIds,
+      isCorrect,
+      pointsEarned
+    });
+
+    await this.answerRepository.save(userAnswer);
+  }
+
+  /**
+   * Calculate percentage score and pass/fail status
+   */
+  private calculatePercentageAndStatus(
+    totalScore: number,
+    totalPoints: number,
+    passingScore: number
+  ): { percentage: number; passed: boolean } {
+    const percentage = totalPoints > 0 ? (totalScore / totalPoints) * 100 : 0;
+    const roundedPercentage = Math.round(percentage * 100) / 100;
+    const passed = roundedPercentage >= passingScore;
+
+    return { percentage: roundedPercentage, passed };
   }
 
   async getUserQuizAttempts(userId: number, quizId: number) {
