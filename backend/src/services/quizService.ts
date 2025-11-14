@@ -92,31 +92,37 @@ export class QuizService {
 
     await this.quizRepository.save(quiz);
 
-    // Create questions and options
-    for (const questionData of data.questions) {
-      const question = this.questionRepository.create({
+    // Create all questions in parallel
+    const questions = data.questions.map(questionData =>
+      this.questionRepository.create({
         quizId: quiz.id,
         question: questionData.question,
         type: questionData.type,
         order: questionData.order,
         points: questionData.points,
         explanation: questionData.explanation
-      });
+      })
+    );
 
-      await this.questionRepository.save(question);
+    const savedQuestions = await Promise.all(
+      questions.map(question => this.questionRepository.save(question))
+    );
 
-      // Create options
-      for (const optionData of questionData.options) {
-        const option = this.optionRepository.create({
+    // Create all options for all questions in parallel
+    const allOptions = savedQuestions.flatMap((question, index) =>
+      data.questions[index].options.map(optionData =>
+        this.optionRepository.create({
           questionId: question.id,
           text: optionData.text,
           isCorrect: optionData.isCorrect,
           order: optionData.order
-        });
+        })
+      )
+    );
 
-        await this.optionRepository.save(option);
-      }
-    }
+    await Promise.all(
+      allOptions.map(option => this.optionRepository.save(option))
+    );
 
     return this.getQuiz(quiz.id);
   }
@@ -191,17 +197,39 @@ export class QuizService {
     let totalScore = 0;
     let totalPoints = 0;
 
-    for (const answer of answers) {
-      const question = quiz.questions.find(q => q.id === answer.questionId);
-      if (!question) continue;
+    // Grade all answers and prepare them for parallel saving
+    const userAnswersToSave = answers
+      .map(answer => {
+        const question = quiz.questions.find(q => q.id === answer.questionId);
+        if (!question) return null;
 
-      totalPoints += question.points;
+        totalPoints += question.points;
 
-      const { isCorrect, pointsEarned } = this.gradeAnswer(question, answer.selectedOptionIds);
-      totalScore += pointsEarned;
+        const { isCorrect, pointsEarned } = this.gradeAnswer(question, answer.selectedOptionIds);
+        totalScore += pointsEarned;
 
-      await this.saveUserAnswer(attemptId, question.id, answer.selectedOptionIds, isCorrect, pointsEarned);
-    }
+        return {
+          attemptId,
+          questionId: question.id,
+          selectedOptionIds: answer.selectedOptionIds,
+          isCorrect,
+          pointsEarned
+        };
+      })
+      .filter(answer => answer !== null);
+
+    // Save all user answers in parallel
+    await Promise.all(
+      userAnswersToSave.map(answerData =>
+        this.saveUserAnswer(
+          answerData.attemptId,
+          answerData.questionId,
+          answerData.selectedOptionIds,
+          answerData.isCorrect,
+          answerData.pointsEarned
+        )
+      )
+    );
 
     return { totalScore, totalPoints };
   }
