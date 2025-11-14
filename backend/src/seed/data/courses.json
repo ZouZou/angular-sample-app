@@ -1,0 +1,92 @@
+[
+  {
+    "id": "angular-complete-guide",
+    "title": "Angular - The Complete Guide (2025 Edition)",
+    "description": "Master Angular 20 from the ground up and build awesome, reactive web apps with the successor of Angular.js. Learn all the fundamentals about Components, Directives, Services, Pipes, HTTP access, Authentication, Routing, Modules, NgRx, and much more in this bestselling Angular course! This comprehensive course covers everything from basics to advanced topics with 15 sections, 120+ lessons, and hands-on quizzes.",
+    "instructor": "Maximilian Schwarzmüller",
+    "duration": 3540,
+    "price": 84.99,
+    "category": "Web Development",
+    "level": "Beginner",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=400&h=250&fit=crop",
+    "bannerUrl": "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=1200&h=400&fit=crop",
+    "enrollmentCount": 1247,
+    "rating": 4.7,
+    "language": "English",
+    "requirements": [
+      "Basic knowledge of HTML, CSS, and JavaScript is required",
+      "No Angular or TypeScript knowledge is required!",
+      "A modern code editor (VS Code recommended)",
+      "Node.js and npm installed on your machine"
+    ],
+    "learningOutcomes": [
+      "Develop modern, complex, responsive and scalable web applications with Angular",
+      "Use the gained, deep understanding of the Angular fundamentals to quickly establish yourself as a frontend developer",
+      "Fully understand the architecture of an Angular application and how to use it",
+      "Create single-page applications with one of the most modern JavaScript frameworks",
+      "Use TypeScript to write more robust code and leverage its advantages",
+      "Learn about Components, Directives, Services, Pipes, HTTP access, Authentication, Modules, and much more"
+    ],
+    "contentFile": "courses/angular-content.json"
+  },
+  {
+    "id": "react-complete-guide",
+    "title": "React - The Complete Guide",
+    "description": "Dive in and learn React.js from scratch! Learn React, Hooks, Redux, React Router, Next.js, Best Practices and way more!",
+    "instructor": "Maximilian Schwarzmüller",
+    "duration": 2880,
+    "price": 89.99,
+    "category": "Web Development",
+    "level": "Beginner",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1633356122102-3fe601e05bd2?w=400&h=250&fit=crop",
+    "bannerUrl": "https://images.unsplash.com/photo-1633356122102-3fe601e05bd2?w=1200&h=400&fit=crop",
+    "enrollmentCount": 2156,
+    "rating": 4.8,
+    "published": true
+  },
+  {
+    "id": "nodejs-complete-guide",
+    "title": "Node.js - The Complete Guide",
+    "description": "Master Node JS & Deno.js, build REST APIs with Node.js, GraphQL APIs, add Authentication, use MongoDB, SQL & much more!",
+    "instructor": "Maximilian Schwarzmüller",
+    "duration": 2520,
+    "price": 94.99,
+    "category": "Web Development",
+    "level": "Intermediate",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1627398242454-45a1465c2479?w=400&h=250&fit=crop",
+    "bannerUrl": "https://images.unsplash.com/photo-1627398242454-45a1465c2479?w=1200&h=400&fit=crop",
+    "enrollmentCount": 892,
+    "rating": 4.6,
+    "published": true
+  },
+  {
+    "id": "openedge-4gl-course",
+    "title": "OpenEdge 4GL (Progress ABL) - Interactive Comprehensive Course",
+    "description": "Master OpenEdge 4GL from complete beginner to professional enterprise developer. Learn 19 structured lessons covering basics, database operations, OOP, web services, and advanced professional topics. Build 6 real-world projects including customer management, order processing, and inventory systems. This comprehensive course includes hands-on practice exercises, interactive quizzes with detailed answer keys, and progressive difficulty with enterprise best practices.",
+    "instructor": "OpenEdge Professionals",
+    "duration": 3000,
+    "price": 79.99,
+    "category": "Programming",
+    "level": "Beginner",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1516116216624-53e697fedbea?w=400&h=250&fit=crop",
+    "bannerUrl": "https://images.unsplash.com/photo-1516116216624-53e697fedbea?w=1200&h=400&fit=crop",
+    "enrollmentCount": 342,
+    "rating": 4.8,
+    "language": "English",
+    "requirements": [
+      "No prior programming experience required",
+      "A computer with Windows, Mac, or Linux",
+      "Willingness to learn and practice coding",
+      "Basic computer skills (file management, text editing)"
+    ],
+    "learningOutcomes": [
+      "Write professional OpenEdge 4GL code from scratch",
+      "Build complete database-driven applications",
+      "Master CRUD operations and transaction handling",
+      "Implement OOP concepts in OpenEdge",
+      "Create web services and API integrations",
+      "Apply enterprise development best practices"
+    ],
+    "contentFile": "courses/openedge-content.json"
+  }
+]

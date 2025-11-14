@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Admin User",
+    "email": "admin@lms.com",
+    "password": "admin123",
+    "role": "admin"
+  },
+  {
+    "name": "John Student",
+    "email": "john@lms.com",
+    "password": "student123",
+    "role": "student"
+  },
+  {
+    "name": "Jane Instructor",
+    "email": "jane@lms.com",
+    "password": "instructor123",
+    "role": "instructor"
+  },
+  {
+    "name": "Alice Student",
+    "email": "alice@lms.com",
+    "password": "student123",
+    "role": "student"
+  }
+]
