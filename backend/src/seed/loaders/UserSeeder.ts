@@ -25,7 +25,7 @@ export class UserSeeder extends SeedDataFactory<User> {
 
   protected createEntities(data: UserSeedData[]): User[] {
     const repository = this.getRepository();
-    return data.map(userData =>
+    const users = data.map(userData =>
       repository.create({
         name: userData.name,
         email: userData.email,
@@ -33,6 +33,7 @@ export class UserSeeder extends SeedDataFactory<User> {
         role: userData.role
       })
     );
+    return users as User[];
   }
 
   async seed(): Promise<User[]> {
@@ -51,6 +52,7 @@ export class UserSeeder extends SeedDataFactory<User> {
       })
     );
 
-    return await repository.save(users);
+    const savedUsers = await repository.save(users);
+    return savedUsers as User[];
   }
 }

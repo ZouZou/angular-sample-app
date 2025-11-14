@@ -17,7 +17,7 @@ interface CourseSeedData {
   duration: number;
   price: number;
   category: string;
-  level: string;
+  level: 'Beginner' | 'Intermediate' | 'Advanced';
   thumbnailUrl?: string;
   bannerUrl?: string;
   enrollmentCount?: number;
@@ -62,7 +62,7 @@ interface QuizData {
 
 interface QuestionData {
   question: string;
-  type: 'multiple-choice' | 'true-false' | 'short-answer';
+  type: 'multiple-choice' | 'true-false' | 'multi-select';
   points: number;
   order: number;
   options?: OptionData[];
