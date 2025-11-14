@@ -1,6 +1,7 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { CurriculumService } from '../../../services/curriculum.service';
 import { CourseSection, Lesson } from '../../../models/curriculum.interface';
+import { LoggerService } from '../../../../shared/services/logger.service';
 
 @Component({
   selector: 'app-curriculum-manager',
@@ -16,7 +17,10 @@ export class CurriculumManagerComponent implements OnChanges {
   editingSection: CourseSection | null = null;
   editingLesson: { section: CourseSection; lesson: Lesson | null } | null = null;
 
-  constructor(private curriculumService: CurriculumService) {}
+  constructor(
+    private curriculumService: CurriculumService,
+    private logger: LoggerService
+  ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['courseId'] && this.courseId) {
@@ -35,7 +39,7 @@ export class CurriculumManagerComponent implements OnChanges {
         this.isLoadingCurriculum = false;
       },
       error: (error) => {
-        console.error('Error loading curriculum:', error);
+        this.logger.error('Error loading curriculum:', error);
         this.isLoadingCurriculum = false;
       }
     });
@@ -86,7 +90,7 @@ export class CurriculumManagerComponent implements OnChanges {
           this.cancelEditSection();
         },
         error: (error) => {
-          console.error('Error updating section:', error);
+          this.logger.error('Error updating section:', error);
           alert('Failed to update section. Please try again.');
         }
       });
@@ -99,7 +103,7 @@ export class CurriculumManagerComponent implements OnChanges {
           this.cancelEditSection();
         },
         error: (error) => {
-          console.error('Error creating section:', error);
+          this.logger.error('Error creating section:', error);
           alert('Failed to create section. Please try again.');
         }
       });
@@ -119,7 +123,7 @@ export class CurriculumManagerComponent implements OnChanges {
         this.reorderSections();
       },
       error: (error) => {
-        console.error('Error deleting section:', error);
+        this.logger.error('Error deleting section:', error);
         alert('Failed to delete section. Please try again.');
       }
     });
@@ -149,7 +153,7 @@ export class CurriculumManagerComponent implements OnChanges {
     const sectionIds = this.sections.map(s => s.id!).filter(id => id !== undefined);
     if (sectionIds.length > 0 && this.courseId) {
       this.curriculumService.reorderSections(this.courseId, sectionIds).subscribe({
-        error: (error) => console.error('Error reordering sections:', error)
+        error: (error) => this.logger.error('Error reordering sections:', error)
       });
     }
   }
@@ -189,7 +193,7 @@ export class CurriculumManagerComponent implements OnChanges {
           this.cancelEditLesson();
         },
         error: (error) => {
-          console.error('Error updating lesson:', error);
+          this.logger.error('Error updating lesson:', error);
           alert('Failed to update lesson. Please try again.');
         }
       });
@@ -206,7 +210,7 @@ export class CurriculumManagerComponent implements OnChanges {
           this.cancelEditLesson();
         },
         error: (error) => {
-          console.error('Error creating lesson:', error);
+          this.logger.error('Error creating lesson:', error);
           alert('Failed to create lesson. Please try again.');
         }
       });
@@ -226,7 +230,7 @@ export class CurriculumManagerComponent implements OnChanges {
         this.reorderLessons(section);
       },
       error: (error) => {
-        console.error('Error deleting lesson:', error);
+        this.logger.error('Error deleting lesson:', error);
         alert('Failed to delete lesson. Please try again.');
       }
     });
@@ -256,7 +260,7 @@ export class CurriculumManagerComponent implements OnChanges {
     const lessonIds = section.lessons.map(l => l.id!).filter(id => id !== undefined);
     if (lessonIds.length > 0 && section.id) {
       this.curriculumService.reorderLessons(section.id, lessonIds).subscribe({
-        error: (error) => console.error('Error reordering lessons:', error)
+        error: (error) => this.logger.error('Error reordering lessons:', error)
       });
     }
   }

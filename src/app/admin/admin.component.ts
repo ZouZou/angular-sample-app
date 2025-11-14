@@ -4,6 +4,7 @@ import { AuthService } from '../course/services/auth.service';
 import { QuizService } from '../course/services/quiz.service';
 import { CourseService } from '../course/services/course.service';
 import { NotificationService } from '../shared/services/notification.service';
+import { LoggerService } from '../shared/services/logger.service';
 import { User } from '../course/models/user.interface';
 import { QuizAttempt } from '../course/models/quiz.interface';
 import { Course } from '../course/models/course.interface';
@@ -61,7 +62,8 @@ export class AdminComponent implements OnInit {
     private quizService: QuizService,
     private courseService: CourseService,
     private router: Router,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private logger: LoggerService
   ) {}
 
   ngOnInit(): void {
@@ -86,7 +88,7 @@ export class AdminComponent implements OnInit {
         this.loadingUsers = false;
       },
       error: (error) => {
-        console.error('Error loading users:', error);
+        this.logger.error('Error loading users:', error);
         this.loadingUsers = false;
       }
     });
@@ -183,7 +185,7 @@ export class AdminComponent implements OnInit {
         this.loadingAttempts = false;
       },
       error: (error) => {
-        console.error('Error loading attempts:', error);
+        this.logger.error('Error loading attempts:', error);
         this.loadingAttempts = false;
       }
     });
@@ -223,7 +225,7 @@ export class AdminComponent implements OnInit {
         this.loadingAttempts = false;
       },
       error: (error) => {
-        console.error('Error filtering attempts:', error);
+        this.logger.error('Error filtering attempts:', error);
         this.loadingAttempts = false;
       }
     });
@@ -242,7 +244,7 @@ export class AdminComponent implements OnInit {
         this.loadingAttempts = false;
       },
       error: (error) => {
-        console.error('Error filtering attempts:', error);
+        this.logger.error('Error filtering attempts:', error);
         this.loadingAttempts = false;
       }
     });
@@ -261,7 +263,7 @@ export class AdminComponent implements OnInit {
         this.loadingCourses = false;
       },
       error: (error) => {
-        console.error('Error loading courses:', error);
+        this.logger.error('Error loading courses:', error);
         this.loadingCourses = false;
       }
     });

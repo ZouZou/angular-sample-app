@@ -7,6 +7,7 @@ import { EnrollmentService } from '../../../services/enrollment.service';
 import { ProgressService } from '../../../services/progress.service';
 import { AuthService } from '../../../services/auth.service';
 import { CourseService } from '../../../services/course.service';
+import { LoggerService } from '../../../../shared/services/logger.service';
 import { Course } from '../../../models/course.interface';
 import { CourseSection, Lesson } from '../../../models/curriculum.interface';
 import { Enrollment } from '../../../models/enrollment.interface';
@@ -38,7 +39,8 @@ export class CoursePlayerComponent implements OnInit, OnDestroy {
     private curriculumService: CurriculumService,
     private enrollmentService: EnrollmentService,
     private progressService: ProgressService,
-    private authService: AuthService
+    private authService: AuthService,
+    private logger: LoggerService
   ) {}
 
   // Keyboard navigation
@@ -124,7 +126,7 @@ export class CoursePlayerComponent implements OnInit, OnDestroy {
         this.isLoading = false;
       },
       error: (error) => {
-        console.error('Error loading course data:', error);
+        this.logger.error('Error loading course data:', error);
         this.error = 'Failed to load course. Please try again.';
         this.isLoading = false;
       }
@@ -140,7 +142,7 @@ export class CoursePlayerComponent implements OnInit, OnDestroy {
             this.completedLessonIds = lessonIds;
           },
           error: (error) => {
-            console.error('Error loading progress:', error);
+            this.logger.error('Error loading progress:', error);
           }
         });
     }

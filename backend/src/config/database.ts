@@ -11,6 +11,7 @@ import { Enrollment } from '../entities/Enrollment';
 import { UserProgress } from '../entities/UserProgress';
 import { QuizAttempt } from '../entities/QuizAttempt';
 import { UserAnswer } from '../entities/UserAnswer';
+import { logger } from '../utils/logger';
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
@@ -41,17 +42,17 @@ export const AppDataSource = new DataSource({
 export const initializeDatabase = async () => {
   try {
     await AppDataSource.initialize();
-    console.log('Database connection established successfully');
-    console.log('Synchronize enabled:', AppDataSource.options.synchronize);
+    logger.info('Database connection established successfully');
+    logger.debug('Synchronize enabled:', AppDataSource.options.synchronize);
 
     // Explicitly synchronize schema in development
     if (process.env.NODE_ENV === 'development') {
-      console.log('Synchronizing database schema...');
+      logger.debug('Synchronizing database schema...');
       await AppDataSource.synchronize(false);
-      console.log('Database schema synchronized');
+      logger.info('Database schema synchronized');
     }
   } catch (error) {
-    console.error('Error connecting to database:', error);
+    logger.error('Error connecting to database:', error);
     process.exit(1);
   }
 };

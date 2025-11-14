@@ -1,7 +1,8 @@
-import { Directive, Input, ElementRef, Renderer2, OnInit, OnDestroy } from '@angular/core';
+import { Directive, Input, ElementRef, Renderer2, OnInit, OnDestroy, inject } from '@angular/core';
 import { NgControl } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { LoggerService } from '../services/logger.service';
 
 @Directive({
   selector: '[appCharacterCounter]',
@@ -13,6 +14,7 @@ export class CharacterCounterDirective implements OnInit, OnDestroy {
 
   private counterElement!: HTMLElement;
   private destroy$ = new Subject<void>();
+  private logger = inject(LoggerService);
 
   constructor(
     private el: ElementRef,
@@ -22,7 +24,7 @@ export class CharacterCounterDirective implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     if (!this.maxLength) {
-      console.warn('CharacterCounterDirective: maxLength is required');
+      this.logger.warn('CharacterCounterDirective: maxLength is required');
       return;
     }
 

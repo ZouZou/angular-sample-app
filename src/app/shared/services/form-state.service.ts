@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subject, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { LoggerService } from './logger.service';
 
 interface FormState {
   formId: string;
@@ -19,7 +20,7 @@ export class FormStateService {
   private readonly STORAGE_PREFIX = 'form_state_';
   private readonly AUTO_SAVE_DELAY = 2000; // 2 seconds
 
-  constructor() {}
+  constructor(private logger: LoggerService) {}
 
   /**
    * Enable auto-save for a form
@@ -60,7 +61,7 @@ export class FormStateService {
         JSON.stringify(formState)
       );
     } catch (error) {
-      console.error('Error saving form state:', error);
+      this.logger.error('Error saving form state:', error);
       this.autoSaveSubject.next({ formId, status: 'error' });
     }
   }
@@ -76,7 +77,7 @@ export class FormStateService {
         return formState.data;
       }
     } catch (error) {
-      console.error('Error restoring form state:', error);
+      this.logger.error('Error restoring form state:', error);
     }
     return null;
   }
@@ -99,7 +100,7 @@ export class FormStateService {
         return Date.now() - formState.timestamp;
       }
     } catch (error) {
-      console.error('Error getting saved state age:', error);
+      this.logger.error('Error getting saved state age:', error);
     }
     return null;
   }

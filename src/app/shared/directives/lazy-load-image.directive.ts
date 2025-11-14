@@ -1,4 +1,5 @@
-import { Directive, ElementRef, Input, OnInit, Renderer2, OnDestroy } from '@angular/core';
+import { Directive, ElementRef, Input, OnInit, Renderer2, OnDestroy, inject } from '@angular/core';
+import { LoggerService } from '../services/logger.service';
 
 /**
  * Lazy Load Image Directive
@@ -17,6 +18,7 @@ export class LazyLoadImageDirective implements OnInit, OnDestroy {
   @Input() placeholder: string = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"%3E%3Crect width="400" height="300" fill="%23f0f0f0"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-size="18" fill="%23999"%3ELoading...%3C/text%3E%3C/svg%3E';
 
   private observer: IntersectionObserver | null = null;
+  private logger = inject(LoggerService);
 
   constructor(
     private el: ElementRef<HTMLImageElement>,
@@ -77,7 +79,7 @@ export class LazyLoadImageDirective implements OnInit, OnDestroy {
 
     img.onerror = () => {
       // Error loading image, use fallback
-      console.error(`Failed to load image: ${this.appLazyLoadImage}`);
+      this.logger.error(`Failed to load image: ${this.appLazyLoadImage}`);
       this.renderer.setAttribute(
         this.el.nativeElement,
         'src',

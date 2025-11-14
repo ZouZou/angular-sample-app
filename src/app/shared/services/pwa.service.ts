@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, fromEvent } from 'rxjs';
 import { take } from 'rxjs/operators';
+import { LoggerService } from './logger.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class PwaService {
   private isInstalledSubject = new BehaviorSubject<boolean>(this.checkIfInstalled());
   public isInstalled$ = this.isInstalledSubject.asObservable();
 
-  constructor() {
+  constructor(private logger: LoggerService) {
     this.initPwaPrompt();
     this.listenForInstallation();
   }
@@ -40,7 +41,7 @@ export class PwaService {
         this.promptEvent = null;
         this.installPromptSubject.next(false);
         this.isInstalledSubject.next(true);
-        console.log('PWA installed successfully');
+        this.logger.debug('PWA installed successfully');
       });
     }
   }
@@ -63,7 +64,7 @@ export class PwaService {
    */
   public async promptInstall(): Promise<boolean> {
     if (!this.promptEvent) {
-      console.warn('Install prompt not available');
+      this.logger.warn('Install prompt not available');
       return false;
     }
 
@@ -74,10 +75,10 @@ export class PwaService {
     const result = await this.promptEvent.userChoice;
 
     if (result.outcome === 'accepted') {
-      console.log('User accepted the install prompt');
+      this.logger.debug('User accepted the install prompt');
       return true;
     } else {
-      console.log('User dismissed the install prompt');
+      this.logger.debug('User dismissed the install prompt');
       return false;
     }
   }

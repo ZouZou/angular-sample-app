@@ -1,7 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { LoggerService } from '../../shared/services/logger.service';
 
 /**
  * HTTP Caching Interceptor
@@ -11,6 +12,7 @@ import { tap } from 'rxjs/operators';
 export class CacheInterceptor implements HttpInterceptor {
   private cache = new Map<string, { response: HttpResponse<any>; timestamp: number }>();
   private readonly CACHE_TTL = 5 * 60 * 1000; // 5 minutes cache TTL
+  private logger = inject(LoggerService);
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // Only cache GET requests
@@ -26,7 +28,7 @@ export class CacheInterceptor implements HttpInterceptor {
     // Check cache
     const cachedResponse = this.getCachedResponse(req.urlWithParams);
     if (cachedResponse) {
-      console.log(`Cache hit for: ${req.urlWithParams}`);
+      this.logger.debug(`Cache hit for: ${req.urlWithParams}`);
       return of(cachedResponse);
     }
 
@@ -34,7 +36,7 @@ export class CacheInterceptor implements HttpInterceptor {
     return next.handle(req).pipe(
       tap(event => {
         if (event instanceof HttpResponse) {
-          console.log(`Caching response for: ${req.urlWithParams}`);
+          this.logger.debug(`Caching response for: ${req.urlWithParams}`);
           this.cache.set(req.urlWithParams, {
             response: event,
             timestamp: Date.now()
@@ -54,7 +56,7 @@ export class CacheInterceptor implements HttpInterceptor {
     // Check if cache has expired
     const age = Date.now() - cached.timestamp;
     if (age > this.CACHE_TTL) {
-      console.log(`Cache expired for: ${url}`);
+      this.logger.debug(`Cache expired for: ${url}`);
       this.cache.delete(url);
       return null;
     }
@@ -67,7 +69,7 @@ export class CacheInterceptor implements HttpInterceptor {
    */
   public clearCache(): void {
     this.cache.clear();
-    console.log('Cache cleared');
+    this.logger.debug('Cache cleared');
   }
 
   /**
@@ -75,7 +77,7 @@ export class CacheInterceptor implements HttpInterceptor {
    */
   public clearCacheForUrl(url: string): void {
     this.cache.delete(url);
-    console.log(`Cache cleared for: ${url}`);
+    this.logger.debug(`Cache cleared for: ${url}`);
   }
 
   /**

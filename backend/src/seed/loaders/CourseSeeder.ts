@@ -7,6 +7,7 @@ import { Lesson } from '../../entities/Lesson';
 import { Quiz } from '../../entities/Quiz';
 import { QuizQuestion } from '../../entities/QuizQuestion';
 import { QuizOption } from '../../entities/QuizOption';
+import { logger } from '../../utils/logger';
 
 interface CourseSeedData {
   id: string;
@@ -92,11 +93,11 @@ export class CourseSeeder {
   }
 
   async seed(): Promise<void> {
-    console.log('Loading course data...');
+    logger.debug('Loading course data...');
     const courses = await this.loadCourses();
 
     for (const courseData of courses) {
-      console.log(`Creating course: ${courseData.title}`);
+      logger.debug(`Creating course: ${courseData.title}`);
       const course = await this.createCourse(courseData);
 
       if (courseData.contentFile) {
@@ -105,7 +106,7 @@ export class CourseSeeder {
       }
     }
 
-    console.log('Courses seeded successfully');
+    logger.info('Courses seeded successfully');
   }
 
   private async loadCourses(): Promise<CourseSeedData[]> {
@@ -118,7 +119,7 @@ export class CourseSeeder {
     const dataPath = path.join(__dirname, '../data', contentFile);
 
     if (!fs.existsSync(dataPath)) {
-      console.log(`Content file not found: ${contentFile}, skipping detailed content`);
+      logger.warn(`Content file not found: ${contentFile}, skipping detailed content`);
       return {};
     }
 
