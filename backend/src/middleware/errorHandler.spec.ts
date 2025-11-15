@@ -1,11 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
 import { AppError, errorHandler } from './errorHandler';
+import { logger } from '../utils/logger';
 
 describe('ErrorHandler Middleware', () => {
   let mockRequest: Partial<Request>;
   let mockResponse: Partial<Response>;
   let mockNext: NextFunction;
-  let consoleErrorSpy: jest.SpyInstance;
+  let loggerErrorSpy: jest.SpyInstance;
 
   beforeEach(() => {
     mockRequest = {};
@@ -14,12 +15,12 @@ describe('ErrorHandler Middleware', () => {
       json: jest.fn().mockReturnThis(),
     };
     mockNext = jest.fn();
-    consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation();
+    loggerErrorSpy = jest.spyOn(logger, 'error').mockImplementation();
   });
 
   afterEach(() => {
     jest.clearAllMocks();
-    consoleErrorSpy.mockRestore();
+    loggerErrorSpy.mockRestore();
   });
 
   describe('AppError', () => {
@@ -50,7 +51,7 @@ describe('ErrorHandler Middleware', () => {
 
       errorHandler(error, mockRequest as Request, mockResponse as Response, mockNext);
 
-      expect(consoleErrorSpy).toHaveBeenCalledWith('Error:', error);
+      expect(loggerErrorSpy).toHaveBeenCalledWith('Error:', error);
       expect(mockResponse.status).toHaveBeenCalledWith(404);
       expect(mockResponse.json).toHaveBeenCalledWith({
         message: 'Custom error message',
@@ -80,7 +81,7 @@ describe('ErrorHandler Middleware', () => {
 
       errorHandler(error, mockRequest as Request, mockResponse as Response, mockNext);
 
-      expect(consoleErrorSpy).toHaveBeenCalledWith('Error:', error);
+      expect(loggerErrorSpy).toHaveBeenCalledWith('Error:', error);
       expect(mockResponse.status).toHaveBeenCalledWith(500);
       expect(mockResponse.json).toHaveBeenCalledWith({
         message: 'Internal server error',
@@ -134,7 +135,7 @@ describe('ErrorHandler Middleware', () => {
 
       errorHandler(error, mockRequest as Request, mockResponse as Response, mockNext);
 
-      expect(consoleErrorSpy).toHaveBeenCalledWith('Error:', error);
+      expect(loggerErrorSpy).toHaveBeenCalledWith('Error:', error);
     });
   });
 });
