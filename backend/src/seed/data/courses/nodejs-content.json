@@ -1,0 +1,529 @@
+{
+  "sections": [
+    {
+      "title": "Node.js Fundamentals",
+      "description": "Learn the basics of Node.js and server-side JavaScript",
+      "order": 1,
+      "lessons": [
+        {
+          "title": "Welcome to Node.js",
+          "description": "Introduction to Node.js and its ecosystem",
+          "type": "video",
+          "duration": 15,
+          "order": 1,
+          "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ"
+        },
+        {
+          "title": "Setting Up Node.js",
+          "description": "Install Node.js and set up your development environment",
+          "type": "text",
+          "duration": 20,
+          "order": 2,
+          "content": "<h3>What is Node.js?</h3><p>Node.js is a JavaScript runtime built on Chrome's V8 JavaScript engine. It allows you to run JavaScript on the server.</p><h3>Installation</h3><ol><li>Download Node.js from <a href='https://nodejs.org'>nodejs.org</a></li><li>Install the LTS (Long Term Support) version</li><li>Verify installation: <code>node --version</code> and <code>npm --version</code></li></ol><h3>Your First Node.js Program</h3><pre><code>// hello.js\nconsole.log('Hello, Node.js!');\n\n// Run with: node hello.js</code></pre><h3>Node.js REPL</h3><p>The REPL (Read-Eval-Print-Loop) is an interactive shell:</p><pre><code>$ node\n> 2 + 2\n4\n> const name = 'Node'\n> console.log(`Hello, ${name}!`)\nHello, Node!</code></pre>"
+        },
+        {
+          "title": "Understanding Modules",
+          "description": "Learn about CommonJS and ES modules",
+          "type": "text",
+          "duration": 25,
+          "order": 3,
+          "content": "<h3>CommonJS Modules</h3><p>Node.js uses CommonJS module system by default:</p><pre><code>// math.js\nfunction add(a, b) {\n  return a + b;\n}\n\nfunction subtract(a, b) {\n  return a - b;\n}\n\nmodule.exports = { add, subtract };\n\n// app.js\nconst math = require('./math');\nconsole.log(math.add(5, 3)); // 8</code></pre><h3>ES Modules</h3><p>Modern JavaScript modules (requires .mjs extension or \"type\": \"module\" in package.json):</p><pre><code>// math.mjs\nexport function add(a, b) {\n  return a + b;\n}\n\nexport function subtract(a, b) {\n  return a - b;\n}\n\n// app.mjs\nimport { add, subtract } from './math.mjs';\nconsole.log(add(5, 3)); // 8</code></pre><h3>Built-in Modules</h3><pre><code>const fs = require('fs');\nconst path = require('path');\nconst http = require('http');\nconst os = require('os');</code></pre>"
+        },
+        {
+          "title": "Working with the File System",
+          "description": "Read and write files with Node.js",
+          "type": "video",
+          "duration": 28,
+          "order": 4,
+          "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ"
+        },
+        {
+          "title": "Quiz: Node.js Basics",
+          "description": "Test your understanding of Node.js fundamentals",
+          "type": "quiz",
+          "duration": 10,
+          "order": 5,
+          "quizId": 0
+        }
+      ]
+    },
+    {
+      "title": "Express.js Framework",
+      "description": "Build web applications and APIs with Express.js",
+      "order": 2,
+      "lessons": [
+        {
+          "title": "Introduction to Express.js",
+          "description": "Learn the basics of the Express framework",
+          "type": "text",
+          "duration": 22,
+          "order": 1,
+          "content": "<h3>What is Express.js?</h3><p>Express is a minimal and flexible Node.js web application framework that provides a robust set of features for web and mobile applications.</p><h3>Installation</h3><pre><code>npm install express</code></pre><h3>Creating a Basic Server</h3><pre><code>const express = require('express');\nconst app = express();\nconst port = 3000;\n\napp.get('/', (req, res) => {\n  res.send('Hello, Express!');\n});\n\napp.listen(port, () => {\n  console.log(`Server running at http://localhost:${port}`);\n});</code></pre><h3>Routing</h3><pre><code>app.get('/users', (req, res) => {\n  res.json({ message: 'Get all users' });\n});\n\napp.post('/users', (req, res) => {\n  res.json({ message: 'Create a user' });\n});\n\napp.put('/users/:id', (req, res) => {\n  res.json({ message: `Update user ${req.params.id}` });\n});\n\napp.delete('/users/:id', (req, res) => {\n  res.json({ message: `Delete user ${req.params.id}` });\n});</code></pre>"
+        },
+        {
+          "title": "Middleware in Express",
+          "description": "Understand and use middleware functions",
+          "type": "video",
+          "duration": 30,
+          "order": 2,
+          "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ"
+        },
+        {
+          "title": "Request and Response Objects",
+          "description": "Work with HTTP requests and responses",
+          "type": "text",
+          "duration": 25,
+          "order": 3,
+          "content": "<h3>Request Object (req)</h3><p>The request object contains information about the HTTP request:</p><pre><code>app.get('/user/:id', (req, res) => {\n  // Route parameters\n  console.log(req.params.id);\n\n  // Query parameters (?name=John&age=25)\n  console.log(req.query.name);\n  console.log(req.query.age);\n\n  // Request headers\n  console.log(req.headers['content-type']);\n\n  // Request body (requires body-parser middleware)\n  console.log(req.body);\n});</code></pre><h3>Response Object (res)</h3><p>The response object is used to send a response to the client:</p><pre><code>// Send plain text\nres.send('Hello World');\n\n// Send JSON\nres.json({ name: 'John', age: 25 });\n\n// Set status code\nres.status(404).send('Not Found');\n\n// Redirect\nres.redirect('/login');\n\n// Send file\nres.sendFile('/path/to/file.pdf');</code></pre><h3>Parsing Request Bodies</h3><pre><code>// Built-in middleware\napp.use(express.json()); // Parse JSON bodies\napp.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies\n\napp.post('/users', (req, res) => {\n  console.log(req.body); // Access parsed body\n  res.json(req.body);\n});</code></pre>"
+        },
+        {
+          "title": "Quiz: Express.js",
+          "description": "Test your knowledge of Express framework",
+          "type": "quiz",
+          "duration": 12,
+          "order": 4,
+          "quizId": 1
+        }
+      ]
+    },
+    {
+      "title": "Building REST APIs",
+      "description": "Create RESTful APIs with Express and Node.js",
+      "order": 3,
+      "lessons": [
+        {
+          "title": "REST API Principles",
+          "description": "Understand RESTful architecture and best practices",
+          "type": "video",
+          "duration": 25,
+          "order": 1,
+          "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ"
+        },
+        {
+          "title": "Creating CRUD Endpoints",
+          "description": "Build Create, Read, Update, Delete operations",
+          "type": "text",
+          "duration": 35,
+          "order": 2,
+          "content": "<h3>RESTful CRUD Operations</h3><table><tr><th>HTTP Method</th><th>Endpoint</th><th>Description</th></tr><tr><td>GET</td><td>/api/posts</td><td>Get all posts</td></tr><tr><td>GET</td><td>/api/posts/:id</td><td>Get a single post</td></tr><tr><td>POST</td><td>/api/posts</td><td>Create a new post</td></tr><tr><td>PUT</td><td>/api/posts/:id</td><td>Update a post</td></tr><tr><td>DELETE</td><td>/api/posts/:id</td><td>Delete a post</td></tr></table><h3>Example Implementation</h3><pre><code>const express = require('express');\nconst router = express.Router();\n\n// In-memory data store (use database in production)\nlet posts = [\n  { id: 1, title: 'First Post', content: 'Hello World' },\n  { id: 2, title: 'Second Post', content: 'Learning Node.js' }\n];\n\n// GET all posts\nrouter.get('/posts', (req, res) => {\n  res.json(posts);\n});\n\n// GET single post\nrouter.get('/posts/:id', (req, res) => {\n  const post = posts.find(p => p.id === parseInt(req.params.id));\n  if (!post) return res.status(404).json({ error: 'Post not found' });\n  res.json(post);\n});\n\n// CREATE post\nrouter.post('/posts', (req, res) => {\n  const newPost = {\n    id: posts.length + 1,\n    title: req.body.title,\n    content: req.body.content\n  };\n  posts.push(newPost);\n  res.status(201).json(newPost);\n});\n\n// UPDATE post\nrouter.put('/posts/:id', (req, res) => {\n  const post = posts.find(p => p.id === parseInt(req.params.id));\n  if (!post) return res.status(404).json({ error: 'Post not found' });\n\n  post.title = req.body.title;\n  post.content = req.body.content;\n  res.json(post);\n});\n\n// DELETE post\nrouter.delete('/posts/:id', (req, res) => {\n  const index = posts.findIndex(p => p.id === parseInt(req.params.id));\n  if (index === -1) return res.status(404).json({ error: 'Post not found' });\n\n  posts.splice(index, 1);\n  res.status(204).send();\n});\n\nmodule.exports = router;</code></pre>"
+        },
+        {
+          "title": "Error Handling and Validation",
+          "description": "Implement proper error handling and input validation",
+          "type": "text",
+          "duration": 28,
+          "order": 3,
+          "content": "<h3>Input Validation with express-validator</h3><pre><code>npm install express-validator</code></pre><pre><code>const { body, validationResult } = require('express-validator');\n\nrouter.post('/users',\n  // Validation rules\n  body('email').isEmail().normalizeEmail(),\n  body('password').isLength({ min: 6 }),\n  body('name').trim().notEmpty(),\n  \n  // Handler\n  (req, res) => {\n    const errors = validationResult(req);\n    if (!errors.isEmpty()) {\n      return res.status(400).json({ errors: errors.array() });\n    }\n\n    // Create user...\n    res.json({ message: 'User created' });\n  }\n);</code></pre><h3>Centralized Error Handling</h3><pre><code>// Error handling middleware (must be last)\napp.use((err, req, res, next) => {\n  console.error(err.stack);\n  \n  res.status(err.status || 500).json({\n    error: {\n      message: err.message,\n      status: err.status || 500\n    }\n  });\n});\n\n// Usage\napp.get('/error-example', (req, res, next) => {\n  const error = new Error('Something went wrong');\n  error.status = 400;\n  next(error);\n});</code></pre><h3>Async Error Handling</h3><pre><code>// Wrapper for async routes\nconst asyncHandler = (fn) => (req, res, next) => {\n  Promise.resolve(fn(req, res, next)).catch(next);\n};\n\nrouter.get('/posts', asyncHandler(async (req, res) => {\n  const posts = await Post.find();\n  res.json(posts);\n}));</code></pre>"
+        },
+        {
+          "title": "Quiz: REST APIs",
+          "description": "Test your understanding of REST API development",
+          "type": "quiz",
+          "duration": 15,
+          "order": 4,
+          "quizId": 2
+        }
+      ]
+    },
+    {
+      "title": "Database Integration",
+      "description": "Connect Node.js applications to databases",
+      "order": 4,
+      "lessons": [
+        {
+          "title": "Introduction to MongoDB",
+          "description": "Learn MongoDB and Mongoose ODM",
+          "type": "video",
+          "duration": 30,
+          "order": 1,
+          "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ"
+        },
+        {
+          "title": "Mongoose Models and Schemas",
+          "description": "Define data models with Mongoose",
+          "type": "text",
+          "duration": 32,
+          "order": 2,
+          "content": "<h3>Installing Mongoose</h3><pre><code>npm install mongoose</code></pre><h3>Connecting to MongoDB</h3><pre><code>const mongoose = require('mongoose');\n\nmongoose.connect('mongodb://localhost:27017/myapp', {\n  useNewUrlParser: true,\n  useUnifiedTopology: true\n})\n.then(() => console.log('MongoDB connected'))\n.catch(err => console.error('MongoDB connection error:', err));</code></pre><h3>Defining a Schema</h3><pre><code>const userSchema = new mongoose.Schema({\n  name: {\n    type: String,\n    required: [true, 'Name is required'],\n    trim: true,\n    minlength: 2,\n    maxlength: 50\n  },\n  email: {\n    type: String,\n    required: true,\n    unique: true,\n    lowercase: true,\n    match: [/^\\S+@\\S+\\.\\S+$/, 'Invalid email']\n  },\n  age: {\n    type: Number,\n    min: 0,\n    max: 120\n  },\n  isActive: {\n    type: Boolean,\n    default: true\n  },\n  createdAt: {\n    type: Date,\n    default: Date.now\n  }\n});\n\nconst User = mongoose.model('User', userSchema);\nmodule.exports = User;</code></pre><h3>CRUD Operations with Mongoose</h3><pre><code>// Create\nconst user = new User({\n  name: 'John Doe',\n  email: 'john@example.com',\n  age: 25\n});\nawait user.save();\n\n// Read\nconst users = await User.find();\nconst user = await User.findById(id);\nconst activeUsers = await User.find({ isActive: true });\n\n// Update\nawait User.findByIdAndUpdate(id, { age: 26 }, { new: true });\n\n// Delete\nawait User.findByIdAndDelete(id);</code></pre>"
+        },
+        {
+          "title": "Working with SQL Databases",
+          "description": "Use PostgreSQL and MySQL with Node.js",
+          "type": "video",
+          "duration": 35,
+          "order": 3,
+          "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ"
+        },
+        {
+          "title": "Database Migrations and Seeding",
+          "description": "Manage database schema changes",
+          "type": "text",
+          "duration": 25,
+          "order": 4,
+          "content": "<h3>Using TypeORM for SQL Databases</h3><pre><code>npm install typeorm pg reflect-metadata</code></pre><h3>Entity Definition</h3><pre><code>import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';\n\n@Entity()\nexport class User {\n  @PrimaryGeneratedColumn()\n  id: number;\n\n  @Column()\n  name: string;\n\n  @Column({ unique: true })\n  email: string;\n\n  @Column({ default: true })\n  isActive: boolean;\n}</code></pre><h3>Creating Migrations</h3><pre><code>// Run migration\ntypeorm migration:create -n CreateUsersTable\n\n// Generated migration file\nimport { MigrationInterface, QueryRunner, Table } from 'typeorm';\n\nexport class CreateUsersTable1234567890 implements MigrationInterface {\n  public async up(queryRunner: QueryRunner): Promise<void> {\n    await queryRunner.createTable(\n      new Table({\n        name: 'users',\n        columns: [\n          { name: 'id', type: 'int', isPrimary: true, isGenerated: true },\n          { name: 'name', type: 'varchar' },\n          { name: 'email', type: 'varchar', isUnique: true },\n          { name: 'isActive', type: 'boolean', default: true }\n        ]\n      })\n    );\n  }\n\n  public async down(queryRunner: QueryRunner): Promise<void> {\n    await queryRunner.dropTable('users');\n  }\n}</code></pre>"
+        }
+      ]
+    },
+    {
+      "title": "Authentication & Authorization",
+      "description": "Implement secure authentication and authorization",
+      "order": 5,
+      "lessons": [
+        {
+          "title": "JWT Authentication",
+          "description": "Implement JSON Web Token authentication",
+          "type": "text",
+          "duration": 35,
+          "order": 1,
+          "content": "<h3>Installing Dependencies</h3><pre><code>npm install jsonwebtoken bcryptjs</code></pre><h3>Password Hashing</h3><pre><code>const bcrypt = require('bcryptjs');\n\n// Hash password before saving\nconst saltRounds = 10;\nconst hashedPassword = await bcrypt.hash(plainPassword, saltRounds);\n\n// Compare password during login\nconst isMatch = await bcrypt.compare(plainPassword, hashedPassword);</code></pre><h3>Generating JWT Tokens</h3><pre><code>const jwt = require('jsonwebtoken');\n\n// Sign token\nconst token = jwt.sign(\n  { userId: user.id, email: user.email },\n  process.env.JWT_SECRET,\n  { expiresIn: '24h' }\n);\n\n// Verify token\ntry {\n  const decoded = jwt.verify(token, process.env.JWT_SECRET);\n  console.log(decoded); // { userId: ..., email: ..., iat: ..., exp: ... }\n} catch (err) {\n  console.error('Invalid token');\n}</code></pre><h3>Authentication Middleware</h3><pre><code>const authenticateToken = (req, res, next) => {\n  const authHeader = req.headers['authorization'];\n  const token = authHeader && authHeader.split(' ')[1];\n\n  if (!token) {\n    return res.status(401).json({ error: 'Access token required' });\n  }\n\n  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {\n    if (err) {\n      return res.status(403).json({ error: 'Invalid token' });\n    }\n    req.user = user;\n    next();\n  });\n};\n\n// Protected route\nrouter.get('/profile', authenticateToken, (req, res) => {\n  res.json({ user: req.user });\n});</code></pre><h3>Complete Auth Flow</h3><pre><code>// Register\nrouter.post('/register', async (req, res) => {\n  const { email, password, name } = req.body;\n  \n  // Hash password\n  const hashedPassword = await bcrypt.hash(password, 10);\n  \n  // Save user\n  const user = await User.create({\n    email,\n    password: hashedPassword,\n    name\n  });\n  \n  // Generate token\n  const token = jwt.sign(\n    { userId: user.id },\n    process.env.JWT_SECRET,\n    { expiresIn: '24h' }\n  );\n  \n  res.status(201).json({ token, user });\n});\n\n// Login\nrouter.post('/login', async (req, res) => {\n  const { email, password } = req.body;\n  \n  // Find user\n  const user = await User.findOne({ email });\n  if (!user) {\n    return res.status(401).json({ error: 'Invalid credentials' });\n  }\n  \n  // Check password\n  const isMatch = await bcrypt.compare(password, user.password);\n  if (!isMatch) {\n    return res.status(401).json({ error: 'Invalid credentials' });\n  }\n  \n  // Generate token\n  const token = jwt.sign(\n    { userId: user.id },\n    process.env.JWT_SECRET,\n    { expiresIn: '24h' }\n  );\n  \n  res.json({ token, user });\n});</code></pre>"
+        },
+        {
+          "title": "Role-Based Access Control",
+          "description": "Implement authorization with roles and permissions",
+          "type": "video",
+          "duration": 28,
+          "order": 2,
+          "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ"
+        },
+        {
+          "title": "Session-Based Authentication",
+          "description": "Alternative authentication with sessions",
+          "type": "text",
+          "duration": 30,
+          "order": 3,
+          "content": "<h3>Session Authentication with express-session</h3><pre><code>npm install express-session connect-mongo</code></pre><h3>Session Setup</h3><pre><code>const session = require('express-session');\nconst MongoStore = require('connect-mongo');\n\napp.use(session({\n  secret: process.env.SESSION_SECRET,\n  resave: false,\n  saveUninitialized: false,\n  store: MongoStore.create({\n    mongoUrl: process.env.MONGODB_URI,\n    ttl: 24 * 60 * 60 // 1 day\n  }),\n  cookie: {\n    maxAge: 1000 * 60 * 60 * 24, // 1 day\n    httpOnly: true,\n    secure: process.env.NODE_ENV === 'production'\n  }\n}));</code></pre><h3>Login with Sessions</h3><pre><code>router.post('/login', async (req, res) => {\n  const { email, password } = req.body;\n  \n  const user = await User.findOne({ email });\n  if (!user || !(await bcrypt.compare(password, user.password))) {\n    return res.status(401).json({ error: 'Invalid credentials' });\n  }\n  \n  // Store user in session\n  req.session.userId = user.id;\n  req.session.email = user.email;\n  \n  res.json({ message: 'Logged in successfully', user });\n});\n\nrouter.post('/logout', (req, res) => {\n  req.session.destroy();\n  res.json({ message: 'Logged out successfully' });\n});</code></pre><h3>Session Authentication Middleware</h3><pre><code>const requireAuth = (req, res, next) => {\n  if (!req.session.userId) {\n    return res.status(401).json({ error: 'Not authenticated' });\n  }\n  next();\n};\n\nrouter.get('/profile', requireAuth, async (req, res) => {\n  const user = await User.findById(req.session.userId);\n  res.json({ user });\n});</code></pre>"
+        },
+        {
+          "title": "Quiz: Authentication",
+          "description": "Test your knowledge of authentication and authorization",
+          "type": "quiz",
+          "duration": 15,
+          "order": 4,
+          "quizId": 3
+        }
+      ]
+    },
+    {
+      "title": "Advanced Topics",
+      "description": "Master advanced Node.js concepts and best practices",
+      "order": 6,
+      "lessons": [
+        {
+          "title": "Asynchronous Patterns",
+          "description": "Callbacks, Promises, and async/await",
+          "type": "video",
+          "duration": 32,
+          "order": 1,
+          "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ"
+        },
+        {
+          "title": "Streams and Buffers",
+          "description": "Work with large data efficiently",
+          "type": "text",
+          "duration": 28,
+          "order": 2,
+          "content": "<h3>What are Streams?</h3><p>Streams are objects that let you read or write data piece by piece, without loading everything into memory.</p><h3>Types of Streams</h3><ul><li><strong>Readable</strong>: Read data (e.g., fs.createReadStream)</li><li><strong>Writable</strong>: Write data (e.g., fs.createWriteStream)</li><li><strong>Duplex</strong>: Both read and write</li><li><strong>Transform</strong>: Modify data while reading/writing</li></ul><h3>Reading Files with Streams</h3><pre><code>const fs = require('fs');\n\n// Read large file efficiently\nconst readStream = fs.createReadStream('large-file.txt', {\n  encoding: 'utf8',\n  highWaterMark: 64 * 1024 // 64KB chunks\n});\n\nreadStream.on('data', (chunk) => {\n  console.log('Received chunk:', chunk.length, 'bytes');\n});\n\nreadStream.on('end', () => {\n  console.log('Finished reading file');\n});\n\nreadStream.on('error', (err) => {\n  console.error('Error:', err);\n});</code></pre><h3>Piping Streams</h3><pre><code>const readStream = fs.createReadStream('input.txt');\nconst writeStream = fs.createWriteStream('output.txt');\n\n// Copy file using streams\nreadStream.pipe(writeStream);\n\n// Multiple pipes\nconst zlib = require('zlib');\nconst gzip = zlib.createGzip();\n\nfs.createReadStream('input.txt')\n  .pipe(gzip)\n  .pipe(fs.createWriteStream('input.txt.gz'));</code></pre><h3>Buffers</h3><pre><code>// Create buffer\nconst buf1 = Buffer.from('Hello');\nconst buf2 = Buffer.alloc(10); // 10 bytes of zeros\n\n// Work with buffers\nconsole.log(buf1.toString()); // 'Hello'\nconsole.log(buf1.length); // 5\nconsole.log(buf1[0]); // 72 (ASCII code for 'H')\n\n// Concatenate buffers\nconst buf3 = Buffer.concat([buf1, Buffer.from(' World')]);\nconsole.log(buf3.toString()); // 'Hello World'</code></pre>"
+        },
+        {
+          "title": "Testing Node.js Applications",
+          "description": "Write unit and integration tests",
+          "type": "video",
+          "duration": 35,
+          "order": 3,
+          "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ"
+        },
+        {
+          "title": "Performance and Security",
+          "description": "Optimize performance and secure your applications",
+          "type": "text",
+          "duration": 30,
+          "order": 4,
+          "content": "<h3>Performance Best Practices</h3><ul><li><strong>Use compression</strong>: Compress responses with gzip</li><li><strong>Caching</strong>: Cache frequently accessed data</li><li><strong>Database indexing</strong>: Index frequently queried fields</li><li><strong>Connection pooling</strong>: Reuse database connections</li><li><strong>Cluster mode</strong>: Use multiple CPU cores</li></ul><h3>Compression Middleware</h3><pre><code>npm install compression\n\nconst compression = require('compression');\napp.use(compression());</code></pre><h3>Security Best Practices</h3><ul><li><strong>Helmet.js</strong>: Set secure HTTP headers</li><li><strong>Rate limiting</strong>: Prevent brute force attacks</li><li><strong>Input validation</strong>: Validate and sanitize all inputs</li><li><strong>CORS</strong>: Configure Cross-Origin Resource Sharing</li><li><strong>Environment variables</strong>: Never hardcode secrets</li></ul><h3>Security Middleware</h3><pre><code>npm install helmet express-rate-limit cors\n\nconst helmet = require('helmet');\nconst rateLimit = require('express-rate-limit');\nconst cors = require('cors');\n\n// Security headers\napp.use(helmet());\n\n// CORS\napp.use(cors({\n  origin: process.env.ALLOWED_ORIGINS.split(','),\n  credentials: true\n}));\n\n// Rate limiting\nconst limiter = rateLimit({\n  windowMs: 15 * 60 * 1000, // 15 minutes\n  max: 100 // limit each IP to 100 requests per windowMs\n});\napp.use('/api/', limiter);</code></pre><h3>Environment Variables</h3><pre><code>npm install dotenv\n\n// .env file\nPORT=3000\nDB_HOST=localhost\nDB_PASSWORD=secret123\nJWT_SECRET=your-secret-key\n\n// Load in app\nrequire('dotenv').config();\n\nconst port = process.env.PORT || 3000;\nconst dbPassword = process.env.DB_PASSWORD;</code></pre>"
+        },
+        {
+          "title": "Deployment and Production",
+          "description": "Deploy Node.js applications to production",
+          "type": "video",
+          "duration": 25,
+          "order": 5,
+          "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ"
+        }
+      ]
+    }
+  ],
+  "quizzes": [
+    {
+      "title": "Node.js Basics Quiz",
+      "description": "Test your understanding of Node.js fundamentals",
+      "passingScore": 70,
+      "timeLimit": 10,
+      "questions": [
+        {
+          "question": "What is Node.js?",
+          "type": "multiple-choice",
+          "points": 10,
+          "order": 1,
+          "options": [
+            {
+              "text": "A JavaScript runtime built on Chrome's V8 engine",
+              "isCorrect": true,
+              "order": 1
+            },
+            {
+              "text": "A web browser",
+              "isCorrect": false,
+              "order": 2
+            },
+            {
+              "text": "A database system",
+              "isCorrect": false,
+              "order": 3
+            },
+            {
+              "text": "A CSS framework",
+              "isCorrect": false,
+              "order": 4
+            }
+          ],
+          "explanation": "Node.js is a JavaScript runtime environment that executes JavaScript code outside of a web browser, built on Chrome's V8 JavaScript engine."
+        },
+        {
+          "question": "Which module system does Node.js use by default?",
+          "type": "multiple-choice",
+          "points": 10,
+          "order": 2,
+          "options": [
+            {
+              "text": "ES Modules",
+              "isCorrect": false,
+              "order": 1
+            },
+            {
+              "text": "CommonJS",
+              "isCorrect": true,
+              "order": 2
+            },
+            {
+              "text": "AMD",
+              "isCorrect": false,
+              "order": 3
+            },
+            {
+              "text": "UMD",
+              "isCorrect": false,
+              "order": 4
+            }
+          ],
+          "explanation": "Node.js uses CommonJS module system by default, with module.exports and require()."
+        },
+        {
+          "question": "Node.js is single-threaded.",
+          "type": "true-false",
+          "points": 5,
+          "order": 3,
+          "options": [
+            {
+              "text": "True",
+              "isCorrect": true,
+              "order": 1
+            },
+            {
+              "text": "False",
+              "isCorrect": false,
+              "order": 2
+            }
+          ],
+          "explanation": "True. Node.js runs on a single thread using an event loop for asynchronous operations."
+        }
+      ]
+    },
+    {
+      "title": "Express.js Quiz",
+      "description": "Test your knowledge of Express framework",
+      "passingScore": 70,
+      "timeLimit": 12,
+      "questions": [
+        {
+          "question": "What is Express.js?",
+          "type": "multiple-choice",
+          "points": 10,
+          "order": 1,
+          "options": [
+            {
+              "text": "A minimal web framework for Node.js",
+              "isCorrect": true,
+              "order": 1
+            },
+            {
+              "text": "A database ORM",
+              "isCorrect": false,
+              "order": 2
+            },
+            {
+              "text": "A testing framework",
+              "isCorrect": false,
+              "order": 3
+            },
+            {
+              "text": "A package manager",
+              "isCorrect": false,
+              "order": 4
+            }
+          ],
+          "explanation": "Express.js is a minimal and flexible Node.js web application framework."
+        },
+        {
+          "question": "Middleware functions have access to which objects?",
+          "type": "multiple-choice",
+          "points": 10,
+          "order": 2,
+          "options": [
+            {
+              "text": "req, res, and next",
+              "isCorrect": true,
+              "order": 1
+            },
+            {
+              "text": "Only req and res",
+              "isCorrect": false,
+              "order": 2
+            },
+            {
+              "text": "Only req",
+              "isCorrect": false,
+              "order": 3
+            },
+            {
+              "text": "req, res, and err",
+              "isCorrect": false,
+              "order": 4
+            }
+          ],
+          "explanation": "Middleware functions have access to the request object (req), response object (res), and next middleware function (next)."
+        }
+      ]
+    },
+    {
+      "title": "REST APIs Quiz",
+      "description": "Test your understanding of REST API development",
+      "passingScore": 70,
+      "timeLimit": 15,
+      "questions": [
+        {
+          "question": "Which HTTP method is used to create a new resource?",
+          "type": "multiple-choice",
+          "points": 10,
+          "order": 1,
+          "options": [
+            {
+              "text": "GET",
+              "isCorrect": false,
+              "order": 1
+            },
+            {
+              "text": "POST",
+              "isCorrect": true,
+              "order": 2
+            },
+            {
+              "text": "PUT",
+              "isCorrect": false,
+              "order": 3
+            },
+            {
+              "text": "DELETE",
+              "isCorrect": false,
+              "order": 4
+            }
+          ],
+          "explanation": "POST is used to create new resources in RESTful APIs."
+        },
+        {
+          "question": "What status code indicates a successful resource creation?",
+          "type": "multiple-choice",
+          "points": 10,
+          "order": 2,
+          "options": [
+            {
+              "text": "200 OK",
+              "isCorrect": false,
+              "order": 1
+            },
+            {
+              "text": "201 Created",
+              "isCorrect": true,
+              "order": 2
+            },
+            {
+              "text": "204 No Content",
+              "isCorrect": false,
+              "order": 3
+            },
+            {
+              "text": "400 Bad Request",
+              "isCorrect": false,
+              "order": 4
+            }
+          ],
+          "explanation": "201 Created indicates that a resource has been successfully created."
+        }
+      ]
+    },
+    {
+      "title": "Authentication Quiz",
+      "description": "Test your knowledge of authentication and authorization",
+      "passingScore": 70,
+      "timeLimit": 15,
+      "questions": [
+        {
+          "question": "What does JWT stand for?",
+          "type": "multiple-choice",
+          "points": 10,
+          "order": 1,
+          "options": [
+            {
+              "text": "JavaScript Web Token",
+              "isCorrect": false,
+              "order": 1
+            },
+            {
+              "text": "JSON Web Token",
+              "isCorrect": true,
+              "order": 2
+            },
+            {
+              "text": "Java Web Token",
+              "isCorrect": false,
+              "order": 3
+            },
+            {
+              "text": "JSON Web Transfer",
+              "isCorrect": false,
+              "order": 4
+            }
+          ],
+          "explanation": "JWT stands for JSON Web Token, a compact way to securely transmit information between parties."
+        },
+        {
+          "question": "Passwords should be stored in plain text in the database.",
+          "type": "true-false",
+          "points": 10,
+          "order": 2,
+          "options": [
+            {
+              "text": "True",
+              "isCorrect": false,
+              "order": 1
+            },
+            {
+              "text": "False",
+              "isCorrect": true,
+              "order": 2
+            }
+          ],
+          "explanation": "False. Passwords should always be hashed using algorithms like bcrypt before storing in the database."
+        }
+      ]
+    }
+  ]
+}

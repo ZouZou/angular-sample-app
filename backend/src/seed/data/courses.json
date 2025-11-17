@@ -32,7 +32,7 @@
   {
     "id": "react-complete-guide",
     "title": "React - The Complete Guide",
-    "description": "Dive in and learn React.js from scratch! Learn React, Hooks, Redux, React Router, Next.js, Best Practices and way more!",
+    "description": "Dive in and learn React.js from scratch! Learn React, Hooks, Redux, React Router, Next.js, Best Practices and way more! This comprehensive course covers everything from basics to advanced topics with 6 sections, 25+ lessons, interactive quizzes, and hands-on projects. Master component-based architecture, state management, routing, and modern React patterns.",
     "instructor": "Maximilian Schwarzmüller",
     "duration": 2880,
     "price": 89.99,
@@ -42,12 +42,28 @@
     "bannerUrl": "https://images.unsplash.com/photo-1633356122102-3fe601e05bd2?w=1200&h=400&fit=crop",
     "enrollmentCount": 2156,
     "rating": 4.8,
+    "language": "English",
+    "requirements": [
+      "Basic knowledge of HTML, CSS, and JavaScript is required",
+      "No React knowledge is required - we'll start from scratch!",
+      "A modern code editor (VS Code recommended)",
+      "Node.js and npm installed on your machine"
+    ],
+    "learningOutcomes": [
+      "Build powerful, fast, user-friendly and reactive web apps",
+      "Master React Hooks and functional components",
+      "Implement routing with React Router for single-page applications",
+      "Manage complex application state with Context API and Redux",
+      "Apply best practices and learn advanced patterns",
+      "Understand the internals of React and how it works under the hood"
+    ],
+    "contentFile": "courses/react-content.json",
     "published": true
   },
   {
     "id": "nodejs-complete-guide",
     "title": "Node.js - The Complete Guide",
-    "description": "Master Node JS & Deno.js, build REST APIs with Node.js, GraphQL APIs, add Authentication, use MongoDB, SQL & much more!",
+    "description": "Master Node JS & Deno.js, build REST APIs with Node.js, GraphQL APIs, add Authentication, use MongoDB, SQL & much more! This comprehensive course covers everything from Node.js fundamentals to advanced topics with 6 sections, 25+ lessons, interactive quizzes, and real-world projects. Learn Express.js, database integration, authentication, security, and deployment.",
     "instructor": "Maximilian Schwarzmüller",
     "duration": 2520,
     "price": 94.99,
@@ -57,6 +73,22 @@
     "bannerUrl": "https://images.unsplash.com/photo-1627398242454-45a1465c2479?w=1200&h=400&fit=crop",
     "enrollmentCount": 892,
     "rating": 4.6,
+    "language": "English",
+    "requirements": [
+      "Basic JavaScript knowledge is required",
+      "Understanding of HTML and CSS is helpful but not required",
+      "No Node.js knowledge is required - we start from scratch",
+      "A computer with Windows, Mac, or Linux"
+    ],
+    "learningOutcomes": [
+      "Build server-side applications with Node.js and Express.js",
+      "Create RESTful APIs and GraphQL APIs from scratch",
+      "Work with SQL and NoSQL databases (MongoDB, PostgreSQL)",
+      "Implement secure authentication and authorization with JWT and sessions",
+      "Apply security best practices and performance optimization techniques",
+      "Deploy Node.js applications to production environments"
+    ],
+    "contentFile": "courses/nodejs-content.json",
     "published": true
   },
   {
