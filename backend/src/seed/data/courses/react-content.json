@@ -1,0 +1,503 @@
+{
+  "sections": [
+    {
+      "title": "Getting Started with React",
+      "description": "Learn the fundamentals of React and set up your development environment",
+      "order": 1,
+      "lessons": [
+        {
+          "title": "Welcome to React",
+          "description": "Introduction to React and what makes it special",
+          "type": "video",
+          "duration": 12,
+          "order": 1,
+          "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ"
+        },
+        {
+          "title": "Setting Up Your Development Environment",
+          "description": "Install Node.js, npm, and create your first React app",
+          "type": "text",
+          "duration": 18,
+          "order": 2,
+          "content": "<h3>Prerequisites</h3><p>Before starting with React, you need:</p><ul><li>Node.js (v16 or higher)</li><li>npm or yarn package manager</li><li>A code editor (VS Code recommended)</li><li>Basic JavaScript knowledge</li></ul><h3>Installation Steps</h3><ol><li>Download and install Node.js from nodejs.org</li><li>Verify installation: <code>node --version && npm --version</code></li><li>Create a new React app: <code>npx create-react-app my-app</code></li><li>Navigate to your app: <code>cd my-app</code></li><li>Start the development server: <code>npm start</code></li></ol><h3>Project Structure</h3><p>Your React app contains:</p><ul><li><code>src/</code> - Your application code</li><li><code>public/</code> - Static files</li><li><code>package.json</code> - Project dependencies</li><li><code>node_modules/</code> - Installed packages</li></ul>"
+        },
+        {
+          "title": "JSX - JavaScript XML",
+          "description": "Understanding JSX syntax and how it works",
+          "type": "text",
+          "duration": 25,
+          "order": 3,
+          "content": "<h3>What is JSX?</h3><p>JSX is a syntax extension for JavaScript that looks like HTML but is actually JavaScript.</p><pre><code>const element = &lt;h1&gt;Hello, React!&lt;/h1&gt;;</code></pre><h3>JSX Rules</h3><ul><li>Must return a single parent element</li><li>Use <code>className</code> instead of <code>class</code></li><li>Use camelCase for attributes (onClick, onChange)</li><li>Close all tags (even self-closing ones like &lt;img /&gt;)</li><li>Use <code>{}</code> for JavaScript expressions</li></ul><h3>Embedding Expressions</h3><pre><code>const name = 'Sarah';\nconst element = &lt;h1&gt;Hello, {name}!&lt;/h1&gt;;\nconst result = &lt;p&gt;2 + 2 = {2 + 2}&lt;/p&gt;;</code></pre><h3>Conditional Rendering</h3><pre><code>const isLoggedIn = true;\nreturn (\n  &lt;div&gt;\n    {isLoggedIn ? &lt;p&gt;Welcome back!&lt;/p&gt; : &lt;p&gt;Please sign in&lt;/p&gt;}\n  &lt;/div&gt;\n);</code></pre>"
+        },
+        {
+          "title": "Components and Props",
+          "description": "Learn about React components and how to pass data with props",
+          "type": "video",
+          "duration": 30,
+          "order": 4,
+          "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ"
+        },
+        {
+          "title": "Quiz: React Basics",
+          "description": "Test your understanding of React fundamentals",
+          "type": "quiz",
+          "duration": 10,
+          "order": 5,
+          "quizId": 0
+        }
+      ]
+    },
+    {
+      "title": "State & Event Handling",
+      "description": "Master state management and event handling in React",
+      "order": 2,
+      "lessons": [
+        {
+          "title": "Understanding State",
+          "description": "Learn about component state and the useState hook",
+          "type": "text",
+          "duration": 28,
+          "order": 1,
+          "content": "<h3>What is State?</h3><p>State is data that can change over time in your component. When state changes, React re-renders the component.</p><h3>The useState Hook</h3><pre><code>import { useState } from 'react';\n\nfunction Counter() {\n  const [count, setCount] = useState(0);\n\n  return (\n    &lt;div&gt;\n      &lt;p&gt;Count: {count}&lt;/p&gt;\n      &lt;button onClick={() =&gt; setCount(count + 1)}&gt;\n        Increment\n      &lt;/button&gt;\n    &lt;/div&gt;\n  );\n}</code></pre><h3>State Rules</h3><ul><li>Never modify state directly</li><li>Always use the setter function</li><li>State updates may be asynchronous</li><li>State is private to the component</li></ul><h3>Multiple State Variables</h3><pre><code>function UserProfile() {\n  const [name, setName] = useState('John');\n  const [age, setAge] = useState(25);\n  const [email, setEmail] = useState('john@example.com');\n\n  return (\n    &lt;div&gt;\n      &lt;p&gt;Name: {name}&lt;/p&gt;\n      &lt;p&gt;Age: {age}&lt;/p&gt;\n      &lt;p&gt;Email: {email}&lt;/p&gt;\n    &lt;/div&gt;\n  );\n}</code></pre>"
+        },
+        {
+          "title": "Event Handling",
+          "description": "Handle user interactions in React",
+          "type": "video",
+          "duration": 22,
+          "order": 2,
+          "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ"
+        },
+        {
+          "title": "Working with Forms",
+          "description": "Build and manage forms in React",
+          "type": "text",
+          "duration": 30,
+          "order": 3,
+          "content": "<h3>Controlled Components</h3><p>In React, form inputs are typically controlled by state:</p><pre><code>function LoginForm() {\n  const [email, setEmail] = useState('');\n  const [password, setPassword] = useState('');\n\n  const handleSubmit = (e) =&gt; {\n    e.preventDefault();\n    console.log('Login:', { email, password });\n  };\n\n  return (\n    &lt;form onSubmit={handleSubmit}&gt;\n      &lt;input\n        type=\"email\"\n        value={email}\n        onChange={(e) =&gt; setEmail(e.target.value)}\n        placeholder=\"Email\"\n      /&gt;\n      &lt;input\n        type=\"password\"\n        value={password}\n        onChange={(e) =&gt; setPassword(e.target.value)}\n        placeholder=\"Password\"\n      /&gt;\n      &lt;button type=\"submit\"&gt;Login&lt;/button&gt;\n    &lt;/form&gt;\n  );\n}</code></pre><h3>Form Validation</h3><pre><code>const [errors, setErrors] = useState({});\n\nconst validate = () =&gt; {\n  const newErrors = {};\n  if (!email.includes('@')) {\n    newErrors.email = 'Invalid email';\n  }\n  if (password.length &lt; 6) {\n    newErrors.password = 'Password too short';\n  }\n  return newErrors;\n};</code></pre>"
+        },
+        {
+          "title": "Quiz: State and Events",
+          "description": "Test your knowledge of state management and events",
+          "type": "quiz",
+          "duration": 12,
+          "order": 4,
+          "quizId": 1
+        }
+      ]
+    },
+    {
+      "title": "React Hooks Deep Dive",
+      "description": "Master essential React hooks including useEffect, useCallback, and useMemo",
+      "order": 3,
+      "lessons": [
+        {
+          "title": "useEffect Hook",
+          "description": "Handle side effects in your React components",
+          "type": "text",
+          "duration": 35,
+          "order": 1,
+          "content": "<h3>What is useEffect?</h3><p>useEffect lets you perform side effects in function components (data fetching, subscriptions, timers, etc.).</p><h3>Basic Usage</h3><pre><code>import { useEffect, useState } from 'react';\n\nfunction DataFetcher() {\n  const [data, setData] = useState(null);\n\n  useEffect(() =&gt; {\n    fetch('https://api.example.com/data')\n      .then(res =&gt; res.json())\n      .then(data =&gt; setData(data));\n  }, []); // Empty array = run once on mount\n\n  return &lt;div&gt;{data ? JSON.stringify(data) : 'Loading...'}&lt;/div&gt;;\n}</code></pre><h3>Dependency Array</h3><ul><li>No array: Runs on every render</li><li>Empty array <code>[]</code>: Runs once on mount</li><li>With dependencies <code>[count]</code>: Runs when dependencies change</li></ul><h3>Cleanup Functions</h3><pre><code>useEffect(() =&gt; {\n  const timer = setInterval(() =&gt; {\n    console.log('Tick');\n  }, 1000);\n\n  // Cleanup function\n  return () =&gt; {\n    clearInterval(timer);\n  };\n}, []);</code></pre>"
+        },
+        {
+          "title": "useCallback and useMemo",
+          "description": "Optimize performance with memoization",
+          "type": "video",
+          "duration": 28,
+          "order": 2,
+          "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ"
+        },
+        {
+          "title": "Custom Hooks",
+          "description": "Create reusable logic with custom hooks",
+          "type": "text",
+          "duration": 25,
+          "order": 3,
+          "content": "<h3>What are Custom Hooks?</h3><p>Custom hooks let you extract component logic into reusable functions.</p><h3>Creating a Custom Hook</h3><pre><code>function useLocalStorage(key, initialValue) {\n  const [storedValue, setStoredValue] = useState(() =&gt; {\n    try {\n      const item = window.localStorage.getItem(key);\n      return item ? JSON.parse(item) : initialValue;\n    } catch (error) {\n      return initialValue;\n    }\n  });\n\n  const setValue = (value) =&gt; {\n    try {\n      setStoredValue(value);\n      window.localStorage.setItem(key, JSON.stringify(value));\n    } catch (error) {\n      console.error(error);\n    }\n  };\n\n  return [storedValue, setValue];\n}</code></pre><h3>Using the Custom Hook</h3><pre><code>function App() {\n  const [name, setName] = useLocalStorage('name', 'Guest');\n\n  return (\n    &lt;input\n      value={name}\n      onChange={(e) =&gt; setName(e.target.value)}\n    /&gt;\n  );\n}</code></pre>"
+        },
+        {
+          "title": "Quiz: React Hooks",
+          "description": "Test your understanding of React hooks",
+          "type": "quiz",
+          "duration": 15,
+          "order": 4,
+          "quizId": 2
+        }
+      ]
+    },
+    {
+      "title": "React Router & Navigation",
+      "description": "Build single-page applications with client-side routing",
+      "order": 4,
+      "lessons": [
+        {
+          "title": "Introduction to React Router",
+          "description": "Set up routing in your React application",
+          "type": "video",
+          "duration": 20,
+          "order": 1,
+          "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ"
+        },
+        {
+          "title": "Routes and Navigation",
+          "description": "Create routes and navigate between pages",
+          "type": "text",
+          "duration": 30,
+          "order": 2,
+          "content": "<h3>Setting Up React Router</h3><pre><code>npm install react-router-dom</code></pre><h3>Basic Routing</h3><pre><code>import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';\n\nfunction App() {\n  return (\n    &lt;BrowserRouter&gt;\n      &lt;nav&gt;\n        &lt;Link to=\"/\"&gt;Home&lt;/Link&gt;\n        &lt;Link to=\"/about\"&gt;About&lt;/Link&gt;\n        &lt;Link to=\"/contact\"&gt;Contact&lt;/Link&gt;\n      &lt;/nav&gt;\n\n      &lt;Routes&gt;\n        &lt;Route path=\"/\" element={&lt;Home /&gt;} /&gt;\n        &lt;Route path=\"/about\" element={&lt;About /&gt;} /&gt;\n        &lt;Route path=\"/contact\" element={&lt;Contact /&gt;} /&gt;\n      &lt;/Routes&gt;\n    &lt;/BrowserRouter&gt;\n  );\n}</code></pre><h3>Dynamic Routes</h3><pre><code>&lt;Route path=\"/users/:id\" element={&lt;UserDetail /&gt;} /&gt;\n\n// In UserDetail component\nimport { useParams } from 'react-router-dom';\n\nfunction UserDetail() {\n  const { id } = useParams();\n  return &lt;h1&gt;User ID: {id}&lt;/h1&gt;\n}</code></pre>"
+        },
+        {
+          "title": "Protected Routes and Navigation Guards",
+          "description": "Implement authentication-based routing",
+          "type": "video",
+          "duration": 25,
+          "order": 3,
+          "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ"
+        }
+      ]
+    },
+    {
+      "title": "State Management with Context & Redux",
+      "description": "Manage global state in your React applications",
+      "order": 5,
+      "lessons": [
+        {
+          "title": "React Context API",
+          "description": "Share state across components without prop drilling",
+          "type": "text",
+          "duration": 30,
+          "order": 1,
+          "content": "<h3>Why Context?</h3><p>Context provides a way to pass data through the component tree without having to pass props down manually at every level.</p><h3>Creating Context</h3><pre><code>import { createContext, useContext, useState } from 'react';\n\nconst ThemeContext = createContext();\n\nfunction ThemeProvider({ children }) {\n  const [theme, setTheme] = useState('light');\n\n  const toggleTheme = () =&gt; {\n    setTheme(prev =&gt; prev === 'light' ? 'dark' : 'light');\n  };\n\n  return (\n    &lt;ThemeContext.Provider value={{ theme, toggleTheme }}&gt;\n      {children}\n    &lt;/ThemeContext.Provider&gt;\n  );\n}</code></pre><h3>Using Context</h3><pre><code>function ThemedButton() {\n  const { theme, toggleTheme } = useContext(ThemeContext);\n\n  return (\n    &lt;button\n      style={{ background: theme === 'light' ? '#fff' : '#333' }}\n      onClick={toggleTheme}\n    &gt;\n      Toggle Theme\n    &lt;/button&gt;\n  );\n}</code></pre>"
+        },
+        {
+          "title": "Introduction to Redux",
+          "description": "Learn Redux for advanced state management",
+          "type": "video",
+          "duration": 35,
+          "order": 2,
+          "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ"
+        },
+        {
+          "title": "Redux Toolkit",
+          "description": "Modern Redux with Redux Toolkit",
+          "type": "text",
+          "duration": 32,
+          "order": 3,
+          "content": "<h3>Installing Redux Toolkit</h3><pre><code>npm install @reduxjs/toolkit react-redux</code></pre><h3>Creating a Slice</h3><pre><code>import { createSlice } from '@reduxjs/toolkit';\n\nconst counterSlice = createSlice({\n  name: 'counter',\n  initialState: { value: 0 },\n  reducers: {\n    increment: (state) =&gt; {\n      state.value += 1;\n    },\n    decrement: (state) =&gt; {\n      state.value -= 1;\n    },\n    incrementByAmount: (state, action) =&gt; {\n      state.value += action.payload;\n    }\n  }\n});\n\nexport const { increment, decrement, incrementByAmount } = counterSlice.actions;\nexport default counterSlice.reducer;</code></pre><h3>Configuring the Store</h3><pre><code>import { configureStore } from '@reduxjs/toolkit';\nimport counterReducer from './counterSlice';\n\nexport const store = configureStore({\n  reducer: {\n    counter: counterReducer\n  }\n});</code></pre>"
+        },
+        {
+          "title": "Quiz: State Management",
+          "description": "Test your knowledge of Context and Redux",
+          "type": "quiz",
+          "duration": 15,
+          "order": 4,
+          "quizId": 3
+        }
+      ]
+    },
+    {
+      "title": "Advanced React Patterns",
+      "description": "Learn advanced patterns and best practices",
+      "order": 6,
+      "lessons": [
+        {
+          "title": "Higher-Order Components (HOCs)",
+          "description": "Reuse component logic with HOCs",
+          "type": "video",
+          "duration": 28,
+          "order": 1,
+          "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ"
+        },
+        {
+          "title": "Render Props Pattern",
+          "description": "Share code between components using render props",
+          "type": "text",
+          "duration": 25,
+          "order": 2,
+          "content": "<h3>What are Render Props?</h3><p>A render prop is a function prop that a component uses to know what to render.</p><h3>Example</h3><pre><code>function MouseTracker({ render }) {\n  const [position, setPosition] = useState({ x: 0, y: 0 });\n\n  useEffect(() =&gt; {\n    const handleMouseMove = (e) =&gt; {\n      setPosition({ x: e.clientX, y: e.clientY });\n    };\n\n    window.addEventListener('mousemove', handleMouseMove);\n    return () =&gt; window.removeEventListener('mousemove', handleMouseMove);\n  }, []);\n\n  return render(position);\n}\n\n// Usage\n&lt;MouseTracker\n  render={({ x, y }) =&gt; (\n    &lt;h1&gt;Mouse position: ({x}, {y})&lt;/h1&gt;\n  )}\n/&gt;</code></pre>"
+        },
+        {
+          "title": "Error Boundaries",
+          "description": "Handle errors gracefully in React",
+          "type": "video",
+          "duration": 20,
+          "order": 3,
+          "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ"
+        },
+        {
+          "title": "Performance Optimization",
+          "description": "Optimize your React applications",
+          "type": "text",
+          "duration": 30,
+          "order": 4,
+          "content": "<h3>React.memo</h3><p>Prevent unnecessary re-renders of functional components:</p><pre><code>const MemoizedComponent = React.memo(function MyComponent({ data }) {\n  return &lt;div&gt;{data}&lt;/div&gt;\n});</code></pre><h3>Code Splitting</h3><p>Split your code to load components on demand:</p><pre><code>import { lazy, Suspense } from 'react';\n\nconst HeavyComponent = lazy(() =&gt; import('./HeavyComponent'));\n\nfunction App() {\n  return (\n    &lt;Suspense fallback={&lt;div&gt;Loading...&lt;/div&gt;}&gt;\n      &lt;HeavyComponent /&gt;\n    &lt;/Suspense&gt;\n  );\n}</code></pre><h3>Virtual List for Large Data</h3><pre><code>npm install react-window\n\nimport { FixedSizeList } from 'react-window';\n\nconst Row = ({ index, style }) =&gt; (\n  &lt;div style={style}&gt;Row {index}&lt;/div&gt;\n);\n\n&lt;FixedSizeList\n  height={400}\n  itemCount={1000}\n  itemSize={35}\n&gt;\n  {Row}\n&lt;/FixedSizeList&gt;</code></pre>"
+        }
+      ]
+    }
+  ],
+  "quizzes": [
+    {
+      "title": "React Basics Quiz",
+      "description": "Test your understanding of React fundamentals",
+      "passingScore": 70,
+      "timeLimit": 10,
+      "questions": [
+        {
+          "question": "What is React?",
+          "type": "multiple-choice",
+          "points": 10,
+          "order": 1,
+          "options": [
+            {
+              "text": "A JavaScript library for building user interfaces",
+              "isCorrect": true,
+              "order": 1
+            },
+            {
+              "text": "A CSS framework",
+              "isCorrect": false,
+              "order": 2
+            },
+            {
+              "text": "A database management system",
+              "isCorrect": false,
+              "order": 3
+            },
+            {
+              "text": "A backend framework",
+              "isCorrect": false,
+              "order": 4
+            }
+          ],
+          "explanation": "React is a JavaScript library developed by Facebook for building user interfaces, particularly single-page applications."
+        },
+        {
+          "question": "What is JSX?",
+          "type": "multiple-choice",
+          "points": 10,
+          "order": 2,
+          "options": [
+            {
+              "text": "A JavaScript syntax extension that looks like HTML",
+              "isCorrect": true,
+              "order": 1
+            },
+            {
+              "text": "A CSS preprocessor",
+              "isCorrect": false,
+              "order": 2
+            },
+            {
+              "text": "A testing library",
+              "isCorrect": false,
+              "order": 3
+            },
+            {
+              "text": "A package manager",
+              "isCorrect": false,
+              "order": 4
+            }
+          ],
+          "explanation": "JSX stands for JavaScript XML. It allows us to write HTML-like code in JavaScript."
+        },
+        {
+          "question": "In JSX, you use 'className' instead of 'class'.",
+          "type": "true-false",
+          "points": 5,
+          "order": 3,
+          "options": [
+            {
+              "text": "True",
+              "isCorrect": true,
+              "order": 1
+            },
+            {
+              "text": "False",
+              "isCorrect": false,
+              "order": 2
+            }
+          ],
+          "explanation": "True. Since 'class' is a reserved keyword in JavaScript, we use 'className' in JSX."
+        }
+      ]
+    },
+    {
+      "title": "State and Events Quiz",
+      "description": "Test your knowledge of state management and event handling",
+      "passingScore": 70,
+      "timeLimit": 12,
+      "questions": [
+        {
+          "question": "Which hook is used to add state to functional components?",
+          "type": "multiple-choice",
+          "points": 10,
+          "order": 1,
+          "options": [
+            {
+              "text": "useEffect",
+              "isCorrect": false,
+              "order": 1
+            },
+            {
+              "text": "useState",
+              "isCorrect": true,
+              "order": 2
+            },
+            {
+              "text": "useContext",
+              "isCorrect": false,
+              "order": 3
+            },
+            {
+              "text": "useReducer",
+              "isCorrect": false,
+              "order": 4
+            }
+          ],
+          "explanation": "The useState hook allows you to add state to functional components."
+        },
+        {
+          "question": "State should be modified directly in React.",
+          "type": "true-false",
+          "points": 10,
+          "order": 2,
+          "options": [
+            {
+              "text": "True",
+              "isCorrect": false,
+              "order": 1
+            },
+            {
+              "text": "False",
+              "isCorrect": true,
+              "order": 2
+            }
+          ],
+          "explanation": "False. State should never be modified directly. Always use the setter function provided by useState."
+        }
+      ]
+    },
+    {
+      "title": "React Hooks Quiz",
+      "description": "Test your understanding of React hooks",
+      "passingScore": 70,
+      "timeLimit": 15,
+      "questions": [
+        {
+          "question": "What does useEffect do?",
+          "type": "multiple-choice",
+          "points": 10,
+          "order": 1,
+          "options": [
+            {
+              "text": "Manages component state",
+              "isCorrect": false,
+              "order": 1
+            },
+            {
+              "text": "Performs side effects in function components",
+              "isCorrect": true,
+              "order": 2
+            },
+            {
+              "text": "Creates context",
+              "isCorrect": false,
+              "order": 3
+            },
+            {
+              "text": "Handles routing",
+              "isCorrect": false,
+              "order": 4
+            }
+          ],
+          "explanation": "useEffect is used to perform side effects like data fetching, subscriptions, or manually changing the DOM."
+        },
+        {
+          "question": "An empty dependency array [] in useEffect means the effect runs:",
+          "type": "multiple-choice",
+          "points": 10,
+          "order": 2,
+          "options": [
+            {
+              "text": "On every render",
+              "isCorrect": false,
+              "order": 1
+            },
+            {
+              "text": "Only once when the component mounts",
+              "isCorrect": true,
+              "order": 2
+            },
+            {
+              "text": "Never",
+              "isCorrect": false,
+              "order": 3
+            },
+            {
+              "text": "Only when unmounting",
+              "isCorrect": false,
+              "order": 4
+            }
+          ],
+          "explanation": "An empty dependency array means the effect runs only once when the component mounts."
+        }
+      ]
+    },
+    {
+      "title": "State Management Quiz",
+      "description": "Test your knowledge of Context and Redux",
+      "passingScore": 70,
+      "timeLimit": 15,
+      "questions": [
+        {
+          "question": "What problem does Context API solve?",
+          "type": "multiple-choice",
+          "points": 10,
+          "order": 1,
+          "options": [
+            {
+              "text": "Prop drilling",
+              "isCorrect": true,
+              "order": 1
+            },
+            {
+              "text": "Component styling",
+              "isCorrect": false,
+              "order": 2
+            },
+            {
+              "text": "HTTP requests",
+              "isCorrect": false,
+              "order": 3
+            },
+            {
+              "text": "Routing",
+              "isCorrect": false,
+              "order": 4
+            }
+          ],
+          "explanation": "Context API helps avoid prop drilling by providing a way to share values between components without passing props through every level."
+        },
+        {
+          "question": "Redux Toolkit is the recommended way to write Redux logic.",
+          "type": "true-false",
+          "points": 10,
+          "order": 2,
+          "options": [
+            {
+              "text": "True",
+              "isCorrect": true,
+              "order": 1
+            },
+            {
+              "text": "False",
+              "isCorrect": false,
+              "order": 2
+            }
+          ],
+          "explanation": "True. Redux Toolkit is the official recommended approach for writing Redux logic, as it simplifies the process significantly."
+        }
+      ]
+    }
+  ]
+}
