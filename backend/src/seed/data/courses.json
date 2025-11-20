@@ -27,7 +27,8 @@
       "Use TypeScript to write more robust code and leverage its advantages",
       "Learn about Components, Directives, Services, Pipes, HTTP access, Authentication, Modules, and much more"
     ],
-    "contentFile": "courses/angular-content.json"
+    "contentFile": "courses/angular-content.json",
+    "published": true
   },
   {
     "id": "react-complete-guide",
@@ -119,6 +120,7 @@
       "Create web services and API integrations",
       "Apply enterprise development best practices"
     ],
-    "contentFile": "courses/openedge-content.json"
+    "contentFile": "courses/openedge-content.json",
+    "published": true
   }
 ]
