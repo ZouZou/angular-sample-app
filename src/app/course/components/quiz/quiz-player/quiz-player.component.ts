@@ -73,6 +73,7 @@ export class QuizPlayerComponent implements OnInit, OnDestroy {
     } else {
       this.error = 'Invalid course ID';
       this.isLoading = false;
+      this.cdr.markForCheck();
       return;
     }
 
@@ -88,6 +89,7 @@ export class QuizPlayerComponent implements OnInit, OnDestroy {
         } else {
           this.error = 'Invalid quiz ID';
           this.isLoading = false;
+          this.cdr.markForCheck();
         }
       });
   }
