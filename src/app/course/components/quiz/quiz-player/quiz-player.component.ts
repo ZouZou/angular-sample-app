@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -45,6 +45,7 @@ export class QuizPlayerComponent implements OnInit, OnDestroy {
   private enrollmentService = inject(EnrollmentService);
   private authService = inject(AuthService);
   private logger = inject(LoggerService);
+  private cdr = inject(ChangeDetectorRef);
 
   quiz: Quiz | null = null;
   currentAttempt: QuizAttempt | null = null;
@@ -102,6 +103,7 @@ export class QuizPlayerComponent implements OnInit, OnDestroy {
   loadQuiz(): void {
     this.isLoading = true;
     this.error = null;
+    this.cdr.markForCheck();
 
     // Get enrollment first
     this.enrollmentService.getEnrollment(this.userId, this.courseId)
@@ -114,12 +116,14 @@ export class QuizPlayerComponent implements OnInit, OnDestroy {
           } else {
             this.error = 'You are not enrolled in this course';
             this.isLoading = false;
+            this.cdr.markForCheck();
           }
         },
         error: (error) => {
           this.logger.error('Error loading enrollment:', error);
           this.error = 'Failed to verify enrollment';
           this.isLoading = false;
+          this.cdr.markForCheck();
         }
       });
   }
@@ -132,11 +136,13 @@ export class QuizPlayerComponent implements OnInit, OnDestroy {
           this.quiz = quiz;
           this.startQuizAttempt();
           this.isLoading = false;
+          this.cdr.markForCheck();
         },
         error: (error) => {
           this.logger.error('Error loading quiz:', error);
           this.error = 'Failed to load quiz';
           this.isLoading = false;
+          this.cdr.markForCheck();
         }
       });
   }
@@ -147,6 +153,7 @@ export class QuizPlayerComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (attempt) => {
           this.currentAttempt = attempt;
+          this.cdr.markForCheck();
 
           // Start timer if quiz has time limit
           if (this.quiz?.timeLimit) {
@@ -157,6 +164,7 @@ export class QuizPlayerComponent implements OnInit, OnDestroy {
         error: (error) => {
           this.logger.error('Error starting quiz attempt:', error);
           this.error = 'Failed to start quiz';
+          this.cdr.markForCheck();
         }
       });
   }
@@ -165,6 +173,7 @@ export class QuizPlayerComponent implements OnInit, OnDestroy {
     this.timerInterval = setInterval(() => {
       if (this.timeRemaining !== null && this.timeRemaining > 0) {
         this.timeRemaining--;
+        this.cdr.markForCheck();
       } else if (this.timeRemaining === 0) {
         // Time's up - auto submit
         this.submitQuiz();
@@ -195,6 +204,7 @@ export class QuizPlayerComponent implements OnInit, OnDestroy {
       // Single select
       this.userAnswers.set(questionId, [optionId]);
     }
+    this.cdr.markForCheck();
   }
 
   isOptionSelected(questionId: number, optionId: number): boolean {
@@ -210,17 +220,20 @@ export class QuizPlayerComponent implements OnInit, OnDestroy {
   nextQuestion(): void {
     if (this.quiz && this.currentQuestionIndex < this.quiz.questions.length - 1) {
       this.currentQuestionIndex++;
+      this.cdr.markForCheck();
     }
   }
 
   previousQuestion(): void {
     if (this.currentQuestionIndex > 0) {
       this.currentQuestionIndex--;
+      this.cdr.markForCheck();
     }
   }
 
   goToQuestion(index: number): void {
     this.currentQuestionIndex = index;
+    this.cdr.markForCheck();
   }
 
   getAnsweredQuestionsCount(): number {
@@ -246,6 +259,7 @@ export class QuizPlayerComponent implements OnInit, OnDestroy {
     }
 
     this.isSubmitting = true;
+    this.cdr.markForCheck();
 
     // Stop timer
     if (this.timerInterval) {
@@ -275,6 +289,7 @@ export class QuizPlayerComponent implements OnInit, OnDestroy {
           this.logger.error('Error submitting quiz:', error);
           alert('Failed to submit quiz. Please try again.');
           this.isSubmitting = false;
+          this.cdr.markForCheck();
         }
       });
   }

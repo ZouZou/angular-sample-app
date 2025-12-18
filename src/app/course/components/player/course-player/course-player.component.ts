@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, HostListener, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -49,6 +49,7 @@ export class CoursePlayerComponent implements OnInit, OnDestroy {
   private progressService = inject(ProgressService);
   private authService = inject(AuthService);
   private logger = inject(LoggerService);
+  private cdr = inject(ChangeDetectorRef);
 
   course: Course | null = null;
   sections: CourseSection[] = [];
@@ -113,6 +114,7 @@ export class CoursePlayerComponent implements OnInit, OnDestroy {
   loadCourseData(): void {
     this.isLoading = true;
     this.error = null;
+    this.cdr.markForCheck();
 
     combineLatest([
       this.courseService.getCourse(this.courseId),
@@ -144,11 +146,13 @@ export class CoursePlayerComponent implements OnInit, OnDestroy {
         }
 
         this.isLoading = false;
+        this.cdr.markForCheck();
       },
       error: (error) => {
         this.logger.error('Error loading course data:', error);
         this.error = 'Failed to load course. Please try again.';
         this.isLoading = false;
+        this.cdr.markForCheck();
       }
     });
   }
@@ -160,9 +164,11 @@ export class CoursePlayerComponent implements OnInit, OnDestroy {
         .subscribe({
           next: (lessonIds) => {
             this.completedLessonIds = lessonIds;
+            this.cdr.markForCheck();
           },
           error: (error) => {
             this.logger.error('Error loading progress:', error);
+            this.cdr.markForCheck();
           }
         });
     }
@@ -170,6 +176,7 @@ export class CoursePlayerComponent implements OnInit, OnDestroy {
 
   selectLesson(lesson: Lesson): void {
     this.currentLesson = lesson;
+    this.cdr.markForCheck();
 
     // Update last accessed date
     if (this.enrollment) {
@@ -258,6 +265,7 @@ export class CoursePlayerComponent implements OnInit, OnDestroy {
 
   toggleSidebar(): void {
     this.sidebarCollapsed = !this.sidebarCollapsed;
+    this.cdr.markForCheck();
   }
 
   isSectionExpanded(sectionIndex: number): boolean {
