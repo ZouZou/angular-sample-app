@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewEncapsulation, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewEncapsulation, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
@@ -52,6 +52,7 @@ export class LessonViewerComponent implements OnInit, OnDestroy {
   private sanitizer = inject(DomSanitizer);
   private notificationService = inject(NotificationService);
   private logger = inject(LoggerService);
+  private cdr = inject(ChangeDetectorRef);
 
   lesson: Lesson | null = null;
   isLoading = true;
@@ -103,6 +104,7 @@ export class LessonViewerComponent implements OnInit, OnDestroy {
   loadLesson(): void {
     this.isLoading = true;
     this.error = null;
+    this.cdr.markForCheck();
 
     // Get enrollment first
     this.enrollmentService.getEnrollment(this.userId, this.courseId)
@@ -115,12 +117,14 @@ export class LessonViewerComponent implements OnInit, OnDestroy {
           } else {
             this.error = 'You are not enrolled in this course';
             this.isLoading = false;
+            this.cdr.markForCheck();
           }
         },
         error: (error) => {
           this.logger.error('Error loading enrollment:', error);
           this.error = 'Failed to verify enrollment';
           this.isLoading = false;
+          this.cdr.markForCheck();
         }
       });
   }
@@ -141,15 +145,18 @@ export class LessonViewerComponent implements OnInit, OnDestroy {
             // Check if lesson is completed
             this.checkCompletion();
             this.isLoading = false;
+            this.cdr.markForCheck();
           } else {
             this.error = 'Lesson not found';
             this.isLoading = false;
+            this.cdr.markForCheck();
           }
         },
         error: (error) => {
           this.logger.error('Error loading lesson:', error);
           this.error = 'Failed to load lesson';
           this.isLoading = false;
+          this.cdr.markForCheck();
         }
       });
   }
@@ -161,11 +168,13 @@ export class LessonViewerComponent implements OnInit, OnDestroy {
         next: (progress) => {
           this.isCompleted = progress?.completed || false;
           this.lessonNotes = progress?.notes || '';
+          this.cdr.markForCheck();
         },
         error: (error) => {
           this.logger.error('Error checking completion:', error);
           this.isCompleted = false;
           this.lessonNotes = '';
+          this.cdr.markForCheck();
         }
       });
   }
@@ -178,6 +187,7 @@ export class LessonViewerComponent implements OnInit, OnDestroy {
       .subscribe({
         next: () => {
           this.isCompleted = true;
+          this.cdr.markForCheck();
 
           // Update enrollment progress
           this.updateEnrollmentProgress();
@@ -185,6 +195,7 @@ export class LessonViewerComponent implements OnInit, OnDestroy {
         error: (error) => {
           this.logger.error('Error marking lesson as complete:', error);
           alert('Failed to mark lesson as complete. Please try again.');
+          this.cdr.markForCheck();
         }
       });
   }
