@@ -1,10 +1,12 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { HttpClient, HttpErrorResponse, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { HttpClient, HttpErrorResponse, HttpRequest, HttpHandlerFn, HttpResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { AuthInterceptor } from './auth.interceptor';
+import { authInterceptorFn } from './auth.interceptor';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { of, throwError } from 'rxjs';
 
-describe('AuthInterceptor', () => {
+describe('authInterceptorFn', () => {
   let httpClient: HttpClient;
   let httpMock: HttpTestingController;
   let router: jasmine.SpyObj<Router>;
@@ -15,14 +17,10 @@ describe('AuthInterceptor', () => {
     const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
 
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
       providers: [
         { provide: Router, useValue: routerSpy },
-        {
-          provide: HTTP_INTERCEPTORS,
-          useClass: AuthInterceptor,
-          multi: true
-        }
+        provideHttpClient(withInterceptors([authInterceptorFn])),
+        provideHttpClientTesting()
       ]
     });
 
@@ -412,6 +410,57 @@ describe('AuthInterceptor', () => {
 
       const req = httpMock.expectOne(testUrl);
       req.flush({ message: 'Not Found' }, { status: 404, statusText: 'Not Found' });
+    });
+  });
+
+  describe('Direct Interceptor Function Tests', () => {
+    it('should add authorization header when token exists', (done) => {
+      localStorage.setItem('token', mockToken);
+
+      TestBed.runInInjectionContext(() => {
+        const mockRequest = new HttpRequest('GET', testUrl);
+        const next: HttpHandlerFn = (req) => {
+          expect(req.headers.get('Authorization')).toBe(`Bearer ${mockToken}`);
+          return of(new HttpResponse({ status: 200 }));
+        };
+
+        authInterceptorFn(mockRequest, next).subscribe(() => done());
+      });
+    });
+
+    it('should not add header when no token', (done) => {
+      TestBed.runInInjectionContext(() => {
+        const mockRequest = new HttpRequest('GET', testUrl);
+        const next: HttpHandlerFn = (req) => {
+          expect(req.headers.has('Authorization')).toBe(false);
+          return of(new HttpResponse({ status: 200 }));
+        };
+
+        authInterceptorFn(mockRequest, next).subscribe(() => done());
+      });
+    });
+
+    it('should handle 401 errors directly', (done) => {
+      localStorage.setItem('token', mockToken);
+      localStorage.setItem('user', JSON.stringify({ id: 1 }));
+
+      TestBed.runInInjectionContext(() => {
+        const mockRequest = new HttpRequest('GET', testUrl);
+        const next: HttpHandlerFn = () => {
+          return throwError(() => new HttpErrorResponse({ status: 401 }));
+        };
+
+        authInterceptorFn(mockRequest, next).subscribe(
+          () => fail('should have failed'),
+          (error) => {
+            expect(error.status).toBe(401);
+            expect(localStorage.getItem('token')).toBeNull();
+            expect(localStorage.getItem('user')).toBeNull();
+            expect(router.navigate).toHaveBeenCalledWith(['/courses']);
+            done();
+          }
+        );
+      });
     });
   });
 });

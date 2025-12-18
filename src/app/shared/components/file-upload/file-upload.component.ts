@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, HostListener } from '@angular/core';
+import { Component, input, output, HostListener, ChangeDetectionStrategy } from '@angular/core';
 
 export interface UploadedFile {
   file: File;
@@ -13,14 +13,15 @@ export interface UploadedFile {
   templateUrl: './file-upload.component.html',
   styleUrls: ['./file-upload.component.css'],
   standalone: false
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FileUploadComponent {
-  @Input() accept: string = '*';
-  @Input() multiple: boolean = false;
-  @Input() maxSize: number = 5 * 1024 * 1024; // 5MB default
-  @Input() maxFiles: number = 5;
-  @Output() filesSelected = new EventEmitter<File[]>();
-  @Output() fileRemoved = new EventEmitter<File>();
+  accept = input<string>('*');
+  multiple = input<boolean>(false);
+  maxSize = input<number>(5 * 1024 * 1024); // 5MB default
+  maxFiles = input<number>(5);
+  filesSelected = output<File[]>();
+  fileRemoved = output<File>();
 
   uploadedFiles: UploadedFile[] = [];
   isDragOver = false;
@@ -60,13 +61,13 @@ export class FileUploadComponent {
 
   private handleFiles(files: File[]): void {
     // Validate file count
-    if (!this.multiple && files.length > 1) {
+    if (!this.multiple() && files.length > 1) {
       alert('Only one file is allowed');
       return;
     }
 
-    if (this.uploadedFiles.length + files.length > this.maxFiles) {
-      alert(`Maximum ${this.maxFiles} files allowed`);
+    if (this.uploadedFiles.length + files.length > this.maxFiles()) {
+      alert(`Maximum ${this.maxFiles()} files allowed`);
       return;
     }
 
@@ -75,8 +76,8 @@ export class FileUploadComponent {
 
     files.forEach(file => {
       // Validate file size
-      if (file.size > this.maxSize) {
-        alert(`File "${file.name}" exceeds maximum size of ${this.formatFileSize(this.maxSize)}`);
+      if (file.size > this.maxSize()) {
+        alert(`File "${file.name}" exceeds maximum size of ${this.formatFileSize(this.maxSize())}`);
         return;
       }
 

@@ -1,5 +1,5 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { LoggerService } from './shared/services/logger.service';
@@ -8,11 +8,8 @@ import { LoggerService } from './shared/services/logger.service';
   providedIn: 'root'
 })
 export class HttpService {
-
-  constructor(
-    private http: HttpClient,
-    private logger: LoggerService
-  ) { }
+  private http = inject(HttpClient);
+  private logger = inject(LoggerService);
 
   /**
    * Performs an HTTP GET request to the specified URL

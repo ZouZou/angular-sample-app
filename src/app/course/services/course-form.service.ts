@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Course } from '../models/course.interface';
 
@@ -6,7 +6,7 @@ import { Course } from '../models/course.interface';
   providedIn: 'root'
 })
 export class CourseFormService {
-  constructor(private formBuilder: FormBuilder) {}
+  private formBuilder = inject(FormBuilder);
 
   createCourseForm(): FormGroup {
     return this.formBuilder.group({

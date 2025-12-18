@@ -1,6 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule, ActivatedRoute, Router } from '@angular/router';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatListModule } from '@angular/material/list';
 import { CourseService } from '../../services/course.service';
 import { CurriculumService } from '../../services/curriculum.service';
 import { EnrollmentService } from '../../services/enrollment.service';
@@ -16,9 +24,32 @@ import { LoggerService } from '../../../shared/services/logger.service';
   selector: 'app-course-detail',
   templateUrl: './course-detail.component.html',
   styleUrls: ['./course-detail.component.css'],
-  standalone: false
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatCardModule,
+    MatIconModule,
+    MatProgressSpinnerModule,
+    MatExpansionModule,
+    MatChipsModule,
+    MatListModule
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CourseDetailComponent implements OnInit {
+  private courseService = inject(CourseService);
+  private curriculumService = inject(CurriculumService);
+  private enrollmentService = inject(EnrollmentService);
+  private authService = inject(AuthService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private dialog = inject(MatDialog);
+  private notificationService = inject(NotificationService);
+  private logger = inject(LoggerService);
+
   course: Course | null = null;
   enrollment: Enrollment | null = null;
   sections: CourseSection[] = [];
@@ -26,18 +57,6 @@ export class CourseDetailComponent implements OnInit {
   isEnrolling = false;
   isLoadingCurriculum = false;
   error: string | null = null;
-
-  constructor(
-    private courseService: CourseService,
-    private curriculumService: CurriculumService,
-    private enrollmentService: EnrollmentService,
-    private authService: AuthService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private dialog: MatDialog,
-    private notificationService: NotificationService,
-    private logger: LoggerService
-  ) {}
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');

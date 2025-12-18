@@ -1,5 +1,14 @@
-import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit, OnDestroy, ViewEncapsulation, inject, ChangeDetectionStrategy } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { RouterModule, ActivatedRoute, Router } from '@angular/router';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
@@ -10,15 +19,40 @@ import { AuthService } from '../../../services/auth.service';
 import { NotificationService } from '../../../../shared/services/notification.service';
 import { LoggerService } from '../../../../shared/services/logger.service';
 import { Lesson } from '../../../models/curriculum.interface';
+import { MarkdownPipe } from '../../../pipes/markdown.pipe';
 
 @Component({
   selector: 'app-lesson-viewer',
   templateUrl: './lesson-viewer.component.html',
   styleUrls: ['./lesson-viewer.component.css'],
-  standalone: false,
-  encapsulation: ViewEncapsulation.None
+  standalone: true,
+  encapsulation: ViewEncapsulation.None,
+  imports: [
+    CommonModule,
+    FormsModule,
+    RouterModule,
+    MatCardModule,
+    MatButtonModule,
+    MatIconModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatProgressSpinnerModule,
+    MatExpansionModule,
+    MarkdownPipe
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LessonViewerComponent implements OnInit, OnDestroy {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private curriculumService = inject(CurriculumService);
+  private progressService = inject(ProgressService);
+  private enrollmentService = inject(EnrollmentService);
+  private authService = inject(AuthService);
+  private sanitizer = inject(DomSanitizer);
+  private notificationService = inject(NotificationService);
+  private logger = inject(LoggerService);
+
   lesson: Lesson | null = null;
   isLoading = true;
   isCompleted = false;
@@ -31,18 +65,6 @@ export class LessonViewerComponent implements OnInit, OnDestroy {
   private lessonId!: number;
   private userId!: number;
   private enrollmentId!: number;
-
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private curriculumService: CurriculumService,
-    private progressService: ProgressService,
-    private enrollmentService: EnrollmentService,
-    private authService: AuthService,
-    private sanitizer: DomSanitizer,
-    private notificationService: NotificationService,
-    private logger: LoggerService
-  ) {}
 
   ngOnInit(): void {
     this.userId = this.authService.currentUserId || 1;

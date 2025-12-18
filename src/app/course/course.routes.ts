@@ -1,5 +1,4 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 import { CourseListComponent } from './components/course-list/course-list.component';
 import { CourseFormComponent } from './components/course-form/course-form.component';
 import { CourseDetailComponent } from './components/course-detail/course-detail.component';
@@ -7,9 +6,9 @@ import { CoursePlayerComponent } from './components/player/course-player/course-
 import { LessonViewerComponent } from './components/player/lesson-viewer/lesson-viewer.component';
 import { QuizPlayerComponent } from './components/quiz/quiz-player/quiz-player.component';
 import { QuizResultComponent } from './components/quiz/quiz-result/quiz-result.component';
-import { AdminGuard } from '../core/guards/admin.guard';
+import { adminGuard } from '../core/guards/admin.guard';
 
-const routes: Routes = [
+export const COURSE_ROUTES: Routes = [
   {
     path: '',
     component: CourseListComponent
@@ -17,7 +16,7 @@ const routes: Routes = [
   {
     path: 'new',
     component: CourseFormComponent,
-    canActivate: [AdminGuard]
+    canActivate: [adminGuard]
   },
   {
     path: ':id',
@@ -26,7 +25,7 @@ const routes: Routes = [
   {
     path: ':id/edit',
     component: CourseFormComponent,
-    canActivate: [AdminGuard]
+    canActivate: [adminGuard]
   },
   {
     path: ':id/learn',
@@ -47,9 +46,3 @@ const routes: Routes = [
     ]
   }
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
-})
-export class CourseRoutingModule { }

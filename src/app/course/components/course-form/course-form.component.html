@@ -7,116 +7,148 @@
   </div>
 
   <!-- Loading State -->
-  <div *ngIf="isLoading" class="loading">
-    <mat-spinner></mat-spinner>
-    <p>Loading course...</p>
-  </div>
+  @if (isLoading) {
+    <div class="loading">
+      <mat-spinner></mat-spinner>
+      <p>Loading course...</p>
+    </div>
+  }
 
   <!-- Error State -->
-  <div *ngIf="error && !isLoading" class="error">
-    <mat-icon color="warn">error</mat-icon>
-    <p>{{ error }}</p>
-  </div>
+  @if (error && !isLoading) {
+    <div class="error">
+      <mat-icon color="warn">error</mat-icon>
+      <p>{{ error }}</p>
+    </div>
+  }
 
   <!-- Course Form -->
-  <form *ngIf="!isLoading" [formGroup]="courseForm" (ngSubmit)="onSubmit()" class="course-form">
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title>Course Information</mat-card-title>
-      </mat-card-header>
+  @if (!isLoading) {
+    <form [formGroup]="courseForm" (ngSubmit)="onSubmit()" class="course-form">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Course Information</mat-card-title>
+        </mat-card-header>
 
-      <mat-card-content>
-        <!-- Title -->
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Course Title</mat-label>
-          <input matInput formControlName="title" placeholder="e.g., Angular Fundamentals">
-          <mat-error *ngIf="hasError('title')">{{ getErrorMessage('title') }}</mat-error>
-        </mat-form-field>
-
-        <!-- Description -->
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Description</mat-label>
-          <textarea matInput formControlName="description" rows="4"
-                    placeholder="Describe what students will learn in this course..."></textarea>
-          <mat-error *ngIf="hasError('description')">{{ getErrorMessage('description') }}</mat-error>
-          <mat-hint align="end">{{ courseForm.get('description')?.value?.length || 0 }} / 1000</mat-hint>
-        </mat-form-field>
-
-        <!-- Instructor -->
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Instructor</mat-label>
-          <input matInput formControlName="instructor" placeholder="e.g., John Doe">
-          <mat-icon matPrefix>person</mat-icon>
-          <mat-error *ngIf="hasError('instructor')">{{ getErrorMessage('instructor') }}</mat-error>
-        </mat-form-field>
-
-        <!-- Category and Level -->
-        <div class="form-row">
-          <mat-form-field appearance="outline" class="half-width">
-            <mat-label>Category</mat-label>
-            <mat-select formControlName="category">
-              <mat-option *ngFor="let category of categories" [value]="category">
-                {{ category }}
-              </mat-option>
-            </mat-select>
-            <mat-icon matPrefix>category</mat-icon>
-            <mat-error *ngIf="hasError('category')">{{ getErrorMessage('category') }}</mat-error>
+        <mat-card-content>
+          <!-- Title -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Course Title</mat-label>
+            <input matInput formControlName="title" placeholder="e.g., Angular Fundamentals">
+            @if (hasError('title')) {
+              <mat-error>{{ getErrorMessage('title') }}</mat-error>
+            }
           </mat-form-field>
 
-          <mat-form-field appearance="outline" class="half-width">
-            <mat-label>Level</mat-label>
-            <mat-select formControlName="level">
-              <mat-option *ngFor="let level of levels" [value]="level">
-                {{ level }}
-              </mat-option>
-            </mat-select>
-            <mat-icon matPrefix>signal_cellular_alt</mat-icon>
-            <mat-error *ngIf="hasError('level')">{{ getErrorMessage('level') }}</mat-error>
-          </mat-form-field>
-        </div>
-
-        <!-- Duration and Price -->
-        <div class="form-row">
-          <mat-form-field appearance="outline" class="half-width">
-            <mat-label>Duration (hours)</mat-label>
-            <input matInput type="number" formControlName="duration" min="0">
-            <mat-icon matPrefix>access_time</mat-icon>
-            <mat-error *ngIf="hasError('duration')">{{ getErrorMessage('duration') }}</mat-error>
+          <!-- Description -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Description</mat-label>
+            <textarea matInput formControlName="description" rows="4"
+                      placeholder="Describe what students will learn in this course..."></textarea>
+            @if (hasError('description')) {
+              <mat-error>{{ getErrorMessage('description') }}</mat-error>
+            }
+            <mat-hint align="end">{{ courseForm.get('description')?.value?.length || 0 }} / 1000</mat-hint>
           </mat-form-field>
 
-          <mat-form-field appearance="outline" class="half-width">
-            <mat-label>Price (USD)</mat-label>
-            <input matInput type="number" formControlName="price" min="0" step="0.01">
-            <span matPrefix>$&nbsp;</span>
-            <mat-error *ngIf="hasError('price')">{{ getErrorMessage('price') }}</mat-error>
+          <!-- Instructor -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Instructor</mat-label>
+            <input matInput formControlName="instructor" placeholder="e.g., John Doe">
+            <mat-icon matPrefix>person</mat-icon>
+            @if (hasError('instructor')) {
+              <mat-error>{{ getErrorMessage('instructor') }}</mat-error>
+            }
           </mat-form-field>
-        </div>
 
-        <!-- Thumbnail URL (Optional) -->
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Thumbnail URL (Optional)</mat-label>
-          <input matInput formControlName="thumbnailUrl" placeholder="https://example.com/image.jpg">
-          <mat-icon matPrefix>image</mat-icon>
-          <mat-error *ngIf="hasError('thumbnailUrl')">{{ getErrorMessage('thumbnailUrl') }}</mat-error>
-          <mat-hint>Provide a URL to an image for the course thumbnail</mat-hint>
-        </mat-form-field>
-      </mat-card-content>
+          <!-- Category and Level -->
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Category</mat-label>
+              <mat-select formControlName="category">
+                @for (category of categories; track category) {
+                  <mat-option [value]="category">
+                    {{ category }}
+                  </mat-option>
+                }
+              </mat-select>
+              <mat-icon matPrefix>category</mat-icon>
+              @if (hasError('category')) {
+                <mat-error>{{ getErrorMessage('category') }}</mat-error>
+              }
+            </mat-form-field>
 
-      <mat-card-actions class="form-actions">
-        <button mat-button type="button" (click)="onCancel()" [disabled]="isSaving">
-          Cancel
-        </button>
-        <button mat-raised-button color="primary" type="submit" [disabled]="courseForm.invalid || isSaving">
-          <mat-icon *ngIf="!isSaving">{{ isEditMode ? 'save' : 'add' }}</mat-icon>
-          <mat-spinner *ngIf="isSaving" diameter="20"></mat-spinner>
-          {{ isSaving ? 'Saving...' : (isEditMode ? 'Update Course' : 'Create Course') }}
-        </button>
-      </mat-card-actions>
-    </mat-card>
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Level</mat-label>
+              <mat-select formControlName="level">
+                @for (level of levels; track level) {
+                  <mat-option [value]="level">
+                    {{ level }}
+                  </mat-option>
+                }
+              </mat-select>
+              <mat-icon matPrefix>signal_cellular_alt</mat-icon>
+              @if (hasError('level')) {
+                <mat-error>{{ getErrorMessage('level') }}</mat-error>
+              }
+            </mat-form-field>
+          </div>
 
-    <!-- Curriculum Management (only in edit mode) -->
-    <app-curriculum-manager *ngIf="courseId" [courseId]="courseId"></app-curriculum-manager>
-  </form>
+          <!-- Duration and Price -->
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Duration (hours)</mat-label>
+              <input matInput type="number" formControlName="duration" min="0">
+              <mat-icon matPrefix>access_time</mat-icon>
+              @if (hasError('duration')) {
+                <mat-error>{{ getErrorMessage('duration') }}</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Price (USD)</mat-label>
+              <input matInput type="number" formControlName="price" min="0" step="0.01">
+              <span matPrefix>$&nbsp;</span>
+              @if (hasError('price')) {
+                <mat-error>{{ getErrorMessage('price') }}</mat-error>
+              }
+            </mat-form-field>
+          </div>
+
+          <!-- Thumbnail URL (Optional) -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Thumbnail URL (Optional)</mat-label>
+            <input matInput formControlName="thumbnailUrl" placeholder="https://example.com/image.jpg">
+            <mat-icon matPrefix>image</mat-icon>
+            @if (hasError('thumbnailUrl')) {
+              <mat-error>{{ getErrorMessage('thumbnailUrl') }}</mat-error>
+            }
+            <mat-hint>Provide a URL to an image for the course thumbnail</mat-hint>
+          </mat-form-field>
+        </mat-card-content>
+
+        <mat-card-actions class="form-actions">
+          <button mat-button type="button" (click)="onCancel()" [disabled]="isSaving">
+            Cancel
+          </button>
+          <button mat-raised-button color="primary" type="submit" [disabled]="courseForm.invalid || isSaving">
+            @if (!isSaving) {
+              <mat-icon>{{ isEditMode ? 'save' : 'add' }}</mat-icon>
+            }
+            @if (isSaving) {
+              <mat-spinner diameter="20"></mat-spinner>
+            }
+            {{ isSaving ? 'Saving...' : (isEditMode ? 'Update Course' : 'Create Course') }}
+          </button>
+        </mat-card-actions>
+      </mat-card>
+
+      <!-- Curriculum Management (only in edit mode) -->
+      @if (courseId) {
+        <app-curriculum-manager [courseId]="courseId"></app-curriculum-manager>
+      }
+    </form>
+  }
 
   <!-- Form Debug Info (only in development) -->
   <!-- <div class="debug-info">

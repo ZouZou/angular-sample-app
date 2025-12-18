@@ -1,5 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule, Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatTableModule } from '@angular/material/table';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatCardModule } from '@angular/material/card';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { AuthService } from '../course/services/auth.service';
 import { QuizService } from '../course/services/quiz.service';
 import { CourseService } from '../course/services/course.service';
@@ -23,12 +35,35 @@ interface AttemptWithDetails extends QuizAttempt {
 }
 
 @Component({
-  standalone: false,
+  standalone: true,
   selector: 'app-admin',
   templateUrl: './admin.component.html',
-  styleUrls: ['./admin.component.sass']
+  styleUrls: ['./admin.component.sass'],
+  imports: [
+    CommonModule,
+    RouterModule,
+    FormsModule,
+    MatTabsModule,
+    MatTableModule,
+    MatButtonModule,
+    MatIconModule,
+    MatProgressSpinnerModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatCardModule,
+    MatTooltipModule
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AdminComponent implements OnInit {
+  private authService = inject(AuthService);
+  private quizService = inject(QuizService);
+  private courseService = inject(CourseService);
+  private router = inject(Router);
+  private notificationService = inject(NotificationService);
+  private logger = inject(LoggerService);
+
   currentUser: User | null = null;
   selectedTab = 0;
 
@@ -56,15 +91,6 @@ export class AdminComponent implements OnInit {
 
   displayedUserColumns: string[] = ['id', 'name', 'email', 'role', 'actions'];
   displayedAttemptColumns: string[] = ['userName', 'courseTitle', 'quizTitle', 'score', 'percentage', 'passed', 'date', 'actions'];
-
-  constructor(
-    private authService: AuthService,
-    private quizService: QuizService,
-    private courseService: CourseService,
-    private router: Router,
-    private notificationService: NotificationService,
-    private logger: LoggerService
-  ) {}
 
   ngOnInit(): void {
     this.currentUser = this.authService.currentUserValue;

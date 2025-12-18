@@ -6,8 +6,6 @@ import { Observable, of } from 'rxjs';
 })
 export class ImageService {
 
-  constructor() { }
-
   /**
    * Search for images based on query
    * Uses Unsplash Source for demo purposes

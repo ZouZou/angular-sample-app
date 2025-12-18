@@ -1,5 +1,5 @@
 <div class="section-form">
-  <h3>{{ section?.id ? 'Edit Section' : 'Add New Section' }}</h3>
+  <h3>{{ section()?.id ? 'Edit Section' : 'Add New Section' }}</h3>
 
   <mat-form-field appearance="outline" class="full-width">
     <mat-label>Section Title</mat-label>
@@ -17,7 +17,7 @@
     <button mat-raised-button color="primary" (click)="onSave()"
             [disabled]="!sectionForm.title.trim()">
       <mat-icon>save</mat-icon>
-      {{ section?.id ? 'Update' : 'Create' }} Section
+      {{ section()?.id ? 'Update' : 'Create' }} Section
     </button>
   </div>
 </div>

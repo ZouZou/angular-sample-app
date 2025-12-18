@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -31,7 +31,8 @@ import { fadeInUp, scaleIn, shake } from '../../shared/animations/animations';
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
-  animations: [fadeInUp, scaleIn, shake]
+  animations: [fadeInUp, scaleIn, shake],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 /**
  * Handles user authentication and login functionality
@@ -47,6 +48,12 @@ import { fadeInUp, scaleIn, shake } from '../../shared/animations/animations';
  * ```
  */
 export class LoginComponent implements OnInit, OnDestroy {
+  private fb = inject(FormBuilder);
+  private authService = inject(AuthService);
+  private router = inject(Router);
+  private snackBar = inject(MatSnackBar);
+  private notificationService = inject(NotificationService);
+
   private destroy$ = new Subject<void>();
   loginForm!: FormGroup;
   loading = false;
@@ -58,14 +65,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     { role: 'Student', email: 'john@lms.com', password: 'student123' },
     { role: 'Instructor', email: 'jane@lms.com', password: 'instructor123' }
   ];
-
-  constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router,
-    private snackBar: MatSnackBar,
-    private notificationService: NotificationService
-  ) {}
 
   ngOnInit(): void {
     // Redirect if already logged in

@@ -1,13 +1,22 @@
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule, Router } from '@angular/router';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatChipsModule } from '@angular/material/chips';
 import { Observable, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { CourseService } from '../../services/course.service';
 import { AuthService } from '../../services/auth.service';
 import { Course } from '../../models/course.interface';
 import { ConfirmationDialogComponent } from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
+import { SkeletonCourseCardComponent } from '../../../shared/components/skeleton-course-card/skeleton-course-card.component';
 import { NotificationService } from '../../../shared/services/notification.service';
 import { LoggerService } from '../../../shared/services/logger.service';
 import { fadeInUp, staggerList } from '../../../shared/animations/animations';
@@ -16,9 +25,22 @@ import { fadeInUp, staggerList } from '../../../shared/animations/animations';
   selector: 'app-course-list',
   templateUrl: './course-list.component.html',
   styleUrls: ['./course-list.component.css'],
-  standalone: false,
+  standalone: true,
   animations: [fadeInUp, staggerList],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    CommonModule,
+    RouterModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatCardModule,
+    MatIconModule,
+    MatProgressSpinnerModule,
+    MatSelectModule,
+    MatFormFieldModule,
+    MatChipsModule,
+    SkeletonCourseCardComponent
+  ]
 })
 /**
  * Displays a filterable course catalog with administrative management actions
@@ -34,6 +56,15 @@ import { fadeInUp, staggerList } from '../../../shared/animations/animations';
  * ```
  */
 export class CourseListComponent implements OnInit, OnDestroy {
+  private courseService = inject(CourseService);
+  private authService = inject(AuthService);
+  private router = inject(Router);
+  private breakpointObserver = inject(BreakpointObserver);
+  private dialog = inject(MatDialog);
+  private notificationService = inject(NotificationService);
+  private cdr = inject(ChangeDetectorRef);
+  private logger = inject(LoggerService);
+
   private destroy$ = new Subject<void>();
   courses: Course[] = [];
   filteredCourses: Course[] = [];
@@ -49,17 +80,6 @@ export class CourseListComponent implements OnInit, OnDestroy {
   selectedLevel = 'All';
   categories = ['All', 'Web Development', 'Programming', 'Data Science', 'Design', 'Business'];
   levels = ['All', 'Beginner', 'Intermediate', 'Advanced'];
-
-  constructor(
-    private courseService: CourseService,
-    private authService: AuthService,
-    private router: Router,
-    private breakpointObserver: BreakpointObserver,
-    private dialog: MatDialog,
-    private notificationService: NotificationService,
-    private cdr: ChangeDetectorRef,
-    private logger: LoggerService
-  ) {}
 
   ngOnInit(): void {
     this.loadCourses();

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Enrollment } from '../models/enrollment.interface';
@@ -8,9 +8,9 @@ import { environment } from '../../../environments/environment';
   providedIn: 'root'
 })
 export class EnrollmentService {
-  private apiUrl = `${environment.apiUrl}/enrollments`;
+  private http = inject(HttpClient);
 
-  constructor(private http: HttpClient) { }
+  private apiUrl = `${environment.apiUrl}/enrollments`;
 
   /**
    * Enroll in a course

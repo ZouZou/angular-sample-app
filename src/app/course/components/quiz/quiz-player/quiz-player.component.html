@@ -1,161 +1,186 @@
 <div class="quiz-player-container">
   <!-- Loading State -->
-  <app-loading-spinner *ngIf="isLoading" message="Loading quiz..."></app-loading-spinner>
+  @if (isLoading) {
+    <app-loading-spinner message="Loading quiz..."></app-loading-spinner>
+  }
 
   <!-- Error State -->
-  <div *ngIf="error && !isLoading" class="error">
-    <mat-icon color="warn">error</mat-icon>
-    <p>{{ error }}</p>
-  </div>
+  @if (error && !isLoading) {
+    <div class="error">
+      <mat-icon color="warn">error</mat-icon>
+      <p>{{ error }}</p>
+    </div>
+  }
 
   <!-- Quiz Content -->
-  <div *ngIf="!isLoading && !error && quiz" class="quiz-content">
-    <!-- Quiz Header -->
-    <div class="quiz-header">
-      <div class="quiz-header-top">
-        <button mat-icon-button (click)="exitQuiz()" aria-label="Exit quiz" class="exit-button">
-          <mat-icon>close</mat-icon>
-        </button>
-      </div>
-      <div class="quiz-info">
-        <h1>{{ quiz.title }}</h1>
-        <p *ngIf="quiz.description">{{ quiz.description }}</p>
-        <div class="quiz-meta">
-          <span>
-            <mat-icon>quiz</mat-icon>
-            {{ getTotalQuestions() }} questions
-          </span>
-          <span>
-            <mat-icon>stars</mat-icon>
-            Passing score: {{ quiz.passingScore }}%
-          </span>
-          <span *ngIf="timeRemaining !== null" [class.time-warning]="timeRemaining < 60">
-            <mat-icon>timer</mat-icon>
-            Time remaining: {{ getTimerDisplay() }}
-          </span>
+  @if (!isLoading && !error && quiz) {
+    <div class="quiz-content">
+      <!-- Quiz Header -->
+      <div class="quiz-header">
+        <div class="quiz-header-top">
+          <button mat-icon-button (click)="exitQuiz()" aria-label="Exit quiz" class="exit-button">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+        <div class="quiz-info">
+          <h1>{{ quiz.title }}</h1>
+          @if (quiz.description) {
+            <p>{{ quiz.description }}</p>
+          }
+          <div class="quiz-meta">
+            <span>
+              <mat-icon>quiz</mat-icon>
+              {{ getTotalQuestions() }} questions
+            </span>
+            <span>
+              <mat-icon>stars</mat-icon>
+              Passing score: {{ quiz.passingScore }}%
+            </span>
+            @if (timeRemaining !== null) {
+              <span [class.time-warning]="timeRemaining < 60">
+                <mat-icon>timer</mat-icon>
+                Time remaining: {{ getTimerDisplay() }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <div class="question-progress">
+          <span>Question {{ currentQuestionIndex + 1 }} of {{ getTotalQuestions() }}</span>
+          <mat-progress-bar
+            mode="determinate"
+            [value]="((currentQuestionIndex + 1) / getTotalQuestions()) * 100">
+          </mat-progress-bar>
         </div>
       </div>
 
-      <div class="question-progress">
-        <span>Question {{ currentQuestionIndex + 1 }} of {{ getTotalQuestions() }}</span>
-        <mat-progress-bar
-          mode="determinate"
-          [value]="((currentQuestionIndex + 1) / getTotalQuestions()) * 100">
-        </mat-progress-bar>
-      </div>
-    </div>
+      <!-- Question Display -->
+      @if (getCurrentQuestion(); as question) {
+        <div class="question-container">
+          <div class="question-header">
+            <span class="question-number">Question {{ currentQuestionIndex + 1 }}</span>
+            <span class="question-points">{{ question.points }} points</span>
+          </div>
 
-    <!-- Question Display -->
-    <div *ngIf="getCurrentQuestion() as question" class="question-container">
-      <div class="question-header">
-        <span class="question-number">Question {{ currentQuestionIndex + 1 }}</span>
-        <span class="question-points">{{ question.points }} points</span>
-      </div>
+          <h2 class="question-text">{{ question.question }}</h2>
 
-      <h2 class="question-text">{{ question.question }}</h2>
+          <div class="options-container">
+            <!-- Multiple Choice / True-False -->
+            @if (question.type === 'multiple-choice' || question.type === 'true-false') {
+              <mat-radio-group class="options-list">
+                @for (option of question.options; track option.id) {
+                  <mat-radio-button
+                    [value]="option.id"
+                    [checked]="isOptionSelected(question.id!, option.id!)"
+                    (change)="selectAnswer(question.id!, option.id!, false)"
+                    class="option-item">
+                    {{ option.text }}
+                  </mat-radio-button>
+                }
+              </mat-radio-group>
+            }
 
-      <div class="options-container">
-        <!-- Multiple Choice / True-False -->
-        <mat-radio-group
-          *ngIf="question.type === 'multiple-choice' || question.type === 'true-false'"
-          class="options-list">
-          <mat-radio-button
-            *ngFor="let option of question.options"
-            [value]="option.id"
-            [checked]="isOptionSelected(question.id!, option.id!)"
-            (change)="selectAnswer(question.id!, option.id!, false)"
-            class="option-item">
-            {{ option.text }}
-          </mat-radio-button>
-        </mat-radio-group>
+            <!-- Multi-Select -->
+            @if (question.type === 'multi-select') {
+              <div class="options-list">
+                @for (option of question.options; track option.id) {
+                  <mat-checkbox
+                    [checked]="isOptionSelected(question.id!, option.id!)"
+                    (change)="selectAnswer(question.id!, option.id!, true)"
+                    class="option-item">
+                    {{ option.text }}
+                  </mat-checkbox>
+                }
+                <p class="multi-select-hint">Select all that apply</p>
+              </div>
+            }
+          </div>
 
-        <!-- Multi-Select -->
-        <div *ngIf="question.type === 'multi-select'" class="options-list">
-          <mat-checkbox
-            *ngFor="let option of question.options"
-            [checked]="isOptionSelected(question.id!, option.id!)"
-            (change)="selectAnswer(question.id!, option.id!, true)"
-            class="option-item">
-            {{ option.text }}
-          </mat-checkbox>
-          <p class="multi-select-hint">Select all that apply</p>
+          <!-- Navigation Buttons -->
+          <div class="question-navigation">
+            <button
+              mat-button
+              (click)="previousQuestion()"
+              [disabled]="currentQuestionIndex === 0">
+              <mat-icon>arrow_back</mat-icon>
+              Previous
+            </button>
+
+            <div class="answered-indicator">
+              @if (isQuestionAnswered(question.id!)) {
+                <mat-icon>check_circle</mat-icon>
+              }
+              <span>{{ getAnsweredQuestionsCount() }} / {{ getTotalQuestions() }} answered</span>
+            </div>
+
+            @if (currentQuestionIndex < getTotalQuestions() - 1) {
+              <button
+                mat-raised-button
+                color="primary"
+                (click)="nextQuestion()">
+                Next
+                <mat-icon>arrow_forward</mat-icon>
+              </button>
+            }
+
+            @if (currentQuestionIndex === getTotalQuestions() - 1) {
+              <button
+                mat-raised-button
+                color="accent"
+                (click)="submitQuiz()"
+                [disabled]="isSubmitting">
+                @if (isSubmitting) {
+                  <mat-spinner diameter="20"></mat-spinner>
+                }
+                @if (!isSubmitting) {
+                  <span>Submit Quiz</span>
+                }
+              </button>
+            }
+          </div>
         </div>
-      </div>
+      }
 
-      <!-- Navigation Buttons -->
-      <div class="question-navigation">
-        <button
-          mat-button
-          (click)="previousQuestion()"
-          [disabled]="currentQuestionIndex === 0">
-          <mat-icon>arrow_back</mat-icon>
-          Previous
-        </button>
-
-        <div class="answered-indicator">
-          <mat-icon *ngIf="isQuestionAnswered(question.id!)">check_circle</mat-icon>
-          <span>{{ getAnsweredQuestionsCount() }} / {{ getTotalQuestions() }} answered</span>
+      <!-- Question Navigator -->
+      <div class="question-navigator">
+        <h3>Questions</h3>
+        <div class="question-grid">
+          @for (question of quiz.questions; track question.id; let i = $index) {
+            <button
+              mat-mini-fab
+              [color]="isQuestionAnswered(question.id!) ? 'primary' : 'basic'"
+              [class.current]="i === currentQuestionIndex"
+              (click)="goToQuestion(i)">
+              {{ i + 1 }}
+            </button>
+          }
         </div>
 
-        <button
-          mat-raised-button
-          color="primary"
-          *ngIf="currentQuestionIndex < getTotalQuestions() - 1"
-          (click)="nextQuestion()">
-          Next
-          <mat-icon>arrow_forward</mat-icon>
-        </button>
+        <div class="legend">
+          <div class="legend-item">
+            <div class="legend-box answered"></div>
+            <span>Answered</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-box unanswered"></div>
+            <span>Unanswered</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-box current"></div>
+            <span>Current</span>
+          </div>
+        </div>
 
         <button
           mat-raised-button
           color="accent"
-          *ngIf="currentQuestionIndex === getTotalQuestions() - 1"
+          class="submit-button"
           (click)="submitQuiz()"
-          [disabled]="isSubmitting">
-          <mat-spinner *ngIf="isSubmitting" diameter="20"></mat-spinner>
-          <span *ngIf="!isSubmitting">Submit Quiz</span>
+          [disabled]="isSubmitting || !canSubmit()">
+          <mat-icon>send</mat-icon>
+          Submit Quiz
         </button>
       </div>
     </div>
-
-    <!-- Question Navigator -->
-    <div class="question-navigator">
-      <h3>Questions</h3>
-      <div class="question-grid">
-        <button
-          *ngFor="let question of quiz.questions; let i = index"
-          mat-mini-fab
-          [color]="isQuestionAnswered(question.id!) ? 'primary' : 'basic'"
-          [class.current]="i === currentQuestionIndex"
-          (click)="goToQuestion(i)">
-          {{ i + 1 }}
-        </button>
-      </div>
-
-      <div class="legend">
-        <div class="legend-item">
-          <div class="legend-box answered"></div>
-          <span>Answered</span>
-        </div>
-        <div class="legend-item">
-          <div class="legend-box unanswered"></div>
-          <span>Unanswered</span>
-        </div>
-        <div class="legend-item">
-          <div class="legend-box current"></div>
-          <span>Current</span>
-        </div>
-      </div>
-
-      <button
-        mat-raised-button
-        color="accent"
-        class="submit-button"
-        (click)="submitQuiz()"
-        [disabled]="isSubmitting || !canSubmit()">
-        <mat-icon>send</mat-icon>
-        Submit Quiz
-      </button>
-    </div>
-  </div>
+  }
 </div>

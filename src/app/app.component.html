@@ -9,20 +9,24 @@
 <input placeholder="user" [(ngModel)]="userObject.name"/>
 <input placeholder="user" [(ngModel)]="userObject.age"/>
 <input placeholder="user" [(ngModel)]="userObject.id"/>
-<ng-container *ngIf="showUser">
+@if (showUser) {
     <app-user [user]="userObject" (userEvent)="handleEvent($event)"></app-user>
-</ng-container>
-<ul *ngFor="let item of posts">
-    <li>{{item.userId}}</li>
-    <li>{{item.title}}</li>
-    <li>{{item.body}}</li>
-</ul>
-<ul *ngFor="let item of (postsAsync | async); let i = index">
-    <li>{{i}}</li>
-    <li>{{item.userId}}</li>
-    <li>{{item.title}}</li>
-    <li>{{item.body}}</li>
-</ul> -->
+}
+@for (item of posts; track $index) {
+    <ul>
+        <li>{{item.userId}}</li>
+        <li>{{item.title}}</li>
+        <li>{{item.body}}</li>
+    </ul>
+}
+@for (item of (postsAsync | async); track $index; let i = $index) {
+    <ul>
+        <li>{{i}}</li>
+        <li>{{item.userId}}</li>
+        <li>{{item.title}}</li>
+        <li>{{item.body}}</li>
+    </ul>
+} -->
 <!-- <a routerLink='/User'>User</a>
 <br/>
 <a routerLink='/Admin'>Admin</a>
@@ -31,19 +35,26 @@
     <input type="text" id="firstName" class="form-control"
     formControlName="firstName" required>
 
-    <div *ngIf="firstName?.invalid && (firstName?.dirty || firstName?.touched)"
-    class="alert alert-danger">
+    @if (firstName?.invalid && (firstName?.dirty || firstName?.touched)) {
+        <div class="alert alert-danger">
 
-        <div *ngIf="firstName?.errors?.required">
-            Name is required.
+            @if (firstName?.errors?.required) {
+                <div>
+                    Name is required.
+                </div>
+            }
+            @if (firstName?.errors?.minlength) {
+                <div>
+                    Name must be at least 2 characters long.
+                </div>
+            }
+            @if (firstName?.errors?.forbiddenName) {
+                <div>
+                    Name cannot be Bob.
+                </div>
+            }
         </div>
-        <div *ngIf="firstName?.errors?.minlength">
-            Name must be at least 2 characters long.
-        </div>
-        <div *ngIf="firstName?.errors?.forbiddenName">
-            Name cannot be Bob.
-        </div>
-    </div>
+    }
     <h3>Raised Buttons</h3>
     <div class="example-button-row">
         <button mat-raised-button>Basic</button>
@@ -60,4 +71,3 @@
 <input type="text" [formControl]="testProp" name="testProp">
 {{testProp.value}} -->
 <router-outlet></router-outlet>
-

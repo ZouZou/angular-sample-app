@@ -1,18 +1,47 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormGroup } from '@angular/forms';
+import { RouterModule, ActivatedRoute, Router } from '@angular/router';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatCardModule } from '@angular/material/card';
 import { CourseService } from '../../services/course.service';
 import { CourseFormService } from '../../services/course-form.service';
 import { Course } from '../../models/course.interface';
 import { LoggerService } from '../../../shared/services/logger.service';
+import { CurriculumManagerComponent } from './curriculum-manager/curriculum-manager.component';
 
 @Component({
   selector: 'app-course-form',
   templateUrl: './course-form.component.html',
   styleUrls: ['./course-form.component.css'],
-  standalone: false
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    RouterModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatIconModule,
+    MatProgressSpinnerModule,
+    MatCardModule,
+    CurriculumManagerComponent
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CourseFormComponent implements OnInit {
+  private courseService = inject(CourseService);
+  private courseFormService = inject(CourseFormService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private logger = inject(LoggerService);
+
   courseForm!: FormGroup;
   isEditMode = false;
   isLoading = false;
@@ -22,14 +51,6 @@ export class CourseFormComponent implements OnInit {
 
   categories = ['Web Development', 'Programming', 'Data Science', 'Design', 'Business', 'Marketing', 'Other'];
   levels: ('Beginner' | 'Intermediate' | 'Advanced')[] = ['Beginner', 'Intermediate', 'Advanced'];
-
-  constructor(
-    private courseService: CourseService,
-    private courseFormService: CourseFormService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private logger: LoggerService
-  ) {}
 
   ngOnInit(): void {
     this.initializeForm();

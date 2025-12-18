@@ -1,168 +1,187 @@
 <div class="course-player-container">
   <!-- Loading State -->
-  <div *ngIf="isLoading" class="loading">
-    <mat-spinner></mat-spinner>
-    <p>Loading course...</p>
-  </div>
+  @if (isLoading) {
+    <div class="loading">
+      <mat-spinner></mat-spinner>
+      <p>Loading course...</p>
+    </div>
+  }
 
   <!-- Error State -->
-  <div *ngIf="error && !isLoading" class="error">
-    <mat-icon color="warn">error</mat-icon>
-    <p>{{ error }}</p>
-    <button mat-raised-button color="primary" (click)="exitCourse()">Back to Course</button>
-  </div>
+  @if (error && !isLoading) {
+    <div class="error">
+      <mat-icon color="warn">error</mat-icon>
+      <p>{{ error }}</p>
+      <button mat-raised-button color="primary" (click)="exitCourse()">Back to Course</button>
+    </div>
+  }
 
   <!-- Course Player -->
-  <div *ngIf="!isLoading && !error && course" class="player-content">
-    <!-- Top Navigation Bar -->
-    <div class="top-nav-bar">
-      <div class="header-content">
-        <div class="nav-left">
-          <button mat-icon-button (click)="toggleSidebar()" class="sidebar-toggle" matTooltip="Toggle sidebar">
-            <mat-icon>menu</mat-icon>
-          </button>
-          <div class="course-info">
-            <h2>{{ course.title }}</h2>
-            <span class="current-lesson-breadcrumb" *ngIf="currentLesson">
-              <mat-icon>play_circle</mat-icon>
-              {{ currentLesson.title }}
-            </span>
+  @if (!isLoading && !error && course) {
+    <div class="player-content">
+      <!-- Top Navigation Bar -->
+      <div class="top-nav-bar">
+        <div class="header-content">
+          <div class="nav-left">
+            <button mat-icon-button (click)="toggleSidebar()" class="sidebar-toggle" matTooltip="Toggle sidebar">
+              <mat-icon>menu</mat-icon>
+            </button>
+            <div class="course-info">
+              <h2>{{ course.title }}</h2>
+              @if (currentLesson) {
+                <span class="current-lesson-breadcrumb">
+                  <mat-icon>play_circle</mat-icon>
+                  {{ currentLesson.title }}
+                </span>
+              }
+            </div>
           </div>
-        </div>
-        <div class="nav-right">
-          <div class="progress-indicator">
-            <span class="progress-text">{{ getCompletedLessons() }} / {{ getTotalLessons() }} lessons</span>
-            <mat-progress-bar
-              mode="determinate"
-              [value]="getProgressPercentage()"
-              class="mini-progress-bar">
-            </mat-progress-bar>
+          <div class="nav-right">
+            <div class="progress-indicator">
+              <span class="progress-text">{{ getCompletedLessons() }} / {{ getTotalLessons() }} lessons</span>
+              <mat-progress-bar
+                mode="determinate"
+                [value]="getProgressPercentage()"
+                class="mini-progress-bar">
+              </mat-progress-bar>
+            </div>
+            <button mat-button (click)="exitCourse()" class="exit-button">
+              <mat-icon>close</mat-icon>
+              Exit Course
+            </button>
           </div>
-          <button mat-button (click)="exitCourse()" class="exit-button">
-            <mat-icon>close</mat-icon>
-            Exit Course
-          </button>
         </div>
       </div>
-    </div>
 
-    <div class="player-main">
-      <!-- Sidebar Navigation -->
-      <div class="sidebar" [class.sidebar-collapsed]="sidebarCollapsed">
-        <div class="sidebar-header">
-          <div class="sidebar-title">
-            <mat-icon>list</mat-icon>
-            <h3>Course Content</h3>
+      <div class="player-main">
+        <!-- Sidebar Navigation -->
+        <div class="sidebar" [class.sidebar-collapsed]="sidebarCollapsed">
+          <div class="sidebar-header">
+            <div class="sidebar-title">
+              <mat-icon>list</mat-icon>
+              <h3>Course Content</h3>
+            </div>
+            <button mat-icon-button (click)="toggleSidebar()" class="collapse-button" matTooltip="Collapse sidebar">
+              <mat-icon>{{ sidebarCollapsed ? 'chevron_right' : 'chevron_left' }}</mat-icon>
+            </button>
           </div>
-          <button mat-icon-button (click)="toggleSidebar()" class="collapse-button" matTooltip="Collapse sidebar">
-            <mat-icon>{{ sidebarCollapsed ? 'chevron_right' : 'chevron_left' }}</mat-icon>
-          </button>
+
+          <div class="curriculum">
+            <mat-accordion multi>
+              @for (section of sections; track section.id; let sectionIndex = $index) {
+                <mat-expansion-panel [expanded]="isSectionExpanded(sectionIndex)">
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      <div class="section-title-wrapper">
+                        <span class="section-number">Section {{ sectionIndex + 1 }}</span>
+                        <span class="section-title">{{ section.title }}</span>
+                      </div>
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+
+                  <!-- Section Progress Bar -->
+                  <div class="section-progress-bar">
+                    <mat-progress-bar
+                      mode="determinate"
+                      [value]="getSectionProgress(section)"
+                      class="section-bar">
+                    </mat-progress-bar>
+                  </div>
+
+                  <mat-nav-list class="lesson-list">
+                    @for (lesson of section.lessons; track lesson.id; let lessonIndex = $index) {
+                      <mat-list-item
+                        (click)="selectLesson(lesson)"
+                        [class.active]="currentLesson?.id === lesson.id"
+                        [class.completed]="isLessonCompleted(lesson.id)"
+                        class="lesson-item course-content-list-item">
+                        <div class="lesson-icon-wrapper" matListItemIcon>
+                          <mat-icon [class.completed-icon]="isLessonCompleted(lesson.id)">
+                            {{ isLessonCompleted(lesson.id) ? 'check_circle' : getLessonIcon(lesson.type) }}
+                          </mat-icon>
+                        </div>
+                        <div class="lesson-content lesson-content-list-item">
+                          <div matListItemTitle class="lesson-title">
+                            <span class="lesson-number">{{ lessonIndex + 1 }}.</span>
+                            {{ lesson.title }}
+                          </div>
+                          <div matListItemLine class="lesson-meta">
+                            @if (lesson.duration) {
+                              <span class="lesson-duration">
+                                <mat-icon>access_time</mat-icon>
+                                {{ lesson.duration }} min
+                              </span>
+                            }
+                            <span class="lesson-type">{{ getLessonTypeLabel(lesson.type) }}</span>
+                          </div>
+                        </div>
+                        @if (currentLesson?.id === lesson.id) {
+                          <mat-icon class="play-indicator">
+                            play_arrow
+                          </mat-icon>
+                        }
+                      </mat-list-item>
+                    }
+                  </mat-nav-list>
+                </mat-expansion-panel>
+              }
+            </mat-accordion>
+          </div>
+
+          <!-- Sidebar Footer with Stats -->
+          <div class="sidebar-footer">
+            <div class="sidebar-stat">
+              <mat-icon>schedule</mat-icon>
+              <span>{{ getTotalDuration() }} min total</span>
+            </div>
+            <div class="sidebar-stat">
+              <mat-icon>school</mat-icon>
+              <span>{{ getTotalLessons() }} lessons</span>
+            </div>
+          </div>
         </div>
 
-        <div class="curriculum">
-          <mat-accordion multi>
-            <mat-expansion-panel *ngFor="let section of sections; let sectionIndex = index" [expanded]="isSectionExpanded(sectionIndex)">
-              <mat-expansion-panel-header>
-                <mat-panel-title>
-                  <div class="section-title-wrapper">
-                    <span class="section-number">Section {{ sectionIndex + 1 }}</span>
-                    <span class="section-title">{{ section.title }}</span>
-                  </div>
-                </mat-panel-title>
-              </mat-expansion-panel-header>
+        <!-- Main Content Area -->
+        <div class="content-area">
+          <router-outlet></router-outlet>
 
-              <!-- Section Progress Bar -->
-              <div class="section-progress-bar">
-                <mat-progress-bar
-                  mode="determinate"
-                  [value]="getSectionProgress(section)"
-                  class="section-bar">
-                </mat-progress-bar>
+          <!-- Enhanced Navigation Controls -->
+          @if (currentLesson) {
+            <div class="lesson-navigation">
+              <button
+                mat-stroked-button
+                (click)="goToPreviousLesson()"
+                [disabled]="!hasPreviousLesson()"
+                class="nav-button">
+                <mat-icon>arrow_back</mat-icon>
+                Previous Lesson
+              </button>
+
+              <div class="nav-center">
+                <div class="nav-info">
+                  <mat-icon>menu_book</mat-icon>
+                  <span class="current-position">{{ getCurrentLessonPosition() }}</span>
+                </div>
+                @if (!hasPreviousLesson()) {
+                  <span class="keyboard-hint">
+                    Use arrow keys to navigate →
+                  </span>
+                }
               </div>
 
-              <mat-nav-list class="lesson-list">
-                <mat-list-item
-                  *ngFor="let lesson of section.lessons; let lessonIndex = index"
-                  (click)="selectLesson(lesson)"
-                  [class.active]="currentLesson?.id === lesson.id"
-                  [class.completed]="isLessonCompleted(lesson.id)"
-                  class="lesson-item course-content-list-item">
-                  <div class="lesson-icon-wrapper" matListItemIcon>
-                    <mat-icon [class.completed-icon]="isLessonCompleted(lesson.id)">
-                      {{ isLessonCompleted(lesson.id) ? 'check_circle' : getLessonIcon(lesson.type) }}
-                    </mat-icon>
-                  </div>
-                  <div class="lesson-content lesson-content-list-item">
-                    <div matListItemTitle class="lesson-title">
-                      <span class="lesson-number">{{ lessonIndex + 1 }}.</span>
-                      {{ lesson.title }}
-                    </div>
-                    <div matListItemLine class="lesson-meta">
-                      <span *ngIf="lesson.duration" class="lesson-duration">
-                        <mat-icon>access_time</mat-icon>
-                        {{ lesson.duration }} min
-                      </span>
-                      <span class="lesson-type">{{ getLessonTypeLabel(lesson.type) }}</span>
-                    </div>
-                  </div>
-                  <mat-icon class="play-indicator" *ngIf="currentLesson?.id === lesson.id">
-                    play_arrow
-                  </mat-icon>
-                </mat-list-item>
-              </mat-nav-list>
-            </mat-expansion-panel>
-          </mat-accordion>
-        </div>
-
-        <!-- Sidebar Footer with Stats -->
-        <div class="sidebar-footer">
-          <div class="sidebar-stat">
-            <mat-icon>schedule</mat-icon>
-            <span>{{ getTotalDuration() }} min total</span>
-          </div>
-          <div class="sidebar-stat">
-            <mat-icon>school</mat-icon>
-            <span>{{ getTotalLessons() }} lessons</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Main Content Area -->
-      <div class="content-area">
-        <router-outlet></router-outlet>
-
-        <!-- Enhanced Navigation Controls -->
-        <div class="lesson-navigation" *ngIf="currentLesson">
-          <button
-            mat-stroked-button
-            (click)="goToPreviousLesson()"
-            [disabled]="!hasPreviousLesson()"
-            class="nav-button">
-            <mat-icon>arrow_back</mat-icon>
-            Previous Lesson
-          </button>
-
-          <div class="nav-center">
-            <div class="nav-info">
-              <mat-icon>menu_book</mat-icon>
-              <span class="current-position">{{ getCurrentLessonPosition() }}</span>
+              <button
+                mat-raised-button
+                color="primary"
+                (click)="goToNextLesson()"
+                [disabled]="!hasNextLesson()"
+                class="nav-button">
+                Next Lesson
+                <mat-icon>arrow_forward</mat-icon>
+              </button>
             </div>
-            <span class="keyboard-hint" *ngIf="!hasPreviousLesson()">
-              Use arrow keys to navigate →
-            </span>
-          </div>
-
-          <button
-            mat-raised-button
-            color="primary"
-            (click)="goToNextLesson()"
-            [disabled]="!hasNextLesson()"
-            class="nav-button">
-            Next Lesson
-            <mat-icon>arrow_forward</mat-icon>
-          </button>
+          }
         </div>
       </div>
     </div>
-  </div>
+  }
 </div>

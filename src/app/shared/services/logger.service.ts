@@ -18,13 +18,7 @@ export enum LogLevel {
   providedIn: 'root'
 })
 export class LoggerService {
-  private logLevel: LogLevel;
-
-  constructor() {
-    // In production, only log errors and warnings
-    // In development, log everything
-    this.logLevel = environment.production ? LogLevel.Warn : LogLevel.Debug;
-  }
+  private logLevel: LogLevel = environment.production ? LogLevel.Warn : LogLevel.Debug;
 
   /**
    * Set the minimum log level

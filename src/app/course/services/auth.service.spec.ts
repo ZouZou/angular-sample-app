@@ -44,7 +44,7 @@ describe('AuthService', () => {
     it('should load user from localStorage on initialization', () => {
       localStorage.setItem('user', JSON.stringify(mockUser));
 
-      const newService = new AuthService(TestBed.inject(HttpClientTestingModule) as any);
+      const newService = TestBed.runInInjectionContext(() => new AuthService());
 
       expect(newService.currentUserValue).toEqual(mockUser);
     });

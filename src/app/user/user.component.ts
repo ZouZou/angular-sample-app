@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, input, output, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 interface UserInterface {
   name: string;
@@ -11,24 +12,26 @@ interface UserInterface {
   selector: 'app-user',
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.sass'],
-  standalone: false
+  standalone: true,
+  imports: [
+    CommonModule
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserComponent implements OnInit {
-
-  @Input() user: UserInterface;
-  @Output() userEvent = new EventEmitter<UserInterface>();
+  user = input<UserInterface>({} as UserInterface);
+  userEvent = output<UserInterface>();
   isColored: boolean;
 
-  constructor() { 
-    this.user = {} as UserInterface;
-    this.isColored = this.user.isColored ? true : false;
+  constructor() {
+    this.isColored = this.user().isColored ? true : false;
   }
 
   ngOnInit(): void {
-    this.isColored = this.user.isColored ? true : false;
+    this.isColored = this.user().isColored ? true : false;
   }
 
   sendUserEvent(): void {
-    this.userEvent.emit(this.user);
+    this.userEvent.emit(this.user());
   }
 }

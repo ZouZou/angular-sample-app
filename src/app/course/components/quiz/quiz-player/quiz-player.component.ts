@@ -1,20 +1,51 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit, OnDestroy, inject, ChangeDetectionStrategy } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule, ActivatedRoute, Router } from '@angular/router';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatChipsModule } from '@angular/material/chips';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { QuizService } from '../../../services/quiz.service';
 import { EnrollmentService } from '../../../services/enrollment.service';
 import { AuthService } from '../../../services/auth.service';
 import { LoggerService } from '../../../../shared/services/logger.service';
+import { LoadingSpinnerComponent } from '../../../../shared/components/loading-spinner/loading-spinner.component';
 import { Quiz, QuizQuestion, QuizAttempt, UserAnswer } from '../../../models/quiz.interface';
 
 @Component({
   selector: 'app-quiz-player',
   templateUrl: './quiz-player.component.html',
   styleUrls: ['./quiz-player.component.css'],
-  standalone: false
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterModule,
+    MatCardModule,
+    MatButtonModule,
+    MatIconModule,
+    MatRadioModule,
+    MatCheckboxModule,
+    MatProgressBarModule,
+    MatProgressSpinnerModule,
+    MatChipsModule,
+    LoadingSpinnerComponent
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class QuizPlayerComponent implements OnInit, OnDestroy {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private quizService = inject(QuizService);
+  private enrollmentService = inject(EnrollmentService);
+  private authService = inject(AuthService);
+  private logger = inject(LoggerService);
+
   quiz: Quiz | null = null;
   currentAttempt: QuizAttempt | null = null;
   userAnswers: Map<number, number[]> = new Map();
@@ -30,15 +61,6 @@ export class QuizPlayerComponent implements OnInit, OnDestroy {
   private quizId!: number;
   private userId!: number;
   private enrollmentId!: number;
-
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private quizService: QuizService,
-    private enrollmentService: EnrollmentService,
-    private authService: AuthService,
-    private logger: LoggerService
-  ) {}
 
   ngOnInit(): void {
     this.userId = this.authService.currentUserId || 1;
