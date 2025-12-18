@@ -19,8 +19,8 @@ describe('AddressComponent', () => {
     const notificationSpy = jasmine.createSpyObj('NotificationService', ['success', 'error', 'info', 'warning']);
 
     TestBed.configureTestingModule({
-      declarations: [ AddressComponent ],
       imports: [
+        AddressComponent,
         NoopAnimationsModule,
         ReactiveFormsModule,
         MatButtonModule,
