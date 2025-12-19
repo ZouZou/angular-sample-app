@@ -1,297 +1,345 @@
 <div class="course-detail-container">
   <!-- Loading State -->
-  <div *ngIf="isLoading" class="loading">
-    <mat-spinner></mat-spinner>
-    <p>Loading course details...</p>
-  </div>
+  @if (isLoading) {
+    <div class="loading">
+      <mat-spinner></mat-spinner>
+      <p>Loading course details...</p>
+    </div>
+  }
 
   <!-- Error State -->
-  <div *ngIf="error && !isLoading" class="error-container">
-    <mat-card>
-      <mat-card-content class="error">
-        <mat-icon color="warn">error</mat-icon>
-        <div>
-          <h2>Course Not Found</h2>
-          <p>{{ error }}</p>
-        </div>
-      </mat-card-content>
-      <mat-card-actions>
-        <button mat-raised-button color="primary" (click)="navigateToList()">
-          <mat-icon>arrow_back</mat-icon>
-          Back to Courses
-        </button>
-      </mat-card-actions>
-    </mat-card>
-  </div>
-
-  <!-- Course Detail -->
-  <div *ngIf="course && !isLoading" class="course-detail">
-    <!-- Header with Actions -->
-    <div class="detail-header">
-      <div class="header-content">
-        <div class="welcome-section">
-          <h1>{{ course.title }}</h1>
-          <p>{{ course.category }} • {{ course.level }}</p>
-        </div>
-        <div class="header-actions">
-          <button mat-button (click)="navigateToList()">
+  @if (error && !isLoading) {
+    <div class="error-container">
+      <mat-card>
+        <mat-card-content class="error">
+          <mat-icon color="warn">error</mat-icon>
+          <div>
+            <h2>Course Not Found</h2>
+            <p>{{ error }}</p>
+          </div>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-raised-button color="primary" (click)="navigateToList()">
             <mat-icon>arrow_back</mat-icon>
             Back to Courses
           </button>
-          <button *ngIf="isAdmin()" mat-button (click)="navigateToEdit()">
-            <mat-icon>edit</mat-icon>
-            Edit Course
-          </button>
-          <button *ngIf="isAdmin()" mat-button (click)="deleteCourse()">
-            <mat-icon>delete</mat-icon>
-            Delete Course
-          </button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  }
+
+  <!-- Course Detail -->
+  @if (course && !isLoading) {
+    <div class="course-detail">
+      <!-- Header with Actions -->
+      <div class="detail-header">
+        <div class="header-content">
+          <div class="welcome-section">
+            <h1>{{ course.title }}</h1>
+            <p>{{ course.category }} • {{ course.level }}</p>
+          </div>
+          <div class="header-actions">
+            <button mat-button (click)="navigateToList()">
+              <mat-icon>arrow_back</mat-icon>
+              Back to Courses
+            </button>
+            @if (isAdmin()) {
+              <button mat-button (click)="navigateToEdit()">
+                <mat-icon>edit</mat-icon>
+                Edit Course
+              </button>
+            }
+            @if (isAdmin()) {
+              <button mat-button (click)="deleteCourse()">
+                <mat-icon>delete</mat-icon>
+                Delete Course
+              </button>
+            }
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- Course Banner -->
-    <div class="course-banner" [style.background-image]="'url(' + (course.bannerUrl || course.thumbnailUrl || 'https://via.placeholder.com/1200x400?text=Course+Image') + ')'">
-      <div class="banner-overlay">
-        <div class="banner-content">
-          <span class="level-badge" [ngClass]="getLevelClass(course.level)">
-            {{ course.level }}
-          </span>
-          <h1>{{ course.title }}</h1>
-          <p class="instructor">
-            <mat-icon>person</mat-icon>
-            {{ course.instructor }}
-          </p>
+      <!-- Course Banner -->
+      <div class="course-banner" [style.background-image]="'url(' + (course.bannerUrl || course.thumbnailUrl || 'https://via.placeholder.com/1200x400?text=Course+Image') + ')'">
+        <div class="banner-overlay">
+          <div class="banner-content">
+            <span class="level-badge" [ngClass]="getLevelClass(course.level)">
+              {{ course.level }}
+            </span>
+            <h1>{{ course.title }}</h1>
+            <p class="instructor">
+              <mat-icon>person</mat-icon>
+              {{ course.instructor }}
+            </p>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- Course Info Grid -->
-    <div class="course-info-grid">
-      <!-- Main Content Area -->
-      <div class="main-content-area">
-        <!-- About This Course -->
-        <mat-card class="main-content">
+      <!-- Course Info Grid -->
+      <div class="course-info-grid">
+        <!-- Main Content Area -->
+        <div class="main-content-area">
+          <!-- About This Course -->
+          <mat-card class="main-content">
+            <mat-card-header>
+              <mat-card-title>About This Course</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <p class="description">{{ course.description }}</p>
+
+              <div class="course-stats">
+                <div class="stat-item">
+                  <mat-icon>access_time</mat-icon>
+                  <div>
+                    <strong>{{ course.duration }} hours</strong>
+                    <span>Total duration</span>
+                  </div>
+                </div>
+
+                <div class="stat-item">
+                  <mat-icon>people</mat-icon>
+                  <div>
+                    <strong>{{ course.enrollmentCount || 0 }}</strong>
+                    <span>Students enrolled</span>
+                  </div>
+                </div>
+
+                @if (course.rating) {
+                  <div class="stat-item">
+                    <mat-icon>star</mat-icon>
+                    <div>
+                      <strong>{{ course.rating }} / 5</strong>
+                      <span>Course rating</span>
+                    </div>
+                  </div>
+                }
+
+                <div class="stat-item">
+                  <mat-icon>category</mat-icon>
+                  <div>
+                    <strong>{{ course.category }}</strong>
+                    <span>Category</span>
+                  </div>
+                </div>
+              </div>
+
+              @if (course.createdDate) {
+                <div class="additional-info">
+                  <mat-icon>calendar_today</mat-icon>
+                  <span>Created on {{ course.createdDate | date:'mediumDate' }}</span>
+                </div>
+              }
+            </mat-card-content>
+          </mat-card>
+
+          <!-- Course Curriculum -->
+          <mat-card class="curriculum-card">
           <mat-card-header>
-            <mat-card-title>About This Course</mat-card-title>
+            <mat-card-title>Course Curriculum</mat-card-title>
           </mat-card-header>
           <mat-card-content>
-            <p class="description">{{ course.description }}</p>
+            <!-- Loading State -->
+            @if (isLoadingCurriculum) {
+              <div class="curriculum-loading">
+                <mat-spinner diameter="40"></mat-spinner>
+                <p>Loading curriculum...</p>
+              </div>
+            }
 
-            <div class="course-stats">
-              <div class="stat-item">
+            <!-- Curriculum Summary -->
+            @if (!isLoadingCurriculum && sections.length > 0) {
+              <div class="curriculum-summary">
+                <div class="summary-item">
+                  <mat-icon>list</mat-icon>
+                  <span><strong>{{ sections.length }}</strong> Sections</span>
+                </div>
+                <div class="summary-item">
+                  <mat-icon>play_circle</mat-icon>
+                  <span><strong>{{ getTotalLessons() }}</strong> Lessons</span>
+                </div>
+                <div class="summary-item">
+                  <mat-icon>schedule</mat-icon>
+                  <span><strong>{{ formatDuration(getTotalDuration()) }}</strong> Total</span>
+                </div>
+              </div>
+            }
+
+            <!-- Sections Accordion -->
+            @if (!isLoadingCurriculum && sections.length > 0) {
+              <mat-accordion class="curriculum-accordion">
+                @for (section of sections; track section.id; let i = $index) {
+                  <mat-expansion-panel [expanded]="i === 0">
+                    <mat-expansion-panel-header>
+                      <mat-panel-title>
+                        <div class="section-header">
+                          <span class="section-number">Section {{ i + 1 }}</span>
+                          <span class="section-title">{{ section.title }}</span>
+                        </div>
+                      </mat-panel-title>
+                      <mat-panel-description>
+                        <span class="section-meta">
+                          {{ section.lessons.length }} lessons
+                          @if (section.lessons.length > 0) {
+                            <span>
+                              • {{ formatDuration(getSectionDuration(section)) }}
+                            </span>
+                          }
+                        </span>
+                      </mat-panel-description>
+                    </mat-expansion-panel-header>
+
+                    <!-- Section Description -->
+                    @if (section.description) {
+                      <p class="section-description">{{ section.description }}</p>
+                    }
+
+                    <!-- Lessons List -->
+                    <mat-list class="lessons-list">
+                      @for (lesson of section.lessons; track lesson.id) {
+                        <mat-list-item>
+                          <mat-icon matListItemIcon [class]="'lesson-icon-' + lesson.type">{{ getLessonIcon(lesson.type) }}</mat-icon>
+                          <div matListItemTitle class="lesson-title">{{ lesson.title }}</div>
+                          <div matListItemLine class="lesson-meta">
+                            <span class="lesson-type">{{ lesson.type | titlecase }}</span>
+                            @if (lesson.duration) {
+                              <span class="lesson-duration">
+                                <mat-icon>schedule</mat-icon>
+                                {{ lesson.duration }} min
+                              </span>
+                            }
+                          </div>
+                        </mat-list-item>
+                      }
+                    </mat-list>
+                  </mat-expansion-panel>
+                }
+              </mat-accordion>
+            }
+
+            <!-- Empty State -->
+            @if (!isLoadingCurriculum && sections.length === 0) {
+              <div class="empty-curriculum">
+                <mat-icon>school</mat-icon>
+                <p>No curriculum available yet</p>
+              </div>
+            }
+          </mat-card-content>
+          </mat-card>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+          <!-- Pricing Card -->
+          <mat-card class="pricing-card">
+            <mat-card-content>
+              <div class="price-section">
+                @if (!isEnrolled()) {
+                  <div class="price">
+                    <span class="currency">$</span>
+                    <span class="amount">{{ course.price }}</span>
+                  </div>
+                }
+
+                <!-- Enrollment Status Badge -->
+                @if (isEnrolled() && enrollment) {
+                  <div class="enrollment-status">
+                    <mat-icon>check_circle</mat-icon>
+                    <div>
+                      <strong>Enrolled</strong>
+                      <span>{{ enrollment.progress }}% Complete</span>
+                    </div>
+                  </div>
+                }
+
+                <!-- Enroll Button (if not enrolled) -->
+                @if (!isEnrolled()) {
+                  <button
+                    mat-raised-button
+                    color="primary"
+                    class="enroll-button"
+                    (click)="enrollCourse()"
+                    [disabled]="isEnrolling">
+                    @if (isEnrolling) {
+                      <mat-spinner diameter="20"></mat-spinner>
+                    }
+                    @if (!isEnrolling) {
+                      <mat-icon>school</mat-icon>
+                    }
+                    @if (!isEnrolling) {
+                      <span>Enroll Now</span>
+                    }
+                    @if (isEnrolling) {
+                      <span>Enrolling...</span>
+                    }
+                  </button>
+                }
+
+                <!-- Start Learning Button (if enrolled) -->
+                @if (isEnrolled()) {
+                  <button
+                    mat-raised-button
+                    color="accent"
+                    class="enroll-button"
+                    (click)="startLearning()">
+                    <mat-icon>play_circle</mat-icon>
+                    {{ enrollment?.progress === 0 ? 'Start Learning' : 'Continue Learning' }}
+                  </button>
+                }
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <!-- Course Details Card -->
+          <mat-card class="details-card">
+            <mat-card-header>
+              <mat-card-title>Course Details</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="detail-item">
+                <mat-icon>signal_cellular_alt</mat-icon>
+                <div>
+                  <strong>Level</strong>
+                  <span>{{ course.level }}</span>
+                </div>
+              </div>
+
+              <div class="detail-item">
+                <mat-icon>person</mat-icon>
+                <div>
+                  <strong>Instructor</strong>
+                  <span>{{ course.instructor }}</span>
+                </div>
+              </div>
+
+              <div class="detail-item">
                 <mat-icon>access_time</mat-icon>
                 <div>
-                  <strong>{{ course.duration }} hours</strong>
-                  <span>Total duration</span>
+                  <strong>Duration</strong>
+                  <span>{{ course.duration }} hours</span>
                 </div>
               </div>
 
-              <div class="stat-item">
-                <mat-icon>people</mat-icon>
-                <div>
-                  <strong>{{ course.enrollmentCount || 0 }}</strong>
-                  <span>Students enrolled</span>
-                </div>
-              </div>
-
-              <div class="stat-item" *ngIf="course.rating">
-                <mat-icon>star</mat-icon>
-                <div>
-                  <strong>{{ course.rating }} / 5</strong>
-                  <span>Course rating</span>
-                </div>
-              </div>
-
-              <div class="stat-item">
+              <div class="detail-item">
                 <mat-icon>category</mat-icon>
                 <div>
-                  <strong>{{ course.category }}</strong>
-                  <span>Category</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="additional-info" *ngIf="course.createdDate">
-              <mat-icon>calendar_today</mat-icon>
-              <span>Created on {{ course.createdDate | date:'mediumDate' }}</span>
-            </div>
-          </mat-card-content>
-        </mat-card>
-
-        <!-- Course Curriculum -->
-        <mat-card class="curriculum-card">
-        <mat-card-header>
-          <mat-card-title>Course Curriculum</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <!-- Loading State -->
-          <div *ngIf="isLoadingCurriculum" class="curriculum-loading">
-            <mat-spinner diameter="40"></mat-spinner>
-            <p>Loading curriculum...</p>
-          </div>
-
-          <!-- Curriculum Summary -->
-          <div *ngIf="!isLoadingCurriculum && sections.length > 0" class="curriculum-summary">
-            <div class="summary-item">
-              <mat-icon>list</mat-icon>
-              <span><strong>{{ sections.length }}</strong> Sections</span>
-            </div>
-            <div class="summary-item">
-              <mat-icon>play_circle</mat-icon>
-              <span><strong>{{ getTotalLessons() }}</strong> Lessons</span>
-            </div>
-            <div class="summary-item">
-              <mat-icon>schedule</mat-icon>
-              <span><strong>{{ formatDuration(getTotalDuration()) }}</strong> Total</span>
-            </div>
-          </div>
-
-          <!-- Sections Accordion -->
-          <mat-accordion *ngIf="!isLoadingCurriculum && sections.length > 0" class="curriculum-accordion">
-            <mat-expansion-panel *ngFor="let section of sections; let i = index" [expanded]="i === 0">
-              <mat-expansion-panel-header>
-                <mat-panel-title>
-                  <div class="section-header">
-                    <span class="section-number">Section {{ i + 1 }}</span>
-                    <span class="section-title">{{ section.title }}</span>
-                  </div>
-                </mat-panel-title>
-                <mat-panel-description>
-                  <span class="section-meta">
-                    {{ section.lessons.length }} lessons
-                    <span *ngIf="section.lessons.length > 0">
-                      • {{ formatDuration(getSectionDuration(section)) }}
-                    </span>
-                  </span>
-                </mat-panel-description>
-              </mat-expansion-panel-header>
-
-              <!-- Section Description -->
-              <p *ngIf="section.description" class="section-description">{{ section.description }}</p>
-
-              <!-- Lessons List -->
-              <mat-list class="lessons-list">
-                <mat-list-item *ngFor="let lesson of section.lessons">
-                  <mat-icon matListItemIcon [class]="'lesson-icon-' + lesson.type">{{ getLessonIcon(lesson.type) }}</mat-icon>
-                  <div matListItemTitle class="lesson-title">{{ lesson.title }}</div>
-                  <div matListItemLine class="lesson-meta">
-                    <span class="lesson-type">{{ lesson.type | titlecase }}</span>
-                    <span *ngIf="lesson.duration" class="lesson-duration">
-                      <mat-icon>schedule</mat-icon>
-                      {{ lesson.duration }} min
-                    </span>
-                  </div>
-                </mat-list-item>
-              </mat-list>
-            </mat-expansion-panel>
-          </mat-accordion>
-
-          <!-- Empty State -->
-          <div *ngIf="!isLoadingCurriculum && sections.length === 0" class="empty-curriculum">
-            <mat-icon>school</mat-icon>
-            <p>No curriculum available yet</p>
-          </div>
-        </mat-card-content>
-        </mat-card>
-      </div>
-
-      <!-- Sidebar -->
-      <div class="sidebar">
-        <!-- Pricing Card -->
-        <mat-card class="pricing-card">
-          <mat-card-content>
-            <div class="price-section">
-              <div class="price" *ngIf="!isEnrolled()">
-                <span class="currency">$</span>
-                <span class="amount">{{ course.price }}</span>
-              </div>
-
-              <!-- Enrollment Status Badge -->
-              <div *ngIf="isEnrolled() && enrollment" class="enrollment-status">
-                <mat-icon>check_circle</mat-icon>
-                <div>
-                  <strong>Enrolled</strong>
-                  <span>{{ enrollment.progress }}% Complete</span>
+                  <strong>Category</strong>
+                  <span>{{ course.category }}</span>
                 </div>
               </div>
 
-              <!-- Enroll Button (if not enrolled) -->
-              <button
-                *ngIf="!isEnrolled()"
-                mat-raised-button
-                color="primary"
-                class="enroll-button"
-                (click)="enrollCourse()"
-                [disabled]="isEnrolling">
-                <mat-spinner *ngIf="isEnrolling" diameter="20"></mat-spinner>
-                <mat-icon *ngIf="!isEnrolling">school</mat-icon>
-                <span *ngIf="!isEnrolling">Enroll Now</span>
-                <span *ngIf="isEnrolling">Enrolling...</span>
-              </button>
-
-              <!-- Start Learning Button (if enrolled) -->
-              <button
-                *ngIf="isEnrolled()"
-                mat-raised-button
-                color="accent"
-                class="enroll-button"
-                (click)="startLearning()">
-                <mat-icon>play_circle</mat-icon>
-                {{ enrollment?.progress === 0 ? 'Start Learning' : 'Continue Learning' }}
-              </button>
-            </div>
-          </mat-card-content>
-        </mat-card>
-
-        <!-- Course Details Card -->
-        <mat-card class="details-card">
-          <mat-card-header>
-            <mat-card-title>Course Details</mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
-            <div class="detail-item">
-              <mat-icon>signal_cellular_alt</mat-icon>
-              <div>
-                <strong>Level</strong>
-                <span>{{ course.level }}</span>
-              </div>
-            </div>
-
-            <div class="detail-item">
-              <mat-icon>person</mat-icon>
-              <div>
-                <strong>Instructor</strong>
-                <span>{{ course.instructor }}</span>
-              </div>
-            </div>
-
-            <div class="detail-item">
-              <mat-icon>access_time</mat-icon>
-              <div>
-                <strong>Duration</strong>
-                <span>{{ course.duration }} hours</span>
-              </div>
-            </div>
-
-            <div class="detail-item">
-              <mat-icon>category</mat-icon>
-              <div>
-                <strong>Category</strong>
-                <span>{{ course.category }}</span>
-              </div>
-            </div>
-
-            <div class="detail-item" *ngIf="course.id">
-              <mat-icon>tag</mat-icon>
-              <div>
-                <strong>Course ID</strong>
-                <span>#{{ course.id }}</span>
-              </div>
-            </div>
-          </mat-card-content>
-        </mat-card>
+              @if (course.id) {
+                <div class="detail-item">
+                  <mat-icon>tag</mat-icon>
+                  <div>
+                    <strong>Course ID</strong>
+                    <span>#{{ course.id }}</span>
+                  </div>
+                </div>
+              }
+            </mat-card-content>
+          </mat-card>
+        </div>
       </div>
     </div>
-  </div>
+  }
 </div>

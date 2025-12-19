@@ -114,4 +114,33 @@ export class QuizController {
       next(error);
     }
   }
+
+  async getAllAttempts(req: Request, res: Response, next: NextFunction) {
+    try {
+      const attempts = await quizService.getAllAttempts();
+      res.json(attempts);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getUserAllAttempts(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { userId } = req.params;
+      const attempts = await quizService.getUserAllAttempts(parseInt(userId));
+      res.json(attempts);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getCourseAttempts(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { courseId } = req.params;
+      const attempts = await quizService.getCourseAttempts(parseInt(courseId));
+      res.json(attempts);
+    } catch (error) {
+      next(error);
+    }
+  }
 }

@@ -1,20 +1,52 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit, OnDestroy, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule, ActivatedRoute, Router } from '@angular/router';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatChipsModule } from '@angular/material/chips';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { QuizService } from '../../../services/quiz.service';
 import { EnrollmentService } from '../../../services/enrollment.service';
 import { AuthService } from '../../../services/auth.service';
 import { LoggerService } from '../../../../shared/services/logger.service';
+import { LoadingSpinnerComponent } from '../../../../shared/components/loading-spinner/loading-spinner.component';
 import { Quiz, QuizQuestion, QuizAttempt, UserAnswer } from '../../../models/quiz.interface';
 
 @Component({
   selector: 'app-quiz-player',
   templateUrl: './quiz-player.component.html',
   styleUrls: ['./quiz-player.component.css'],
-  standalone: false
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterModule,
+    MatCardModule,
+    MatButtonModule,
+    MatIconModule,
+    MatRadioModule,
+    MatCheckboxModule,
+    MatProgressBarModule,
+    MatProgressSpinnerModule,
+    MatChipsModule,
+    LoadingSpinnerComponent
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class QuizPlayerComponent implements OnInit, OnDestroy {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private quizService = inject(QuizService);
+  private enrollmentService = inject(EnrollmentService);
+  private authService = inject(AuthService);
+  private logger = inject(LoggerService);
+  private cdr = inject(ChangeDetectorRef);
+
   quiz: Quiz | null = null;
   currentAttempt: QuizAttempt | null = null;
   userAnswers: Map<number, number[]> = new Map();
@@ -31,15 +63,6 @@ export class QuizPlayerComponent implements OnInit, OnDestroy {
   private userId!: number;
   private enrollmentId!: number;
 
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private quizService: QuizService,
-    private enrollmentService: EnrollmentService,
-    private authService: AuthService,
-    private logger: LoggerService
-  ) {}
-
   ngOnInit(): void {
     this.userId = this.authService.currentUserId || 1;
 
@@ -50,6 +73,7 @@ export class QuizPlayerComponent implements OnInit, OnDestroy {
     } else {
       this.error = 'Invalid course ID';
       this.isLoading = false;
+      this.cdr.markForCheck();
       return;
     }
 
@@ -65,6 +89,7 @@ export class QuizPlayerComponent implements OnInit, OnDestroy {
         } else {
           this.error = 'Invalid quiz ID';
           this.isLoading = false;
+          this.cdr.markForCheck();
         }
       });
   }
@@ -80,6 +105,7 @@ export class QuizPlayerComponent implements OnInit, OnDestroy {
   loadQuiz(): void {
     this.isLoading = true;
     this.error = null;
+    this.cdr.markForCheck();
 
     // Get enrollment first
     this.enrollmentService.getEnrollment(this.userId, this.courseId)
@@ -92,12 +118,14 @@ export class QuizPlayerComponent implements OnInit, OnDestroy {
           } else {
             this.error = 'You are not enrolled in this course';
             this.isLoading = false;
+            this.cdr.markForCheck();
           }
         },
         error: (error) => {
           this.logger.error('Error loading enrollment:', error);
           this.error = 'Failed to verify enrollment';
           this.isLoading = false;
+          this.cdr.markForCheck();
         }
       });
   }
@@ -110,11 +138,13 @@ export class QuizPlayerComponent implements OnInit, OnDestroy {
           this.quiz = quiz;
           this.startQuizAttempt();
           this.isLoading = false;
+          this.cdr.markForCheck();
         },
         error: (error) => {
           this.logger.error('Error loading quiz:', error);
           this.error = 'Failed to load quiz';
           this.isLoading = false;
+          this.cdr.markForCheck();
         }
       });
   }
@@ -125,6 +155,7 @@ export class QuizPlayerComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (attempt) => {
           this.currentAttempt = attempt;
+          this.cdr.markForCheck();
 
           // Start timer if quiz has time limit
           if (this.quiz?.timeLimit) {
@@ -135,6 +166,7 @@ export class QuizPlayerComponent implements OnInit, OnDestroy {
         error: (error) => {
           this.logger.error('Error starting quiz attempt:', error);
           this.error = 'Failed to start quiz';
+          this.cdr.markForCheck();
         }
       });
   }
@@ -143,6 +175,7 @@ export class QuizPlayerComponent implements OnInit, OnDestroy {
     this.timerInterval = setInterval(() => {
       if (this.timeRemaining !== null && this.timeRemaining > 0) {
         this.timeRemaining--;
+        this.cdr.markForCheck();
       } else if (this.timeRemaining === 0) {
         // Time's up - auto submit
         this.submitQuiz();
@@ -173,6 +206,7 @@ export class QuizPlayerComponent implements OnInit, OnDestroy {
       // Single select
       this.userAnswers.set(questionId, [optionId]);
     }
+    this.cdr.markForCheck();
   }
 
   isOptionSelected(questionId: number, optionId: number): boolean {
@@ -188,17 +222,20 @@ export class QuizPlayerComponent implements OnInit, OnDestroy {
   nextQuestion(): void {
     if (this.quiz && this.currentQuestionIndex < this.quiz.questions.length - 1) {
       this.currentQuestionIndex++;
+      this.cdr.markForCheck();
     }
   }
 
   previousQuestion(): void {
     if (this.currentQuestionIndex > 0) {
       this.currentQuestionIndex--;
+      this.cdr.markForCheck();
     }
   }
 
   goToQuestion(index: number): void {
     this.currentQuestionIndex = index;
+    this.cdr.markForCheck();
   }
 
   getAnsweredQuestionsCount(): number {
@@ -224,6 +261,7 @@ export class QuizPlayerComponent implements OnInit, OnDestroy {
     }
 
     this.isSubmitting = true;
+    this.cdr.markForCheck();
 
     // Stop timer
     if (this.timerInterval) {
@@ -253,6 +291,7 @@ export class QuizPlayerComponent implements OnInit, OnDestroy {
           this.logger.error('Error submitting quiz:', error);
           alert('Failed to submit quiz. Please try again.');
           this.isSubmitting = false;
+          this.cdr.markForCheck();
         }
       });
   }

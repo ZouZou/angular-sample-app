@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, Observable, fromEvent } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { LoggerService } from './logger.service';
@@ -7,6 +7,8 @@ import { LoggerService } from './logger.service';
   providedIn: 'root'
 })
 export class PwaService {
+  private logger = inject(LoggerService);
+
   private promptEvent: any;
   private installPromptSubject = new BehaviorSubject<boolean>(false);
   public canInstall$ = this.installPromptSubject.asObservable();
@@ -14,7 +16,7 @@ export class PwaService {
   private isInstalledSubject = new BehaviorSubject<boolean>(this.checkIfInstalled());
   public isInstalled$ = this.isInstalledSubject.asObservable();
 
-  constructor(private logger: LoggerService) {
+  constructor() {
     this.initPwaPrompt();
     this.listenForInstallation();
   }

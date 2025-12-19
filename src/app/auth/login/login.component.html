@@ -20,9 +20,11 @@
               autocomplete="email"
             />
             <mat-icon matPrefix>email</mat-icon>
-            <mat-error *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
-              {{ getErrorMessage('email') }}
-            </mat-error>
+            @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
+              <mat-error>
+                {{ getErrorMessage('email') }}
+              </mat-error>
+            }
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="full-width">
@@ -45,9 +47,11 @@
             >
               <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
             </button>
-            <mat-error *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
-              {{ getErrorMessage('password') }}
-            </mat-error>
+            @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
+              <mat-error>
+                {{ getErrorMessage('password') }}
+              </mat-error>
+            }
           </mat-form-field>
 
           <button
@@ -57,8 +61,12 @@
             class="login-button full-width"
             [disabled]="loading"
           >
-            <mat-spinner *ngIf="loading" diameter="20" class="button-spinner"></mat-spinner>
-            <span *ngIf="!loading">Sign In</span>
+            @if (loading) {
+              <mat-spinner diameter="20" class="button-spinner"></mat-spinner>
+            }
+            @if (!loading) {
+              <span>Sign In</span>
+            }
           </button>
         </form>
 
@@ -69,26 +77,27 @@
           </div>
 
           <div class="demo-credentials">
-            <button
-              *ngFor="let cred of demoCredentials"
-              type="button"
-              class="demo-card"
-              (click)="quickLogin(cred.email, cred.password)"
-              [attr.aria-label]="'Quick login as ' + cred.role + ' with email ' + cred.email"
-            >
-              <div class="demo-role">
-                <mat-icon [class]="'role-icon ' + cred.role.toLowerCase()" aria-hidden="true">
-                  {{ cred.role === 'Admin' ? 'admin_panel_settings' :
-                     cred.role === 'Instructor' ? 'school' : 'person' }}
-                </mat-icon>
-                <span class="role-name">{{ cred.role }}</span>
-              </div>
-              <div class="demo-info">
-                <div class="demo-email">{{ cred.email }}</div>
-                <div class="demo-password">{{ cred.password }}</div>
-              </div>
-              <mat-icon class="login-icon" aria-hidden="true">login</mat-icon>
-            </button>
+            @for (cred of demoCredentials; track cred.email) {
+              <button
+                type="button"
+                class="demo-card"
+                (click)="quickLogin(cred.email, cred.password)"
+                [attr.aria-label]="'Quick login as ' + cred.role + ' with email ' + cred.email"
+              >
+                <div class="demo-role">
+                  <mat-icon [class]="'role-icon ' + cred.role.toLowerCase()" aria-hidden="true">
+                    {{ cred.role === 'Admin' ? 'admin_panel_settings' :
+                       cred.role === 'Instructor' ? 'school' : 'person' }}
+                  </mat-icon>
+                  <span class="role-name">{{ cred.role }}</span>
+                </div>
+                <div class="demo-info">
+                  <div class="demo-email">{{ cred.email }}</div>
+                  <div class="demo-password">{{ cred.password }}</div>
+                </div>
+                <mat-icon class="login-icon" aria-hidden="true">login</mat-icon>
+              </button>
+            }
           </div>
         </div>
       </mat-card-content>

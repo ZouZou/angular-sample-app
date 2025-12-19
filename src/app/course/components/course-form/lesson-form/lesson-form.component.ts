@@ -1,17 +1,34 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, input, output, OnChanges, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { CourseSection, Lesson } from '../../../models/curriculum.interface';
 
 @Component({
   selector: 'app-lesson-form',
   templateUrl: './lesson-form.component.html',
   styleUrls: ['./lesson-form.component.css'],
-  standalone: false
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatIconModule
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LessonFormComponent implements OnChanges {
-  @Input() lesson: Lesson | null = null;
-  @Input() section: CourseSection | null = null;
-  @Output() save = new EventEmitter<Partial<Lesson>>();
-  @Output() cancel = new EventEmitter<void>();
+  lesson = input<Lesson | null>(null);
+  section = input<CourseSection | null>(null);
+  save = output<Partial<Lesson>>();
+  cancel = output<void>();
 
   lessonTypes: Array<'video' | 'text' | 'quiz' | 'assignment'> = ['video', 'text', 'quiz', 'assignment'];
 
@@ -26,22 +43,22 @@ export class LessonFormComponent implements OnChanges {
   };
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['lesson'] && this.lesson) {
-      this.lessonForm = { ...this.lesson };
-    } else if (changes['section'] && this.section && !this.lesson) {
+    if (changes['lesson'] && this.lesson()) {
+      this.lessonForm = { ...this.lesson()! };
+    } else if (changes['section'] && this.section() && !this.lesson()) {
       this.resetForm();
     }
   }
 
   onSave(): void {
-    if (this.lessonForm.title?.trim() && this.section?.id) {
+    if (this.lessonForm.title?.trim() && this.section()?.id) {
       const lessonData: Partial<Lesson> = {
-        sectionId: this.section.id,
+        sectionId: this.section()!.id,
         title: this.lessonForm.title.trim(),
         description: this.lessonForm.description?.trim() || '',
         type: this.lessonForm.type || 'video',
         duration: this.lessonForm.duration || 0,
-        order: this.lessonForm.order || (this.section.lessons?.length || 0) + 1
+        order: this.lessonForm.order || (this.section()!.lessons?.length || 0) + 1
       };
 
       // Add type-specific fields
@@ -83,8 +100,8 @@ export class LessonFormComponent implements OnChanges {
       videoUrl: '',
       content: '',
       quizId: undefined,
-      sectionId: this.section?.id,
-      order: (this.section?.lessons?.length || 0) + 1
+      sectionId: this.section()?.id,
+      order: (this.section()?.lessons?.length || 0) + 1
     };
   }
 }

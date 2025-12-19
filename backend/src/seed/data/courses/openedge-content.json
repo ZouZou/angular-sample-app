@@ -224,40 +224,172 @@
 			"timeLimit": 15,
 			"questions": [
 				{
-					"question": "What symbol ends every statement in OpenEdge 4GL?",
+					"question": "What symbol ends EVERY statement in OpenEdge 4GL?",
 					"type": "multiple-choice",
 					"points": 10,
-					"order": 1
+					"order": 1,
+					"options": [
+						{
+							"text": "Semicolon (;)",
+							"isCorrect": false,
+							"order": 1
+						},
+						{
+							"text": "Period (.)",
+							"isCorrect": true,
+							"order": 2
+						},
+						{
+							"text": "Colon (:)",
+							"isCorrect": false,
+							"order": 3
+						},
+						{
+							"text": "Exclamation mark (!)",
+							"isCorrect": false,
+							"order": 4
+						}
+					]
 				},
 				{
 					"question": "Which keyword is used to output data to the screen?",
 					"type": "multiple-choice",
 					"points": 10,
-					"order": 2
+					"order": 2,
+					"options": [
+						{
+							"text": "PRINT",
+							"isCorrect": false,
+							"order": 1
+						},
+						{
+							"text": "OUTPUT",
+							"isCorrect": false,
+							"order": 2
+						},
+						{
+							"text": "DISPLAY",
+							"isCorrect": true,
+							"order": 3
+						},
+						{
+							"text": "SHOW",
+							"isCorrect": false,
+							"order": 4
+						}
+					]
 				},
 				{
-					"question": "What does NO-UNDO mean when defining a variable?",
+					"question": "What does `NO-UNDO` mean when defining a variable?",
 					"type": "multiple-choice",
 					"points": 10,
-					"order": 3
+					"order": 3,
+					"options": [
+						{
+							"text": "The variable cannot be changed",
+							"isCorrect": false,
+							"order": 1
+						},
+						{
+							"text": "The variable won't track transaction changes (more efficient)",
+							"isCorrect": true,
+							"order": 2
+						},
+						{
+							"text": "The variable is read-only",
+							"isCorrect": false,
+							"order": 3
+						},
+						{
+							"text": "The variable must be initialized",
+							"isCorrect": false,
+							"order": 4
+						}
+					]
 				},
 				{
 					"question": "What is the correct way to define an integer variable named \"age\"?",
 					"type": "multiple-choice",
 					"points": 10,
-					"order": 4
+					"order": 4,
+					"options": [
+						{
+							"text": "`INTEGER count NO-UNDO.`",
+							"isCorrect": false,
+							"order": 1
+						},
+						{
+							"text": "`DEFINE count AS INTEGER NO-UNDO.`",
+							"isCorrect": false,
+							"order": 2
+						},
+						{
+							"text": "`DEFINE VARIABLE count AS INTEGER NO-UNDO.`",
+							"isCorrect": true,
+							"order": 3
+						},
+						{
+							"text": "`VAR count: INTEGER NO-UNDO.`",
+							"isCorrect": false,
+							"order": 4
+						}
+					]
 				},
 				{
 					"question": "What does the \"?\" symbol represent in OpenEdge 4GL?",
 					"type": "multiple-choice",
 					"points": 10,
-					"order": 5
+					"order": 5,
+					"options": [
+						{
+							"text": "A question to the user",
+							"isCorrect": false,
+							"order": 1
+						},
+						{
+							"text": "An error state",
+							"isCorrect": false,
+							"order": 2
+						},
+						{
+							"text": "An unknown/null value",
+							"isCorrect": true,
+							"order": 3
+						},
+						{
+							"text": "A comment marker",
+							"isCorrect": false,
+							"order": 4
+						}
+					]
 				},
 				{
 					"question": "Which statement is used to get user input?",
 					"type": "multiple-choice",
 					"points": 10,
-					"order": 6
+					"order": 6,
+					"options": [
+						{
+							"text": "INPUT",
+							"isCorrect": false,
+							"order": 1
+						},
+						{
+							"text": "GET",
+							"isCorrect": false,
+							"order": 2
+						},
+						{
+							"text": "UPDATE",
+							"isCorrect": true,
+							"order": 3
+						},
+						{
+							"text": "READ",
+							"isCorrect": false,
+							"order": 4
+						}
+					]
 				}
 			]
 		},
@@ -271,37 +403,169 @@
 					"question": "Which statement is used to exit a REPEAT loop?",
 					"type": "multiple-choice",
 					"points": 10,
-					"order": 1
+					"order": 1,
+					"options": [
+						{
+							"text": "EXIT",
+							"isCorrect": false,
+							"order": 1
+						},
+						{
+							"text": "BREAK",
+							"isCorrect": false,
+							"order": 2
+						},
+						{
+							"text": "LEAVE",
+							"isCorrect": true,
+							"order": 3
+						},
+						{
+							"text": "QUIT",
+							"isCorrect": false,
+							"order": 4
+						}
+					]
 				},
 				{
 					"question": "How do you check if two values are NOT equal in OpenEdge 4GL?",
 					"type": "multiple-choice",
 					"points": 10,
-					"order": 2
+					"order": 2,
+					"options": [
+						{
+							"text": "`variable != 10`",
+							"isCorrect": false,
+							"order": 1
+						},
+						{
+							"text": "`variable <> 10` or `variable NE 10`",
+							"isCorrect": false,
+							"order": 2
+						},
+						{
+							"text": "`variable NOT 10`",
+							"isCorrect": false,
+							"order": 3
+						},
+						{
+							"text": "`variable !== 10`",
+							"isCorrect": false,
+							"order": 4
+						}
+					]
 				},
 				{
 					"question": "What will this code output? DO i = 1 TO 3: DISPLAY i. END.",
 					"type": "multiple-choice",
 					"points": 10,
-					"order": 3
+					"order": 3,
+					"options": [
+						{
+							"text": "1",
+							"isCorrect": true,
+							"order": 1
+						},
+						{
+							"text": "1 2 3",
+							"isCorrect": true,
+							"order": 2
+						},
+						{
+							"text": "1 2",
+							"isCorrect": true,
+							"order": 3
+						},
+						{
+							"text": "1 2 3 4",
+							"isCorrect": false,
+							"order": 4
+						}
+					]
 				},
 				{
 					"question": "Which logical operator would you use to combine two conditions where BOTH must be true?",
 					"type": "multiple-choice",
 					"points": 10,
-					"order": 4
+					"order": 4,
+					"options": [
+						{
+							"text": "OR",
+							"isCorrect": false,
+							"order": 1
+						},
+						{
+							"text": "AND",
+							"isCorrect": true,
+							"order": 2
+						},
+						{
+							"text": "NOT",
+							"isCorrect": false,
+							"order": 3
+						},
+						{
+							"text": "THEN",
+							"isCorrect": false,
+							"order": 4
+						}
+					]
 				},
 				{
 					"question": "What does the NEXT statement do in a loop?",
 					"type": "multiple-choice",
 					"points": 10,
-					"order": 5
+					"order": 5,
+					"options": [
+						{
+							"text": "Exits the loop",
+							"isCorrect": false,
+							"order": 1
+						},
+						{
+							"text": "Skips to the next iteration",
+							"isCorrect": true,
+							"order": 2
+						},
+						{
+							"text": "Pauses the loop",
+							"isCorrect": false,
+							"order": 3
+						},
+						{
+							"text": "Repeats the current iteration",
+							"isCorrect": false,
+							"order": 4
+						}
+					]
 				},
 				{
 					"question": "What is the result of \"5 MODULO 2\"?",
 					"type": "multiple-choice",
 					"points": 10,
-					"order": 6
+					"order": 6,
+					"options": [
+						{
+							"text": "0",
+							"isCorrect": false,
+							"order": 1
+						},
+						{
+							"text": "1",
+							"isCorrect": true,
+							"order": 2
+						},
+						{
+							"text": "2",
+							"isCorrect": false,
+							"order": 3
+						},
+						{
+							"text": "5",
+							"isCorrect": false,
+							"order": 4
+						}
+					]
 				}
 			]
 		},
@@ -315,37 +579,169 @@
 					"question": "Which lock type should you use for read-only operations?",
 					"type": "multiple-choice",
 					"points": 10,
-					"order": 1
+					"order": 1,
+					"options": [
+						{
+							"text": "READ-ONLY",
+							"isCorrect": false,
+							"order": 1
+						},
+						{
+							"text": "NO-LOCK",
+							"isCorrect": false,
+							"order": 2
+						},
+						{
+							"text": "CONST",
+							"isCorrect": false,
+							"order": 3
+						},
+						{
+							"text": "READONLY",
+							"isCorrect": false,
+							"order": 4
+						}
+					]
 				},
 				{
 					"question": "What does the UNDO keyword do in a transaction block?",
 					"type": "multiple-choice",
 					"points": 10,
-					"order": 2
+					"order": 2,
+					"options": [
+						{
+							"text": "The program stops",
+							"isCorrect": false,
+							"order": 1
+						},
+						{
+							"text": "All changes are reversed",
+							"isCorrect": false,
+							"order": 2
+						},
+						{
+							"text": "Only the last change is reversed",
+							"isCorrect": false,
+							"order": 3
+						},
+						{
+							"text": "An error message appears",
+							"isCorrect": false,
+							"order": 4
+						}
+					]
 				},
 				{
 					"question": "How do you check if a FIND statement successfully found a record?",
 					"type": "multiple-choice",
 					"points": 10,
-					"order": 3
+					"order": 3,
+					"options": [
+						{
+							"text": "`IF FOUND THEN`",
+							"isCorrect": false,
+							"order": 1
+						},
+						{
+							"text": "`IF AVAILABLE TableName THEN`",
+							"isCorrect": false,
+							"order": 2
+						},
+						{
+							"text": "`IF EXISTS THEN`",
+							"isCorrect": false,
+							"order": 3
+						},
+						{
+							"text": "`IF RECORD-FOUND THEN`",
+							"isCorrect": false,
+							"order": 4
+						}
+					]
 				},
 				{
 					"question": "Which statement creates a new database record?",
 					"type": "multiple-choice",
 					"points": 10,
-					"order": 4
+					"order": 4,
+					"options": [
+						{
+							"text": "EXCLUSIVE-LOCK",
+							"isCorrect": false,
+							"order": 1
+						},
+						{
+							"text": "NO-LOCK",
+							"isCorrect": false,
+							"order": 2
+						},
+						{
+							"text": "SHARE-LOCK",
+							"isCorrect": false,
+							"order": 3
+						},
+						{
+							"text": "READ-LOCK",
+							"isCorrect": false,
+							"order": 4
+						}
+					]
 				},
 				{
 					"question": "What does the NO-ERROR option do?",
 					"type": "multiple-choice",
 					"points": 10,
-					"order": 5
+					"order": 5,
+					"options": [
+						{
+							"text": "Prevents all errors",
+							"isCorrect": false,
+							"order": 1
+						},
+						{
+							"text": "Suppresses automatic error messages",
+							"isCorrect": false,
+							"order": 2
+						},
+						{
+							"text": "Fixes errors automatically",
+							"isCorrect": false,
+							"order": 3
+						},
+						{
+							"text": "Logs errors to a file",
+							"isCorrect": false,
+							"order": 4
+						}
+					]
 				},
 				{
 					"question": "What does the LEAVE statement do in a transaction block?",
 					"type": "multiple-choice",
 					"points": 10,
-					"order": 6
+					"order": 6,
+					"options": [
+						{
+							"text": "Commits the transaction",
+							"isCorrect": false,
+							"order": 1
+						},
+						{
+							"text": "Exits the transaction block",
+							"isCorrect": false,
+							"order": 2
+						},
+						{
+							"text": "Rolls back changes",
+							"isCorrect": false,
+							"order": 3
+						},
+						{
+							"text": "Pauses execution",
+							"isCorrect": false,
+							"order": 4
+						}
+					]
 				}
 			]
 		},
@@ -359,25 +755,113 @@
 					"question": "Which keyword defines a parameter that returns a value from a procedure?",
 					"type": "multiple-choice",
 					"points": 10,
-					"order": 1
+					"order": 1,
+					"options": [
+						{
+							"text": "RETURN",
+							"isCorrect": false,
+							"order": 1
+						},
+						{
+							"text": "OUTPUT",
+							"isCorrect": false,
+							"order": 2
+						},
+						{
+							"text": "EXPORT",
+							"isCorrect": false,
+							"order": 3
+						},
+						{
+							"text": "OUT",
+							"isCorrect": false,
+							"order": 4
+						}
+					]
 				},
 				{
 					"question": "How do you call an internal procedure named \"calculateTotal\"?",
 					"type": "multiple-choice",
 					"points": 10,
-					"order": 2
+					"order": 2,
+					"options": [
+						{
+							"text": "`CALL calculateTotal.`",
+							"isCorrect": false,
+							"order": 1
+						},
+						{
+							"text": "`RUN calculateTotal.`",
+							"isCorrect": false,
+							"order": 2
+						},
+						{
+							"text": "`EXECUTE calculateTotal.`",
+							"isCorrect": false,
+							"order": 3
+						},
+						{
+							"text": "`calculateTotal().`",
+							"isCorrect": false,
+							"order": 4
+						}
+					]
 				},
 				{
 					"question": "What is the main difference between a procedure and a function in OpenEdge?",
 					"type": "multiple-choice",
 					"points": 10,
-					"order": 3
+					"order": 3,
+					"options": [
+						{
+							"text": "Procedures are faster",
+							"isCorrect": false,
+							"order": 1
+						},
+						{
+							"text": "Functions return a single value, procedures can have multiple outputs",
+							"isCorrect": false,
+							"order": 2
+						},
+						{
+							"text": "Functions can't have parameters",
+							"isCorrect": false,
+							"order": 3
+						},
+						{
+							"text": "There is no difference",
+							"isCorrect": false,
+							"order": 4
+						}
+					]
 				},
 				{
 					"question": "What does an INPUT-OUTPUT parameter allow?",
 					"type": "multiple-choice",
 					"points": 10,
-					"order": 4
+					"order": 4,
+					"options": [
+						{
+							"text": "Only receives data",
+							"isCorrect": false,
+							"order": 1
+						},
+						{
+							"text": "Only returns data",
+							"isCorrect": false,
+							"order": 2
+						},
+						{
+							"text": "Receives data and can modify it",
+							"isCorrect": false,
+							"order": 3
+						},
+						{
+							"text": "Displays data to user",
+							"isCorrect": false,
+							"order": 4
+						}
+					]
 				}
 			]
 		},
@@ -391,19 +875,85 @@
 					"question": "Which keyword is used to create a new instance of a class?",
 					"type": "multiple-choice",
 					"points": 15,
-					"order": 1
+					"order": 1,
+					"options": [
+						{
+							"text": "CREATE",
+							"isCorrect": false,
+							"order": 1
+						},
+						{
+							"text": "NEW",
+							"isCorrect": false,
+							"order": 2
+						},
+						{
+							"text": "INSTANCE",
+							"isCorrect": false,
+							"order": 3
+						},
+						{
+							"text": "MAKE",
+							"isCorrect": false,
+							"order": 4
+						}
+					]
 				},
 				{
 					"question": "What is inheritance in object-oriented programming?",
 					"type": "multiple-choice",
 					"points": 15,
-					"order": 2
+					"order": 2,
+					"options": [
+						{
+							"text": "Copying code between files",
+							"isCorrect": false,
+							"order": 1
+						},
+						{
+							"text": "A class extending another class",
+							"isCorrect": false,
+							"order": 2
+						},
+						{
+							"text": "Sharing variables",
+							"isCorrect": false,
+							"order": 3
+						},
+						{
+							"text": "Importing libraries",
+							"isCorrect": false,
+							"order": 4
+						}
+					]
 				},
 				{
 					"question": "How do you access a property of an object in OpenEdge?",
 					"type": "multiple-choice",
 					"points": 10,
-					"order": 3
+					"order": 3,
+					"options": [
+						{
+							"text": "object.property",
+							"isCorrect": false,
+							"order": 1
+						},
+						{
+							"text": "object->property",
+							"isCorrect": false,
+							"order": 2
+						},
+						{
+							"text": "object:property",
+							"isCorrect": false,
+							"order": 3
+						},
+						{
+							"text": "object::property",
+							"isCorrect": false,
+							"order": 4
+						}
+					]
 				}
 			]
 		}

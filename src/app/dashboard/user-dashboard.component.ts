@@ -1,5 +1,10 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit, OnDestroy, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule, Router } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { AuthService } from '../course/services/auth.service';
 import { EnrollmentService } from '../course/services/enrollment.service';
 import { CourseService } from '../course/services/course.service';
@@ -13,6 +18,7 @@ import { takeUntil } from 'rxjs/operators';
 import { NotificationService } from '../shared/services/notification.service';
 import { LoggerService } from '../shared/services/logger.service';
 import { fadeInUp, staggerList, scaleIn } from '../shared/animations/animations';
+import { SkeletonCourseCardComponent } from '../shared/components/skeleton-course-card/skeleton-course-card.component';
 
 interface EnrolledCourseData {
   enrollment: Enrollment;
@@ -28,8 +34,18 @@ interface EnrolledCourseData {
   selector: 'app-user-dashboard',
   templateUrl: './user-dashboard.component.html',
   styleUrls: ['./user-dashboard.component.scss'],
-  standalone: false,
-  animations: [fadeInUp, staggerList, scaleIn]
+  standalone: true,
+  animations: [fadeInUp, staggerList, scaleIn],
+  imports: [
+    CommonModule,
+    RouterModule,
+    MatButtonModule,
+    MatCardModule,
+    MatIconModule,
+    MatProgressBarModule,
+    SkeletonCourseCardComponent
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 /**
  * Displays the user learning dashboard with course progress and performance metrics
@@ -45,21 +61,20 @@ interface EnrolledCourseData {
  * ```
  */
 export class UserDashboardComponent implements OnInit, OnDestroy {
+  private authService = inject(AuthService);
+  private enrollmentService = inject(EnrollmentService);
+  private courseService = inject(CourseService);
+  private quizService = inject(QuizService);
+  private router = inject(Router);
+  private notificationService = inject(NotificationService);
+  private logger = inject(LoggerService);
+  private cdr = inject(ChangeDetectorRef);
+
   private destroy$ = new Subject<void>();
   currentUser: User | null = null;
   enrolledCourses: EnrolledCourseData[] = [];
   isLoading = false;
   error: string | null = null;
-
-  constructor(
-    private authService: AuthService,
-    private enrollmentService: EnrollmentService,
-    private courseService: CourseService,
-    private quizService: QuizService,
-    private router: Router,
-    private notificationService: NotificationService,
-    private logger: LoggerService
-  ) {}
 
   ngOnInit(): void {
     this.currentUser = this.authService.currentUserValue;
@@ -75,11 +90,13 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
   loadDashboardData(): void {
     this.isLoading = true;
     this.error = null;
+    this.cdr.markForCheck();
 
     const userId = this.currentUser?.id;
     if (!userId) {
       this.error = 'User not found';
       this.isLoading = false;
+      this.cdr.markForCheck();
       return;
     }
 
@@ -90,6 +107,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
         next: (enrollments) => {
           if (enrollments.length === 0) {
             this.isLoading = false;
+            this.cdr.markForCheck();
             return;
           }
 
@@ -128,6 +146,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
                       });
 
                       this.isLoading = false;
+                      this.cdr.markForCheck();
                     },
                     error: (error) => {
                       this.logger.error('Error loading quiz attempts:', error);
@@ -140,6 +159,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
                         totalQuizzes: 0
                       }));
                       this.isLoading = false;
+                      this.cdr.markForCheck();
                     }
                   });
               },
@@ -147,6 +167,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
                 this.logger.error('Error loading courses:', error);
                 this.error = 'Failed to load course details';
                 this.isLoading = false;
+                this.cdr.markForCheck();
               }
             });
         },
@@ -154,6 +175,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
           this.logger.error('Error loading enrollments:', error);
           this.error = 'Failed to load your enrolled courses';
           this.isLoading = false;
+          this.cdr.markForCheck();
         }
       });
   }

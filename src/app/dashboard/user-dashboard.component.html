@@ -11,10 +11,12 @@
           <mat-icon>search</mat-icon>
           Browse Courses
         </button>
-        <button mat-button *ngIf="currentUser?.role === 'admin'" routerLink="/admin">
-          <mat-icon>admin_panel_settings</mat-icon>
-          Admin Dashboard
-        </button>
+        @if (currentUser?.role === 'admin') {
+          <button mat-button routerLink="/admin">
+            <mat-icon>admin_panel_settings</mat-icon>
+            Admin Dashboard
+          </button>
+        }
         <button mat-button (click)="logout()">
           <mat-icon>logout</mat-icon>
           Sign out
@@ -24,150 +26,176 @@
   </div>
 
   <!-- Loading State with Skeleton Cards -->
-  <div *ngIf="isLoading" class="courses-section" @fadeInUp>
-    <h2>My Courses</h2>
-    <div class="courses-grid">
-      <app-skeleton-course-card *ngFor="let item of [1,2,3,4]" @scaleIn></app-skeleton-course-card>
+  @if (isLoading) {
+    <div class="courses-section" @fadeInUp>
+      <h2>My Courses</h2>
+      <div class="courses-grid">
+        @for (item of [1,2,3,4]; track $index) {
+          <app-skeleton-course-card @scaleIn></app-skeleton-course-card>
+        }
+      </div>
     </div>
-  </div>
+  }
 
   <!-- Error State -->
-  <div *ngIf="error && !isLoading" class="error-container">
-    <mat-icon color="warn">error</mat-icon>
-    <p>{{ error }}</p>
-    <button mat-raised-button color="primary" (click)="loadDashboardData()">
-      Retry
-    </button>
-  </div>
+  @if (error && !isLoading) {
+    <div class="error-container">
+      <mat-icon color="warn">error</mat-icon>
+      <p>{{ error }}</p>
+      <button mat-raised-button color="primary" (click)="loadDashboardData()">
+        Retry
+      </button>
+    </div>
+  }
 
   <!-- Empty State -->
-  <div *ngIf="!isLoading && !error && enrolledCourses.length === 0" class="empty-state">
-    <mat-icon>school</mat-icon>
-    <h2>You haven't enrolled in any courses yet</h2>
-    <p>Explore our course catalog and start learning today!</p>
-    <button mat-raised-button color="primary" routerLink="/courses">
-      <mat-icon>explore</mat-icon>
-      Browse Courses
-    </button>
-  </div>
+  @if (!isLoading && !error && enrolledCourses.length === 0) {
+    <div class="empty-state">
+      <mat-icon>school</mat-icon>
+      <h2>You haven't enrolled in any courses yet</h2>
+      <p>Explore our course catalog and start learning today!</p>
+      <button mat-raised-button color="primary" routerLink="/courses">
+        <mat-icon>explore</mat-icon>
+        Browse Courses
+      </button>
+    </div>
+  }
 
   <!-- Enrolled Courses -->
-  <div *ngIf="!isLoading && !error && enrolledCourses.length > 0" class="courses-section" @fadeInUp>
-    <h2>My Courses ({{ enrolledCourses.length }})</h2>
+  @if (!isLoading && !error && enrolledCourses.length > 0) {
+    <div class="courses-section" @fadeInUp>
+      <h2>My Courses ({{ enrolledCourses.length }})</h2>
 
-    <div class="courses-grid" [@staggerList]="enrolledCourses.length">
-      <mat-card *ngFor="let data of enrolledCourses"
-                class="course-card"
-                @fadeInUp
-                tabindex="0"
-                role="article"
-                [attr.aria-label]="'Course: ' + data.course.title + ' by ' + data.course.instructor + ', ' + data.enrollment.progress + '% complete'">
-        <!-- Course Thumbnail -->
-        <div class="course-thumbnail" [style.background-image]="'url(' + (data.course.thumbnailUrl || 'https://via.placeholder.com/400x250?text=Course') + ')'">
-          <div class="status-badge" [ngClass]="'status-' + data.enrollment.status">
-            {{ data.enrollment.status | titlecase }}
-          </div>
-        </div>
-
-        <mat-card-header>
-          <mat-card-title>{{ data.course.title }}</mat-card-title>
-          <mat-card-subtitle>{{ data.course.instructor }}</mat-card-subtitle>
-        </mat-card-header>
-
-        <mat-card-content>
-          <!-- Progress Section -->
-          <div class="progress-section">
-            <div class="progress-header">
-              <span class="progress-label">Progress</span>
-              <span class="progress-value">{{ data.enrollment.progress }}%</span>
-            </div>
-            <mat-progress-bar
-              [value]="data.enrollment.progress"
-              [color]="getProgressColor(data.enrollment.progress)"
-              mode="determinate">
-            </mat-progress-bar>
-          </div>
-
-          <!-- Quiz Scores Section -->
-          <div class="quiz-scores-section" *ngIf="data.quizAttempts.length > 0">
-            <div class="section-title">
-              <mat-icon>quiz</mat-icon>
-              <span>Quiz Performance</span>
-            </div>
-
-            <div class="quiz-stats">
-              <div class="quiz-stat">
-                <div class="stat-label">Completed</div>
-                <div class="stat-value">{{ data.completedQuizzes }}</div>
-              </div>
-
-              <div class="quiz-stat" *ngIf="data.bestScore !== undefined">
-                <div class="stat-label">Best Score</div>
-                <div class="stat-value" [ngClass]="getScoreColorClass(data.bestScore)">
-                  {{ data.bestScore | number:'1.0-0' }}%
-                </div>
-              </div>
-
-              <div class="quiz-stat" *ngIf="data.averageScore !== undefined">
-                <div class="stat-label">Average Score</div>
-                <div class="stat-value" [ngClass]="getScoreColorClass(data.averageScore)">
-                  {{ data.averageScore | number:'1.0-0' }}%
-                </div>
+      <div class="courses-grid" [@staggerList]="enrolledCourses.length">
+        @for (data of enrolledCourses; track data.course.id) {
+          <mat-card
+            class="course-card"
+            @fadeInUp
+            tabindex="0"
+            role="article"
+            [attr.aria-label]="'Course: ' + data.course.title + ' by ' + data.course.instructor + ', ' + data.enrollment.progress + '% complete'">
+            <!-- Course Thumbnail -->
+            <div class="course-thumbnail" [style.background-image]="'url(' + (data.course.thumbnailUrl || 'https://via.placeholder.com/400x250?text=Course') + ')'">
+              <div class="status-badge" [ngClass]="'status-' + data.enrollment.status">
+                {{ data.enrollment.status | titlecase }}
               </div>
             </div>
 
-            <!-- Recent Quiz Attempts -->
-            <div class="recent-attempts" *ngIf="data.quizAttempts.length > 0">
-              <div class="attempts-header">Recent Attempts</div>
-              <div class="attempt-item" *ngFor="let attempt of data.quizAttempts.slice(0, 3)">
-                <div class="attempt-info">
-                  <span class="attempt-score" [style.color]="getScoreColor(attempt.percentage)">
-                    {{ attempt.percentage }}%
-                    <span class="sr-only">{{ attempt.passed ? '(Passed)' : '(Failed)' }}</span>
-                  </span>
-                  <mat-icon class="attempt-icon"
-                            [style.color]="getScoreColor(attempt.percentage)"
-                            [attr.aria-label]="attempt.passed ? 'Passed' : 'Failed'">
-                    {{ attempt.passed ? 'check_circle' : 'cancel' }}
-                  </mat-icon>
+            <mat-card-header>
+              <mat-card-title>{{ data.course.title }}</mat-card-title>
+              <mat-card-subtitle>{{ data.course.instructor }}</mat-card-subtitle>
+            </mat-card-header>
+
+            <mat-card-content>
+              <!-- Progress Section -->
+              <div class="progress-section">
+                <div class="progress-header">
+                  <span class="progress-label">Progress</span>
+                  <span class="progress-value">{{ data.enrollment.progress }}%</span>
                 </div>
-                <div class="attempt-date">
-                  {{ attempt.completedAt | date:'short' }}
-                </div>
+                <mat-progress-bar
+                  [value]="data.enrollment.progress"
+                  [color]="getProgressColor(data.enrollment.progress)"
+                  mode="determinate">
+                </mat-progress-bar>
               </div>
-            </div>
-          </div>
 
-          <!-- No Quiz Data -->
-          <div class="no-quiz-data" *ngIf="data.quizAttempts.length === 0">
-            <mat-icon>quiz</mat-icon>
-            <span>No quiz attempts yet</span>
-          </div>
+              <!-- Quiz Scores Section -->
+              @if (data.quizAttempts.length > 0) {
+                <div class="quiz-scores-section">
+                  <div class="section-title">
+                    <mat-icon>quiz</mat-icon>
+                    <span>Quiz Performance</span>
+                  </div>
 
-          <!-- Enrollment Info -->
-          <div class="enrollment-info">
-            <div class="info-item">
-              <mat-icon>event</mat-icon>
-              <span>Enrolled: {{ data.enrollment.enrolledDate | date:'mediumDate' }}</span>
-            </div>
-            <div class="info-item" *ngIf="data.enrollment.lastAccessedDate">
-              <mat-icon>schedule</mat-icon>
-              <span>Last accessed: {{ data.enrollment.lastAccessedDate | date:'short' }}</span>
-            </div>
-          </div>
-        </mat-card-content>
+                  <div class="quiz-stats">
+                    <div class="quiz-stat">
+                      <div class="stat-label">Completed</div>
+                      <div class="stat-value">{{ data.completedQuizzes }}</div>
+                    </div>
 
-        <mat-card-actions>
-          <button mat-raised-button color="primary" (click)="continueLearning(data.course.id!)">
-            <mat-icon>play_circle</mat-icon>
-            {{ data.enrollment.progress > 0 ? 'Continue Learning' : 'Start Learning' }}
-          </button>
-          <button mat-button (click)="viewCourse(data.course.id!)">
-            <mat-icon>info</mat-icon>
-            View Details
-          </button>
-        </mat-card-actions>
-      </mat-card>
+                    @if (data.bestScore !== undefined) {
+                      <div class="quiz-stat">
+                        <div class="stat-label">Best Score</div>
+                        <div class="stat-value" [ngClass]="getScoreColorClass(data.bestScore)">
+                          {{ data.bestScore | number:'1.0-0' }}%
+                        </div>
+                      </div>
+                    }
+
+                    @if (data.averageScore !== undefined) {
+                      <div class="quiz-stat">
+                        <div class="stat-label">Average Score</div>
+                        <div class="stat-value" [ngClass]="getScoreColorClass(data.averageScore)">
+                          {{ data.averageScore | number:'1.0-0' }}%
+                        </div>
+                      </div>
+                    }
+                  </div>
+
+                  <!-- Recent Quiz Attempts -->
+                  @if (data.quizAttempts.length > 0) {
+                    <div class="recent-attempts">
+                      <div class="attempts-header">Recent Attempts</div>
+                      @for (attempt of data.quizAttempts.slice(0, 3); track attempt.id) {
+                        <div class="attempt-item">
+                          <div class="attempt-info">
+                            <span class="attempt-score" [style.color]="getScoreColor(attempt.percentage)">
+                              {{ attempt.percentage }}%
+                              <span class="sr-only">{{ attempt.passed ? '(Passed)' : '(Failed)' }}</span>
+                            </span>
+                            <mat-icon class="attempt-icon"
+                                      [style.color]="getScoreColor(attempt.percentage)"
+                                      [attr.aria-label]="attempt.passed ? 'Passed' : 'Failed'">
+                              {{ attempt.passed ? 'check_circle' : 'cancel' }}
+                            </mat-icon>
+                          </div>
+                          <div class="attempt-date">
+                            {{ attempt.completedAt | date:'short' }}
+                          </div>
+                        </div>
+                      }
+                    </div>
+                  }
+                </div>
+              }
+
+              <!-- No Quiz Data -->
+              @if (data.quizAttempts.length === 0) {
+                <div class="no-quiz-data">
+                  <mat-icon>quiz</mat-icon>
+                  <span>No quiz attempts yet</span>
+                </div>
+              }
+
+              <!-- Enrollment Info -->
+              <div class="enrollment-info">
+                <div class="info-item">
+                  <mat-icon>event</mat-icon>
+                  <span>Enrolled: {{ data.enrollment.enrolledDate | date:'mediumDate' }}</span>
+                </div>
+                @if (data.enrollment.lastAccessedDate) {
+                  <div class="info-item">
+                    <mat-icon>schedule</mat-icon>
+                    <span>Last accessed: {{ data.enrollment.lastAccessedDate | date:'short' }}</span>
+                  </div>
+                }
+              </div>
+            </mat-card-content>
+
+            <mat-card-actions>
+              <button mat-raised-button color="primary" (click)="continueLearning(data.course.id!)">
+                <mat-icon>play_circle</mat-icon>
+                {{ data.enrollment.progress > 0 ? 'Continue Learning' : 'Start Learning' }}
+              </button>
+              <button mat-button (click)="viewCourse(data.course.id!)">
+                <mat-icon>info</mat-icon>
+                View Details
+              </button>
+            </mat-card-actions>
+          </mat-card>
+        }
+      </div>
     </div>
-  </div>
+  }
 </div>

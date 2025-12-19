@@ -1,16 +1,27 @@
 import { TestBed } from '@angular/core/testing';
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { blockitGuard } from './blockit.guard';
 
-import { BlockitGuard } from './blockit.guard';
-
-describe('BlockitGuard', () => {
-  let guard: BlockitGuard;
+describe('blockitGuard', () => {
+  let mockRoute: ActivatedRouteSnapshot;
+  let mockState: RouterStateSnapshot;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    guard = TestBed.inject(BlockitGuard);
+
+    mockRoute = {} as ActivatedRouteSnapshot;
+    mockState = { url: '/test' } as RouterStateSnapshot;
   });
 
   it('should be created', () => {
-    expect(guard).toBeTruthy();
+    expect(blockitGuard).toBeTruthy();
+  });
+
+  it('should allow activation', () => {
+    const result = TestBed.runInInjectionContext(() => {
+      return blockitGuard(mockRoute, mockState);
+    });
+
+    expect(result).toBe(true);
   });
 });

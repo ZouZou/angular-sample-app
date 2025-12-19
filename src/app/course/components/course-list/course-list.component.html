@@ -11,14 +11,18 @@
           <mat-icon>dashboard</mat-icon>
           Dashboard
         </button>
-        <button *ngIf="isAdmin()" mat-button (click)="navigateToAdmin()">
-          <mat-icon>admin_panel_settings</mat-icon>
-          Admin Dashboard
-        </button>
-        <button *ngIf="isAdmin()" mat-raised-button color="primary" (click)="navigateToCreate()">
-          <mat-icon>add</mat-icon>
-          Create Course
-        </button>
+        @if (isAdmin()) {
+          <button mat-button (click)="navigateToAdmin()">
+            <mat-icon>admin_panel_settings</mat-icon>
+            Admin Dashboard
+          </button>
+        }
+        @if (isAdmin()) {
+          <button mat-raised-button color="primary" (click)="navigateToCreate()">
+            <mat-icon>add</mat-icon>
+            Create Course
+          </button>
+        }
         <button mat-button (click)="logout()">
           <mat-icon>logout</mat-icon>
           Sign out
@@ -34,103 +38,125 @@
       <mat-form-field appearance="outline">
         <mat-label>Category</mat-label>
         <mat-select [(value)]="selectedCategory" (selectionChange)="applyFilters()">
-          <mat-option *ngFor="let category of categories" [value]="category">
-            {{ category }}
-          </mat-option>
+          @for (category of categories; track category) {
+            <mat-option [value]="category">
+              {{ category }}
+            </mat-option>
+          }
         </mat-select>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>Level</mat-label>
         <mat-select [(value)]="selectedLevel" (selectionChange)="applyFilters()">
-          <mat-option *ngFor="let level of levels" [value]="level">
-            {{ level }}
-          </mat-option>
+          @for (level of levels; track level) {
+            <mat-option [value]="level">
+              {{ level }}
+            </mat-option>
+          }
         </mat-select>
       </mat-form-field>
     </section>
 
     <!-- Loading State with Skeleton Cards -->
-    <div *ngIf="isLoading" class="courses-grid" @fadeInUp>
-      <app-skeleton-course-card *ngFor="let item of [1,2,3,4,5,6]" @fadeInUp></app-skeleton-course-card>
-    </div>
+    @if (isLoading) {
+      <div class="courses-grid" @fadeInUp>
+        @for (item of [1,2,3,4,5,6]; track $index) {
+          <app-skeleton-course-card @fadeInUp></app-skeleton-course-card>
+        }
+      </div>
+    }
 
     <!-- Error State -->
-    <div *ngIf="error && !isLoading" class="error-container">
-      <mat-icon color="warn">error</mat-icon>
-      <p>{{ error }}</p>
-      <button mat-raised-button color="primary" (click)="loadCourses()">Retry</button>
-    </div>
+    @if (error && !isLoading) {
+      <div class="error-container">
+        <mat-icon color="warn">error</mat-icon>
+        <p>{{ error }}</p>
+        <button mat-raised-button color="primary" (click)="loadCourses()">Retry</button>
+      </div>
+    }
 
     <!-- Empty State -->
-    <div *ngIf="!isLoading && !error && filteredCourses.length === 0" class="empty-state">
-      <mat-icon>school</mat-icon>
-      <h2>No courses found</h2>
-      <p>No courses found matching your criteria. Try adjusting your filters.</p>
-    </div>
+    @if (!isLoading && !error && filteredCourses.length === 0) {
+      <div class="empty-state">
+        <mat-icon>school</mat-icon>
+        <h2>No courses found</h2>
+        <p>No courses found matching your criteria. Try adjusting your filters.</p>
+      </div>
+    }
 
     <!-- Course Grid -->
-    <div *ngIf="!isLoading && !error && filteredCourses.length > 0" class="courses-grid" [@staggerList]="filteredCourses.length">
-      <mat-card *ngFor="let course of filteredCourses"
-                class="course-card"
-                @fadeInUp
-                tabindex="0"
-                role="button"
-                [attr.aria-label]="'View details for ' + course.title + ' course by ' + course.instructor"
-                (click)="navigateToDetail(course.id)"
-                (keydown.enter)="navigateToDetail(course.id)"
-                (keydown.space)="navigateToDetail(course.id); $event.preventDefault()">
-        <!-- Course Thumbnail -->
-        <div class="course-thumbnail" [style.background-image]="'url(' + (course.thumbnailUrl || 'https://via.placeholder.com/400x250?text=Course') + ')'">
-          <div class="level-badge" [style.background-color]="getLevelColor(course.level)">
-            {{ course.level }}
-          </div>
-        </div>
+    @if (!isLoading && !error && filteredCourses.length > 0) {
+      <div class="courses-grid" [@staggerList]="filteredCourses.length">
+        @for (course of filteredCourses; track course.id) {
+          <mat-card
+            class="course-card"
+            @fadeInUp
+            tabindex="0"
+            role="button"
+            [attr.aria-label]="'View details for ' + course.title + ' course by ' + course.instructor"
+            (click)="navigateToDetail(course.id)"
+            (keydown.enter)="navigateToDetail(course.id)"
+            (keydown.space)="navigateToDetail(course.id); $event.preventDefault()">
+            <!-- Course Thumbnail -->
+            <div class="course-thumbnail" [style.background-image]="'url(' + (course.thumbnailUrl || 'https://via.placeholder.com/400x250?text=Course') + ')'">
+              <div class="level-badge" [style.background-color]="getLevelColor(course.level)">
+                {{ course.level }}
+              </div>
+            </div>
 
-      <mat-card-header>
-        <mat-card-title>{{ course.title }}</mat-card-title>
-        <mat-card-subtitle>{{ course.instructor }}</mat-card-subtitle>
-      </mat-card-header>
+          <mat-card-header>
+            <mat-card-title>{{ course.title }}</mat-card-title>
+            <mat-card-subtitle>{{ course.instructor }}</mat-card-subtitle>
+          </mat-card-header>
 
-      <mat-card-content>
-        <p class="description">{{ course.description }}</p>
+          <mat-card-content>
+            <p class="description">{{ course.description }}</p>
 
-        <div class="course-stats">
-          <div class="stat">
-            <mat-icon>access_time</mat-icon>
-            <span>{{ course.duration }}h</span>
-          </div>
-          <div class="stat">
-            <mat-icon>people</mat-icon>
-            <span>{{ course.enrollmentCount || 0 }}</span>
-          </div>
-          <div class="stat" *ngIf="course.rating">
-            <mat-icon>star</mat-icon>
-            <span>{{ course.rating }}</span>
-          </div>
-        </div>
+            <div class="course-stats">
+              <div class="stat">
+                <mat-icon>access_time</mat-icon>
+                <span>{{ course.duration }}h</span>
+              </div>
+              <div class="stat">
+                <mat-icon>people</mat-icon>
+                <span>{{ course.enrollmentCount || 0 }}</span>
+              </div>
+              @if (course.rating) {
+                <div class="stat">
+                  <mat-icon>star</mat-icon>
+                  <span>{{ course.rating }}</span>
+                </div>
+              }
+            </div>
 
-        <div class="course-footer">
-          <span class="category">{{ course.category }}</span>
-          <span class="price">${{ course.price }}</span>
-        </div>
-      </mat-card-content>
+            <div class="course-footer">
+              <span class="category">{{ course.category }}</span>
+              <span class="price">${{ course.price }}</span>
+            </div>
+          </mat-card-content>
 
-      <mat-card-actions>
-        <button mat-button color="primary" (click)="navigateToDetail($event, course.id)">
-          <mat-icon>visibility</mat-icon>
-          View Details
-        </button>
-        <button *ngIf="isAdmin()" mat-button color="accent" (click)="navigateToEdit($event, course.id)">
-          <mat-icon>edit</mat-icon>
-          Edit Course
-        </button>
-        <button *ngIf="isAdmin()" mat-button color="warn" (click)="deleteCourse($event, course.id)">
-          <mat-icon>delete</mat-icon>
-          Delete Course
-        </button>
-      </mat-card-actions>
-      </mat-card>
-    </div>
+          <mat-card-actions>
+            <button mat-button color="primary" (click)="navigateToDetail($event, course.id)">
+              <mat-icon>visibility</mat-icon>
+              View Details
+            </button>
+            @if (isAdmin()) {
+              <button mat-button color="accent" (click)="navigateToEdit($event, course.id)">
+                <mat-icon>edit</mat-icon>
+                Edit Course
+              </button>
+            }
+            @if (isAdmin()) {
+              <button mat-button color="warn" (click)="deleteCourse($event, course.id)">
+                <mat-icon>delete</mat-icon>
+                Delete Course
+              </button>
+            }
+          </mat-card-actions>
+          </mat-card>
+        }
+      </div>
+    }
   </main>
 </div>

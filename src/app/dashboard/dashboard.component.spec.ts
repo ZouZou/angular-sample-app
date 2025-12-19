@@ -19,8 +19,8 @@ describe('DashboardComponent', () => {
     breakpointObserverSpy.observe.and.returnValue(of({ matches: false, breakpoints: {} }));
 
     TestBed.configureTestingModule({
-      declarations: [DashboardComponent],
       imports: [
+        DashboardComponent,
         NoopAnimationsModule,
         LayoutModule,
         MatButtonModule,

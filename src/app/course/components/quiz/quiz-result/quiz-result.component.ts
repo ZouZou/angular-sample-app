@@ -1,5 +1,10 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit, OnDestroy, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule, ActivatedRoute, Router } from '@angular/router';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { QuizService } from '../../../services/quiz.service';
@@ -11,9 +16,25 @@ import { LoggerService } from '../../../../shared/services/logger.service';
   selector: 'app-quiz-result',
   templateUrl: './quiz-result.component.html',
   styleUrls: ['./quiz-result.component.css'],
-  standalone: false
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterModule,
+    MatCardModule,
+    MatButtonModule,
+    MatIconModule,
+    MatProgressSpinnerModule
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class QuizResultComponent implements OnInit, OnDestroy {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private quizService = inject(QuizService);
+  private notificationService = inject(NotificationService);
+  private logger = inject(LoggerService);
+  private cdr = inject(ChangeDetectorRef);
+
   quiz: Quiz | null = null;
   attempt: QuizAttempt | null = null;
   isLoading = true;
@@ -23,14 +44,6 @@ export class QuizResultComponent implements OnInit, OnDestroy {
   private courseId!: number;
   private quizId!: number;
   private attemptId!: number;
-
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private quizService: QuizService,
-    private notificationService: NotificationService,
-    private logger: LoggerService
-  ) {}
 
   ngOnInit(): void {
     const courseIdParam = this.route.parent?.snapshot.paramMap.get('id');
@@ -45,6 +58,7 @@ export class QuizResultComponent implements OnInit, OnDestroy {
     } else {
       this.error = 'Invalid parameters';
       this.isLoading = false;
+      this.cdr.markForCheck();
     }
   }
 
@@ -56,6 +70,7 @@ export class QuizResultComponent implements OnInit, OnDestroy {
   loadResults(): void {
     this.isLoading = true;
     this.error = null;
+    this.cdr.markForCheck();
 
     this.quizService.getQuiz(this.quizId)
       .pipe(takeUntil(this.destroy$))
@@ -63,11 +78,13 @@ export class QuizResultComponent implements OnInit, OnDestroy {
         next: (quiz) => {
           this.quiz = quiz;
           this.loadAttempt();
+          this.cdr.markForCheck();
         },
         error: (error) => {
           this.logger.error('Error loading quiz:', error);
           this.error = 'Failed to load quiz';
           this.isLoading = false;
+          this.cdr.markForCheck();
         }
       });
   }
@@ -81,15 +98,18 @@ export class QuizResultComponent implements OnInit, OnDestroy {
             this.attempt = attempt;
             this.isLoading = false;
             this.showScoreNotification(attempt);
+            this.cdr.markForCheck();
           } else {
             this.error = 'Attempt not found';
             this.isLoading = false;
+            this.cdr.markForCheck();
           }
         },
         error: (error) => {
           this.logger.error('Error loading attempt:', error);
           this.error = 'Failed to load results';
           this.isLoading = false;
+          this.cdr.markForCheck();
         }
       });
   }

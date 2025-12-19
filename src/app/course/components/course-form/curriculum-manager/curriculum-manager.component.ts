@@ -1,30 +1,47 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, input, OnChanges, SimpleChanges, inject, ChangeDetectionStrategy } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatCardModule } from '@angular/material/card';
 import { CurriculumService } from '../../../services/curriculum.service';
 import { CourseSection, Lesson } from '../../../models/curriculum.interface';
 import { LoggerService } from '../../../../shared/services/logger.service';
+import { SectionFormComponent } from '../section-form/section-form.component';
+import { LessonFormComponent } from '../lesson-form/lesson-form.component';
 
 @Component({
   selector: 'app-curriculum-manager',
   templateUrl: './curriculum-manager.component.html',
   styleUrls: ['./curriculum-manager.component.css'],
-  standalone: false
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatButtonModule,
+    MatIconModule,
+    MatExpansionModule,
+    MatProgressSpinnerModule,
+    MatCardModule,
+    SectionFormComponent,
+    LessonFormComponent
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CurriculumManagerComponent implements OnChanges {
-  @Input() courseId: number | null = null;
+  private curriculumService = inject(CurriculumService);
+  private logger = inject(LoggerService);
+
+  courseId = input<number | null>(null);
 
   sections: CourseSection[] = [];
   isLoadingCurriculum = false;
   editingSection: CourseSection | null = null;
   editingLesson: { section: CourseSection; lesson: Lesson | null } | null = null;
 
-  constructor(
-    private curriculumService: CurriculumService,
-    private logger: LoggerService
-  ) {}
-
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['courseId'] && this.courseId) {
-      this.loadCurriculum(this.courseId);
+    if (changes['courseId'] && this.courseId()) {
+      this.loadCurriculum(this.courseId()!);
     }
   }
 
@@ -51,7 +68,7 @@ export class CurriculumManagerComponent implements OnChanges {
 
   startAddSection(): void {
     this.editingSection = {
-      courseId: this.courseId!,
+      courseId: this.courseId()!,
       title: '',
       description: '',
       order: this.sections.length + 1,
@@ -68,12 +85,12 @@ export class CurriculumManagerComponent implements OnChanges {
   }
 
   saveSection(formData: { title: string; description: string }): void {
-    if (!this.courseId) {
+    if (!this.courseId()) {
       return;
     }
 
     const sectionData: Partial<CourseSection> = {
-      courseId: this.courseId,
+      courseId: this.courseId()!,
       title: formData.title,
       description: formData.description,
       order: this.editingSection?.order || this.sections.length + 1
@@ -151,8 +168,8 @@ export class CurriculumManagerComponent implements OnChanges {
     });
 
     const sectionIds = this.sections.map(s => s.id!).filter(id => id !== undefined);
-    if (sectionIds.length > 0 && this.courseId) {
-      this.curriculumService.reorderSections(this.courseId, sectionIds).subscribe({
+    if (sectionIds.length > 0 && this.courseId()) {
+      this.curriculumService.reorderSections(this.courseId()!, sectionIds).subscribe({
         error: (error) => this.logger.error('Error reordering sections:', error)
       });
     }

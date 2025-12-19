@@ -1,6 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
+import { Component, OnInit, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule, ActivatedRoute, Router } from '@angular/router';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatListModule } from '@angular/material/list';
 import { CourseService } from '../../services/course.service';
 import { CurriculumService } from '../../services/curriculum.service';
 import { EnrollmentService } from '../../services/enrollment.service';
@@ -16,9 +24,33 @@ import { LoggerService } from '../../../shared/services/logger.service';
   selector: 'app-course-detail',
   templateUrl: './course-detail.component.html',
   styleUrls: ['./course-detail.component.css'],
-  standalone: false
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatCardModule,
+    MatIconModule,
+    MatProgressSpinnerModule,
+    MatExpansionModule,
+    MatChipsModule,
+    MatListModule
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CourseDetailComponent implements OnInit {
+  private courseService = inject(CourseService);
+  private curriculumService = inject(CurriculumService);
+  private enrollmentService = inject(EnrollmentService);
+  private authService = inject(AuthService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private dialog = inject(MatDialog);
+  private notificationService = inject(NotificationService);
+  private logger = inject(LoggerService);
+  private cdr = inject(ChangeDetectorRef);
+
   course: Course | null = null;
   enrollment: Enrollment | null = null;
   sections: CourseSection[] = [];
@@ -26,18 +58,6 @@ export class CourseDetailComponent implements OnInit {
   isEnrolling = false;
   isLoadingCurriculum = false;
   error: string | null = null;
-
-  constructor(
-    private courseService: CourseService,
-    private curriculumService: CurriculumService,
-    private enrollmentService: EnrollmentService,
-    private authService: AuthService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private dialog: MatDialog,
-    private notificationService: NotificationService,
-    private logger: LoggerService
-  ) {}
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
@@ -52,6 +72,7 @@ export class CourseDetailComponent implements OnInit {
   loadCourse(id: number): void {
     this.isLoading = true;
     this.error = null;
+    this.cdr.markForCheck();
 
     this.courseService.getCourse(id).subscribe({
       next: (course) => {
@@ -59,17 +80,20 @@ export class CourseDetailComponent implements OnInit {
         this.checkEnrollment(id);
         this.loadCurriculum(id);
         this.isLoading = false;
+        this.cdr.markForCheck();
       },
       error: (error) => {
         this.logger.error('Error loading course:', error);
         this.error = 'Failed to load course. The course may not exist.';
         this.isLoading = false;
+        this.cdr.markForCheck();
       }
     });
   }
 
   loadCurriculum(courseId: number): void {
     this.isLoadingCurriculum = true;
+    this.cdr.markForCheck();
 
     this.curriculumService.getCourseSections(courseId).subscribe({
       next: (sections) => {
@@ -79,10 +103,12 @@ export class CourseDetailComponent implements OnInit {
           section.lessons.sort((a, b) => a.order - b.order);
         });
         this.isLoadingCurriculum = false;
+        this.cdr.markForCheck();
       },
       error: (error) => {
         this.logger.error('Error loading curriculum:', error);
         this.isLoadingCurriculum = false;
+        this.cdr.markForCheck();
       }
     });
   }
@@ -93,9 +119,11 @@ export class CourseDetailComponent implements OnInit {
       this.enrollmentService.getEnrollment(userId, courseId).subscribe({
         next: (enrollment) => {
           this.enrollment = enrollment;
+          this.cdr.markForCheck();
         },
         error: (error) => {
           this.logger.error('Error checking enrollment:', error);
+          this.cdr.markForCheck();
         }
       });
     }
@@ -171,12 +199,14 @@ export class CourseDetailComponent implements OnInit {
     }
 
     this.isEnrolling = true;
+    this.cdr.markForCheck();
 
     this.enrollmentService.enrollInCourse(userId, this.course.id).subscribe({
       next: (enrollment) => {
         this.enrollment = enrollment;
         this.isEnrolling = false;
         this.notificationService.success(`Successfully enrolled in ${this.course!.title}!`);
+        this.cdr.markForCheck();
         // Navigate to course player
         this.router.navigate(['/courses', this.course!.id, 'learn']);
       },
@@ -184,6 +214,7 @@ export class CourseDetailComponent implements OnInit {
         this.logger.error('Error enrolling in course:', error);
         this.notificationService.error(error.message || 'Failed to enroll in course. Please try again.');
         this.isEnrolling = false;
+        this.cdr.markForCheck();
       }
     });
   }

@@ -1,12 +1,13 @@
 import { TestBed } from '@angular/core/testing';
-import { Router, UrlTree } from '@angular/router';
-import { AdminGuard } from './admin.guard';
+import { Router, UrlTree, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { adminGuard } from './admin.guard';
 import { AuthService } from '../../course/services/auth.service';
 
-describe('AdminGuard', () => {
-  let guard: AdminGuard;
+describe('adminGuard', () => {
   let authService: jasmine.SpyObj<AuthService>;
   let router: jasmine.SpyObj<Router>;
+  let mockRoute: ActivatedRouteSnapshot;
+  let mockState: RouterStateSnapshot;
 
   beforeEach(() => {
     const authServiceSpy = jasmine.createSpyObj('AuthService', ['isAuthenticated', 'isAdmin']);
@@ -14,19 +15,20 @@ describe('AdminGuard', () => {
 
     TestBed.configureTestingModule({
       providers: [
-        AdminGuard,
         { provide: AuthService, useValue: authServiceSpy },
         { provide: Router, useValue: routerSpy }
       ]
     });
 
-    guard = TestBed.inject(AdminGuard);
     authService = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
     router = TestBed.inject(Router) as jasmine.SpyObj<Router>;
+
+    mockRoute = {} as ActivatedRouteSnapshot;
+    mockState = { url: '/admin' } as RouterStateSnapshot;
   });
 
   it('should be created', () => {
-    expect(guard).toBeTruthy();
+    expect(adminGuard).toBeTruthy();
   });
 
   describe('canActivate', () => {
@@ -34,7 +36,9 @@ describe('AdminGuard', () => {
       authService.isAuthenticated.and.returnValue(true);
       authService.isAdmin.and.returnValue(true);
 
-      const result = guard.canActivate();
+      const result = TestBed.runInInjectionContext(() => {
+        return adminGuard(mockRoute, mockState);
+      });
 
       expect(result).toBe(true);
       expect(authService.isAuthenticated).toHaveBeenCalled();
@@ -48,7 +52,9 @@ describe('AdminGuard', () => {
       authService.isAdmin.and.returnValue(false);
       router.createUrlTree.and.returnValue(coursesUrlTree);
 
-      const result = guard.canActivate();
+      const result = TestBed.runInInjectionContext(() => {
+        return adminGuard(mockRoute, mockState);
+      });
 
       expect(result).toBe(coursesUrlTree);
       expect(authService.isAuthenticated).toHaveBeenCalled();
@@ -61,7 +67,9 @@ describe('AdminGuard', () => {
       authService.isAdmin.and.returnValue(false);
       router.createUrlTree.and.returnValue(coursesUrlTree);
 
-      const result = guard.canActivate();
+      const result = TestBed.runInInjectionContext(() => {
+        return adminGuard(mockRoute, mockState);
+      });
 
       expect(result).toBe(coursesUrlTree);
       expect(authService.isAuthenticated).toHaveBeenCalled();
@@ -73,7 +81,9 @@ describe('AdminGuard', () => {
       authService.isAuthenticated.and.returnValue(true);
       authService.isAdmin.and.returnValue(true);
 
-      guard.canActivate();
+      TestBed.runInInjectionContext(() => {
+        adminGuard(mockRoute, mockState);
+      });
 
       expect(authService.isAuthenticated).toHaveBeenCalled();
       expect(authService.isAdmin).toHaveBeenCalled();
@@ -83,7 +93,9 @@ describe('AdminGuard', () => {
       authService.isAuthenticated.and.returnValue(false);
       router.createUrlTree.and.returnValue({} as UrlTree);
 
-      guard.canActivate();
+      TestBed.runInInjectionContext(() => {
+        adminGuard(mockRoute, mockState);
+      });
 
       // Due to short-circuit evaluation, isAdmin may or may not be called
       // The important thing is that the result is a redirect
@@ -96,7 +108,9 @@ describe('AdminGuard', () => {
       authService.isAdmin.and.returnValue(false);
       router.createUrlTree.and.returnValue(coursesUrlTree);
 
-      const result = guard.canActivate();
+      const result = TestBed.runInInjectionContext(() => {
+        return adminGuard(mockRoute, mockState);
+      });
 
       expect(result).toBeInstanceOf(Object);
       expect(result).toBe(coursesUrlTree);
@@ -108,7 +122,9 @@ describe('AdminGuard', () => {
       authService.isAuthenticated.and.returnValue(true);
       authService.isAdmin.and.returnValue(true);
 
-      const canAccess = guard.canActivate();
+      const canAccess = TestBed.runInInjectionContext(() => {
+        return adminGuard(mockRoute, mockState);
+      });
 
       expect(canAccess).toBe(true);
     });
@@ -119,7 +135,9 @@ describe('AdminGuard', () => {
       const coursesUrlTree = {} as UrlTree;
       router.createUrlTree.and.returnValue(coursesUrlTree);
 
-      const canAccess = guard.canActivate();
+      const canAccess = TestBed.runInInjectionContext(() => {
+        return adminGuard(mockRoute, mockState);
+      });
 
       expect(canAccess).toBe(coursesUrlTree);
       expect(canAccess).not.toBe(true);
@@ -131,7 +149,9 @@ describe('AdminGuard', () => {
       const coursesUrlTree = {} as UrlTree;
       router.createUrlTree.and.returnValue(coursesUrlTree);
 
-      const canAccess = guard.canActivate();
+      const canAccess = TestBed.runInInjectionContext(() => {
+        return adminGuard(mockRoute, mockState);
+      });
 
       expect(canAccess).toBe(coursesUrlTree);
       expect(canAccess).not.toBe(true);
@@ -142,7 +162,9 @@ describe('AdminGuard', () => {
       const coursesUrlTree = {} as UrlTree;
       router.createUrlTree.and.returnValue(coursesUrlTree);
 
-      const canAccess = guard.canActivate();
+      const canAccess = TestBed.runInInjectionContext(() => {
+        return adminGuard(mockRoute, mockState);
+      });
 
       expect(canAccess).not.toBe(true);
     });
@@ -153,9 +175,11 @@ describe('AdminGuard', () => {
       authService.isAuthenticated.and.returnValue(true);
       authService.isAdmin.and.returnValue(true);
 
-      guard.canActivate();
-      guard.canActivate();
-      guard.canActivate();
+      TestBed.runInInjectionContext(() => {
+        adminGuard(mockRoute, mockState);
+        adminGuard(mockRoute, mockState);
+        adminGuard(mockRoute, mockState);
+      });
 
       expect(authService.isAuthenticated).toHaveBeenCalledTimes(3);
       expect(authService.isAdmin).toHaveBeenCalledTimes(3);
@@ -166,7 +190,9 @@ describe('AdminGuard', () => {
       authService.isAuthenticated.and.returnValue(true);
       authService.isAdmin.and.returnValue(true);
 
-      let result = guard.canActivate();
+      let result = TestBed.runInInjectionContext(() => {
+        return adminGuard(mockRoute, mockState);
+      });
       expect(result).toBe(true);
 
       // Second check - no longer admin
@@ -174,7 +200,9 @@ describe('AdminGuard', () => {
       const coursesUrlTree = {} as UrlTree;
       router.createUrlTree.and.returnValue(coursesUrlTree);
 
-      result = guard.canActivate();
+      result = TestBed.runInInjectionContext(() => {
+        return adminGuard(mockRoute, mockState);
+      });
       expect(result).toBe(coursesUrlTree);
     });
   });
@@ -184,7 +212,9 @@ describe('AdminGuard', () => {
       authService.isAuthenticated.and.returnValue(true);
       authService.isAdmin.and.returnValue(true);
 
-      const result = guard.canActivate();
+      const result = TestBed.runInInjectionContext(() => {
+        return adminGuard(mockRoute, mockState);
+      });
 
       expect(typeof result === 'boolean' || result instanceof Object).toBe(true);
     });
@@ -193,7 +223,9 @@ describe('AdminGuard', () => {
       authService.isAuthenticated.and.returnValue(false);
       router.createUrlTree.and.returnValue({} as UrlTree);
 
-      const result = guard.canActivate();
+      const result = TestBed.runInInjectionContext(() => {
+        return adminGuard(mockRoute, mockState);
+      });
 
       expect(typeof result === 'boolean' || result instanceof Object).toBe(true);
     });
@@ -204,7 +236,9 @@ describe('AdminGuard', () => {
       authService.isAuthenticated.and.returnValue(false);
       router.createUrlTree.and.returnValue({} as UrlTree);
 
-      guard.canActivate();
+      TestBed.runInInjectionContext(() => {
+        adminGuard(mockRoute, mockState);
+      });
 
       expect(router.createUrlTree).toHaveBeenCalledWith(['/courses']);
     });
@@ -213,7 +247,9 @@ describe('AdminGuard', () => {
       authService.isAuthenticated.and.returnValue(true);
       authService.isAdmin.and.returnValue(true);
 
-      const result = guard.canActivate();
+      const result = TestBed.runInInjectionContext(() => {
+        return adminGuard(mockRoute, mockState);
+      });
 
       expect(result).toBe(true);
       expect(router.createUrlTree).not.toHaveBeenCalled();
@@ -226,7 +262,9 @@ describe('AdminGuard', () => {
       authService.isAdmin.and.returnValue(false);
       router.createUrlTree.and.returnValue({} as UrlTree);
 
-      const canAccess = guard.canActivate();
+      const canAccess = TestBed.runInInjectionContext(() => {
+        return adminGuard(mockRoute, mockState);
+      });
 
       expect(canAccess).not.toBe(true);
     });
@@ -235,7 +273,9 @@ describe('AdminGuard', () => {
       authService.isAuthenticated.and.returnValue(true);
       authService.isAdmin.and.returnValue(true);
 
-      const canAccess = guard.canActivate();
+      const canAccess = TestBed.runInInjectionContext(() => {
+        return adminGuard(mockRoute, mockState);
+      });
 
       expect(canAccess).toBe(true);
     });
@@ -245,7 +285,9 @@ describe('AdminGuard', () => {
       authService.isAuthenticated.and.returnValue(false);
       router.createUrlTree.and.returnValue({} as UrlTree);
 
-      const canAccess = guard.canActivate();
+      const canAccess = TestBed.runInInjectionContext(() => {
+        return adminGuard(mockRoute, mockState);
+      });
 
       expect(canAccess).not.toBe(true);
       expect(router.createUrlTree).toHaveBeenCalledWith(['/courses']);

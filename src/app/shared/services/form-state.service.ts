@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subject, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
@@ -14,13 +14,13 @@ interface FormState {
   providedIn: 'root'
 })
 export class FormStateService {
+  private logger = inject(LoggerService);
+
   private autoSaveSubject = new Subject<{ formId: string; status: 'saving' | 'saved' | 'error' }>();
   public autoSaveStatus$ = this.autoSaveSubject.asObservable();
 
   private readonly STORAGE_PREFIX = 'form_state_';
   private readonly AUTO_SAVE_DELAY = 2000; // 2 seconds
-
-  constructor(private logger: LoggerService) {}
 
   /**
    * Enable auto-save for a form

@@ -1,15 +1,41 @@
-import { Component } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSelectModule } from '@angular/material/select';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { NotificationService } from '../shared/services/notification.service';
 import { LoggerService } from '../shared/services/logger.service';
 
 @Component({
-  standalone: false,
+  standalone: true,
   selector: 'app-address',
   templateUrl: './address.component.html',
-  styleUrls: ['./address.component.css']
+  styleUrls: ['./address.component.css'],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatSelectModule,
+    MatRadioModule,
+    MatIconModule,
+    MatProgressSpinnerModule
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddressComponent {
+  private fb = inject(FormBuilder);
+  private notificationService = inject(NotificationService);
+  private logger = inject(LoggerService);
+
   addressForm = this.fb.group({
     company: null,
     firstName: [null, Validators.required],
@@ -88,12 +114,6 @@ export class AddressComponent {
     {name: 'Wisconsin', abbreviation: 'WI'},
     {name: 'Wyoming', abbreviation: 'WY'}
   ];
-
-  constructor(
-    private fb: FormBuilder,
-    private notificationService: NotificationService,
-    private logger: LoggerService
-  ) {}
 
   onSubmit(): void {
     if (this.addressForm.valid) {

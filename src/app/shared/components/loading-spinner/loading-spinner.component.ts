@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
@@ -7,9 +7,10 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   templateUrl: './loading-spinner.component.html',
   styleUrls: ['./loading-spinner.component.css'],
   standalone: true,
-  imports: [CommonModule, MatProgressSpinnerModule]
+  imports: [CommonModule, MatProgressSpinnerModule],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoadingSpinnerComponent {
-  @Input() message: string = 'Loading...';
-  @Input() diameter: number = 60;
+  message = input<string>('Loading...');
+  diameter = input<number>(60);
 }

@@ -1,6 +1,16 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit, OnDestroy, inject, ChangeDetectionStrategy } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { NotificationService } from '../shared/services/notification.service';
 import { FormStateService } from '../shared/services/form-state.service';
 import { Subject } from 'rxjs';
@@ -13,12 +23,31 @@ interface QuoteResult {
 }
 
 @Component({
-  standalone: false,
+  standalone: true,
   selector: 'app-motor-quotation',
   templateUrl: './motor-quotation.component.html',
-  styleUrls: ['./motor-quotation.component.css']
+  styleUrls: ['./motor-quotation.component.css'],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatIconModule,
+    MatRadioModule,
+    MatCheckboxModule,
+    MatProgressSpinnerModule
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MotorQuotationComponent implements OnInit, OnDestroy {
+  private formBuilder = inject(FormBuilder);
+  private breakpointObserver = inject(BreakpointObserver);
+  private notificationService = inject(NotificationService);
+  private formStateService = inject(FormStateService);
+
   currentStep = 0;
   isLinear = true;
   isMobile = false;
@@ -60,12 +89,7 @@ export class MotorQuotationComponent implements OnInit, OnDestroy {
   deductibles = [250, 500, 1000, 2500, 5000];
   parkingTypes = ['Garage', 'Driveway', 'Street', 'Carport', 'Parking Lot'];
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private breakpointObserver: BreakpointObserver,
-    private notificationService: NotificationService,
-    private formStateService: FormStateService
-  ) {
+  constructor() {
     // Generate years from current year back 25 years
     const currentYear = new Date().getFullYear();
     for (let i = currentYear; i >= currentYear - 25; i--) {

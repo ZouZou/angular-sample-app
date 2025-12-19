@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, ChangeDetectionStrategy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { PwaService } from '../../services/pwa.service';
@@ -8,13 +8,14 @@ import { PwaService } from '../../services/pwa.service';
   templateUrl: './pwa-install-prompt.component.html',
   styleUrls: ['./pwa-install-prompt.component.css'],
   standalone: false
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PwaInstallPromptComponent implements OnInit, OnDestroy {
+  public pwaService = inject(PwaService);
+
   showPrompt = false;
   showIOSInstructions = false;
   private destroy$ = new Subject<void>();
-
-  constructor(public pwaService: PwaService) {}
 
   ngOnInit(): void {
     // Check if iOS and in Safari (needs manual installation instructions)

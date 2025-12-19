@@ -1,0 +1,30 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(nul)",
+      "Bash(npm outdated:*)",
+      "Bash(powershell:*)",
+      "Bash(npm audit:*)",
+      "Bash(npm test:*)",
+      "Bash(timeout /t 20)",
+      "Bash(find:*)",
+      "Bash(cat:*)",
+      "Bash(timeout 30 npm test:*)",
+      "mcp__angular-cli__get_best_practices",
+      "mcp__angular-cli__list_projects",
+      "Bash(git checkout:*)",
+      "Bash(npm run build:*)",
+      "Bash(npx ng build:*)",
+      "Bash(ls:*)",
+      "Bash(grep:*)",
+      "Bash(npm run test:*)",
+      "Bash(curl:*)",
+      "Bash(PGPASSWORD=postgres psql:*)",
+      "Bash(npx ts-node:*)",
+      "Bash(npm run seed:*)",
+      "Bash(node fix-quiz-options.js:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CourseSection, Lesson } from '../models/curriculum.interface';
@@ -8,9 +8,9 @@ import { environment } from '../../../environments/environment';
   providedIn: 'root'
 })
 export class CurriculumService {
-  private apiUrl = environment.apiUrl;
+  private http = inject(HttpClient);
 
-  constructor(private http: HttpClient) { }
+  private apiUrl = environment.apiUrl;
 
   /**
    * Get all sections for a course (with lessons)

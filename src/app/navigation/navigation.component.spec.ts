@@ -19,8 +19,8 @@ describe('NavigationComponent', () => {
     breakpointObserverSpy.observe.and.returnValue(of({ matches: false, breakpoints: {} }));
 
     TestBed.configureTestingModule({
-      declarations: [NavigationComponent],
       imports: [
+        NavigationComponent,
         NoopAnimationsModule,
         LayoutModule,
         MatButtonModule,

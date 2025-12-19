@@ -35,7 +35,7 @@ describe('AdminComponent', () => {
     courseSpy.getCourses.and.returnValue(of([]));
 
     await TestBed.configureTestingModule({
-      declarations: [ AdminComponent ],
+      imports: [ AdminComponent ],
       providers: [
         { provide: AuthService, useValue: authSpy },
         { provide: QuizService, useValue: quizSpy },

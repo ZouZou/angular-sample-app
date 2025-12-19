@@ -1,5 +1,14 @@
-import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit, OnDestroy, HostListener, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule, ActivatedRoute, Router } from '@angular/router';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatListModule } from '@angular/material/list';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Subject, combineLatest } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { CurriculumService } from '../../../services/curriculum.service';
@@ -16,9 +25,32 @@ import { Enrollment } from '../../../models/enrollment.interface';
   selector: 'app-course-player',
   templateUrl: './course-player.component.html',
   styleUrls: ['./course-player.component.css'],
-  standalone: false
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterModule,
+    MatSidenavModule,
+    MatToolbarModule,
+    MatListModule,
+    MatIconModule,
+    MatButtonModule,
+    MatProgressBarModule,
+    MatExpansionModule,
+    MatProgressSpinnerModule
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CoursePlayerComponent implements OnInit, OnDestroy {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private courseService = inject(CourseService);
+  private curriculumService = inject(CurriculumService);
+  private enrollmentService = inject(EnrollmentService);
+  private progressService = inject(ProgressService);
+  private authService = inject(AuthService);
+  private logger = inject(LoggerService);
+  private cdr = inject(ChangeDetectorRef);
+
   course: Course | null = null;
   sections: CourseSection[] = [];
   enrollment: Enrollment | null = null;
@@ -31,17 +63,6 @@ export class CoursePlayerComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   private courseId!: number;
   private userId!: number;
-
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private courseService: CourseService,
-    private curriculumService: CurriculumService,
-    private enrollmentService: EnrollmentService,
-    private progressService: ProgressService,
-    private authService: AuthService,
-    private logger: LoggerService
-  ) {}
 
   // Keyboard navigation
   @HostListener('window:keydown', ['$event'])
@@ -93,6 +114,7 @@ export class CoursePlayerComponent implements OnInit, OnDestroy {
   loadCourseData(): void {
     this.isLoading = true;
     this.error = null;
+    this.cdr.markForCheck();
 
     combineLatest([
       this.courseService.getCourse(this.courseId),
@@ -124,11 +146,13 @@ export class CoursePlayerComponent implements OnInit, OnDestroy {
         }
 
         this.isLoading = false;
+        this.cdr.markForCheck();
       },
       error: (error) => {
         this.logger.error('Error loading course data:', error);
         this.error = 'Failed to load course. Please try again.';
         this.isLoading = false;
+        this.cdr.markForCheck();
       }
     });
   }
@@ -140,9 +164,11 @@ export class CoursePlayerComponent implements OnInit, OnDestroy {
         .subscribe({
           next: (lessonIds) => {
             this.completedLessonIds = lessonIds;
+            this.cdr.markForCheck();
           },
           error: (error) => {
             this.logger.error('Error loading progress:', error);
+            this.cdr.markForCheck();
           }
         });
     }
@@ -150,6 +176,7 @@ export class CoursePlayerComponent implements OnInit, OnDestroy {
 
   selectLesson(lesson: Lesson): void {
     this.currentLesson = lesson;
+    this.cdr.markForCheck();
 
     // Update last accessed date
     if (this.enrollment) {
@@ -238,6 +265,7 @@ export class CoursePlayerComponent implements OnInit, OnDestroy {
 
   toggleSidebar(): void {
     this.sidebarCollapsed = !this.sidebarCollapsed;
+    this.cdr.markForCheck();
   }
 
   isSectionExpanded(sectionIndex: number): boolean {

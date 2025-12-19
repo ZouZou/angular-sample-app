@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
@@ -9,9 +9,9 @@ import { environment } from '../../../environments/environment';
   providedIn: 'root'
 })
 export class ProgressService {
-  private apiUrl = `${environment.apiUrl}/progress`;
+  private http = inject(HttpClient);
 
-  constructor(private http: HttpClient) { }
+  private apiUrl = `${environment.apiUrl}/progress`;
 
   /**
    * Get all progress records for an enrollment

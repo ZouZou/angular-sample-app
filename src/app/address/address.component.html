@@ -16,20 +16,28 @@
           <mat-form-field class="full-width" [ngClass]="{'field-valid': isFieldValid('firstName')}">
             <mat-label>First name</mat-label>
             <input matInput formControlName="firstName">
-            <mat-icon matSuffix *ngIf="isFieldValid('firstName')" class="success-indicator">check_circle</mat-icon>
-            <mat-error *ngIf="addressForm.controls['firstName'].hasError('required')">
-              First name is required
-            </mat-error>
+            @if (isFieldValid('firstName')) {
+              <mat-icon matSuffix class="success-indicator">check_circle</mat-icon>
+            }
+            @if (addressForm.controls['firstName'].hasError('required')) {
+              <mat-error>
+                First name is required
+              </mat-error>
+            }
           </mat-form-field>
         </div>
         <div class="col">
           <mat-form-field class="full-width" [ngClass]="{'field-valid': isFieldValid('lastName')}">
             <mat-label>Last name</mat-label>
             <input matInput formControlName="lastName">
-            <mat-icon matSuffix *ngIf="isFieldValid('lastName')" class="success-indicator">check_circle</mat-icon>
-            <mat-error *ngIf="addressForm.controls['lastName'].hasError('required')">
-              Last name is required
-            </mat-error>
+            @if (isFieldValid('lastName')) {
+              <mat-icon matSuffix class="success-indicator">check_circle</mat-icon>
+            }
+            @if (addressForm.controls['lastName'].hasError('required')) {
+              <mat-error>
+                Last name is required
+              </mat-error>
+            }
           </mat-form-field>
         </div>
       </div>
@@ -38,51 +46,69 @@
           <mat-form-field class="full-width" [ngClass]="{'field-valid': isFieldValid('address')}">
             <mat-label>Street Address</mat-label>
             <textarea matInput formControlName="address" rows="2"></textarea>
-            <mat-icon matSuffix *ngIf="isFieldValid('address')" class="success-indicator">check_circle</mat-icon>
+            @if (isFieldValid('address')) {
+              <mat-icon matSuffix class="success-indicator">check_circle</mat-icon>
+            }
             <mat-hint>Enter your full street address</mat-hint>
-            <mat-error *ngIf="addressForm.controls['address'].hasError('required')">
-              Street address is required
-            </mat-error>
+            @if (addressForm.controls['address'].hasError('required')) {
+              <mat-error>
+                Street address is required
+              </mat-error>
+            }
           </mat-form-field>
         </div>
       </div>
-      <div class="row" *ngIf="!hasUnitNumber">
-        <div class="col">
-          <button mat-button type="button" (click)="hasUnitNumber = !hasUnitNumber">
-            + Add C/O, Apt, Suite, Unit
-          </button>
+      @if (!hasUnitNumber) {
+        <div class="row">
+          <div class="col">
+            <button mat-button type="button" (click)="hasUnitNumber = !hasUnitNumber">
+              + Add C/O, Apt, Suite, Unit
+            </button>
+          </div>
         </div>
-      </div>
-      <div class="row" *ngIf="hasUnitNumber">
-        <div class="col">
-          <mat-form-field class="full-width">
-            <textarea matInput placeholder="Address 2" formControlName="address2"></textarea>
-          </mat-form-field>
+      }
+      @if (hasUnitNumber) {
+        <div class="row">
+          <div class="col">
+            <mat-form-field class="full-width">
+              <textarea matInput placeholder="Address 2" formControlName="address2"></textarea>
+            </mat-form-field>
+          </div>
         </div>
-      </div>
+      }
       <div class="row">
         <div class="col">
           <mat-form-field class="full-width" [ngClass]="{'field-valid': isFieldValid('city')}">
             <mat-label>City</mat-label>
             <input matInput formControlName="city">
-            <mat-icon matSuffix *ngIf="isFieldValid('city')" class="success-indicator">check_circle</mat-icon>
-            <mat-error *ngIf="addressForm.controls['city'].hasError('required')">
-              City is required
-            </mat-error>
+            @if (isFieldValid('city')) {
+              <mat-icon matSuffix class="success-indicator">check_circle</mat-icon>
+            }
+            @if (addressForm.controls['city'].hasError('required')) {
+              <mat-error>
+                City is required
+              </mat-error>
+            }
           </mat-form-field>
         </div>
         <div class="col">
           <mat-form-field class="full-width" [ngClass]="{'field-valid': isFieldValid('state')}">
             <mat-label>State</mat-label>
             <mat-select formControlName="state">
-              <mat-option *ngFor="let state of states" [value]="state.abbreviation">
-                {{ state.name }}
-              </mat-option>
+              @for (state of states; track state.abbreviation) {
+                <mat-option [value]="state.abbreviation">
+                  {{ state.name }}
+                </mat-option>
+              }
             </mat-select>
-            <mat-icon matSuffix *ngIf="isFieldValid('state')" class="success-indicator">check_circle</mat-icon>
-            <mat-error *ngIf="addressForm.controls['state'].hasError('required')">
-              State is required
-            </mat-error>
+            @if (isFieldValid('state')) {
+              <mat-icon matSuffix class="success-indicator">check_circle</mat-icon>
+            }
+            @if (addressForm.controls['state'].hasError('required')) {
+              <mat-error>
+                State is required
+              </mat-error>
+            }
           </mat-form-field>
         </div>
       </div>
@@ -91,14 +117,20 @@
           <mat-form-field class="full-width" [ngClass]="{'field-valid': isFieldValid('postalCode')}">
             <mat-label>Postal Code</mat-label>
             <input matInput #postalCode maxlength="5" type="text" inputmode="numeric" pattern="[0-9]{5}" formControlName="postalCode">
-            <mat-icon matSuffix *ngIf="isFieldValid('postalCode')" class="success-indicator">check_circle</mat-icon>
+            @if (isFieldValid('postalCode')) {
+              <mat-icon matSuffix class="success-indicator">check_circle</mat-icon>
+            }
             <mat-hint align="end">{{postalCode.value.length}} / 5 digits</mat-hint>
-            <mat-error *ngIf="addressForm.controls['postalCode'].hasError('required')">
-              Postal code is required
-            </mat-error>
-            <mat-error *ngIf="addressForm.controls['postalCode'].hasError('minlength') || addressForm.controls['postalCode'].hasError('maxlength')">
-              Postal code must be exactly 5 digits
-            </mat-error>
+            @if (addressForm.controls['postalCode'].hasError('required')) {
+              <mat-error>
+                Postal code is required
+              </mat-error>
+            }
+            @if (addressForm.controls['postalCode'].hasError('minlength') || addressForm.controls['postalCode'].hasError('maxlength')) {
+              <mat-error>
+                Postal code must be exactly 5 digits
+              </mat-error>
+            }
           </mat-form-field>
         </div>
       </div>
@@ -114,8 +146,12 @@
     </mat-card-content>
     <mat-card-actions>
       <button mat-raised-button color="primary" type="submit" [disabled]="isSubmitting" class="submit-button">
-        <mat-spinner *ngIf="isSubmitting" diameter="20" class="button-spinner"></mat-spinner>
-        <mat-icon *ngIf="!isSubmitting">check</mat-icon>
+        @if (isSubmitting) {
+          <mat-spinner diameter="20" class="button-spinner"></mat-spinner>
+        }
+        @if (!isSubmitting) {
+          <mat-icon>check</mat-icon>
+        }
         <span>{{ isSubmitting ? 'Submitting...' : 'Submit' }}</span>
       </button>
     </mat-card-actions>

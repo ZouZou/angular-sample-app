@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
+import { FormControl, FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Router, RouterOutlet } from '@angular/router';
 import { HttpService } from './http.service';
 import { Observable } from 'rxjs';
 import { LoggerService } from './shared/services/logger.service';
+import { CommonModule } from '@angular/common';
 
 interface Post {
   userId: number;
@@ -16,9 +17,16 @@ interface Post {
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.sass'],
-  standalone: false
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, RouterOutlet],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements OnInit{
+  private httpService = inject(HttpService);
+  private router = inject(Router);
+  private fb = inject(FormBuilder);
+  private logger = inject(LoggerService);
+
   title = 'Hello World How are you?';
   jsonValue = {
     a : 'hello',
@@ -45,12 +53,7 @@ export class AppComponent implements OnInit{
     lastName: ['']
   });
 
-  constructor(
-    private httpService: HttpService,
-    private router: Router,
-    private fb: FormBuilder,
-    private logger: LoggerService
-  ) {
+  constructor() {
     // this.router.events.subscribe((e) => {
     //   this.logger.debug('Router event', e);
     // });
@@ -80,5 +83,5 @@ export class AppComponent implements OnInit{
 
   modifyFormControl(): void {
     this.testProp.setValue('Hello World');
-  }  
+  }
 }
