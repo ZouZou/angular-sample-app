@@ -331,4 +331,34 @@ export class QuizService {
 
     return attempts[0] || null;
   }
+
+  async getAllAttempts() {
+    const attempts = await this.attemptRepository.find({
+      relations: ['quiz'],
+      order: { completedAt: 'DESC' }
+    });
+
+    return attempts;
+  }
+
+  async getUserAllAttempts(userId: number) {
+    const attempts = await this.attemptRepository.find({
+      where: { userId },
+      relations: ['quiz'],
+      order: { completedAt: 'DESC' }
+    });
+
+    return attempts;
+  }
+
+  async getCourseAttempts(courseId: number) {
+    const attempts = await this.attemptRepository
+      .createQueryBuilder('attempt')
+      .leftJoinAndSelect('attempt.quiz', 'quiz')
+      .where('quiz.courseId = :courseId', { courseId })
+      .orderBy('attempt.completedAt', 'DESC')
+      .getMany();
+
+    return attempts;
+  }
 }
