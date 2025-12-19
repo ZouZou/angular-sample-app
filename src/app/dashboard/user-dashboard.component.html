@@ -11,6 +11,12 @@
           <mat-icon>search</mat-icon>
           Browse Courses
         </button>
+        @if (currentUser?.role === 'instructor' || currentUser?.role === 'admin') {
+          <button mat-button routerLink="/instructor">
+            <mat-icon>analytics</mat-icon>
+            Instructor Dashboard
+          </button>
+        }
         @if (currentUser?.role === 'admin') {
           <button mat-button routerLink="/admin">
             <mat-icon>admin_panel_settings</mat-icon>

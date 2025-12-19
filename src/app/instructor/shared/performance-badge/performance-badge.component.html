@@ -1,0 +1,6 @@
+<div class="performance-badge" [ngClass]="[getBadgeClass(), 'badge-' + size]">
+  <div class="badge-score">{{ score | number:'1.0-0' }}%</div>
+  @if (showLabel) {
+    <div class="badge-label">{{ getLabel() }}</div>
+  }
+</div>

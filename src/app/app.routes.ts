@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
 import { adminGuard } from './core/guards/admin.guard';
+import { instructorGuard } from './core/guards/instructor.guard';
 import { blockitGuard } from './blockit.guard';
 
 export const routes: Routes = [
@@ -22,6 +23,21 @@ export const routes: Routes = [
     path: 'admin',
     loadComponent: () => import('./admin/admin.component').then(m => m.AdminComponent),
     canActivate: [authGuard, adminGuard]
+  },
+  {
+    path: 'instructor',
+    loadComponent: () => import('./instructor/instructor-dashboard.component').then(m => m.InstructorDashboardComponent),
+    canActivate: [authGuard, instructorGuard]
+  },
+  {
+    path: 'instructor/course/:courseId',
+    loadComponent: () => import('./instructor/course-analytics/course-analytics.component').then(m => m.CourseAnalyticsComponent),
+    canActivate: [authGuard, instructorGuard]
+  },
+  {
+    path: 'instructor/student/:studentId',
+    loadComponent: () => import('./instructor/student-detail/student-detail.component').then(m => m.StudentDetailComponent),
+    canActivate: [authGuard, instructorGuard]
   },
   {
     path: 'Navigation',

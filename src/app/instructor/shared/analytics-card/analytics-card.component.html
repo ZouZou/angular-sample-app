@@ -1,0 +1,21 @@
+<mat-card class="analytics-card" [ngClass]="'card-' + color">
+  <div class="card-icon">
+    <mat-icon>{{ icon }}</mat-icon>
+  </div>
+
+  <div class="card-content">
+    <div class="card-title">{{ title }}</div>
+    <div class="card-value">{{ value }}</div>
+
+    @if (subtitle) {
+      <div class="card-subtitle">{{ subtitle }}</div>
+    }
+
+    @if (trend) {
+      <div class="card-trend" [ngClass]="'trend-' + trend.direction">
+        <mat-icon>{{ trend.direction === 'up' ? 'trending_up' : 'trending_down' }}</mat-icon>
+        <span>{{ trend.value }}%</span>
+      </div>
+    }
+  </div>
+</mat-card>

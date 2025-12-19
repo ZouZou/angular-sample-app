@@ -11,6 +11,7 @@ A full-stack Learning Management System built with Angular 20 and Express.js, fe
 - **Course Player**: Interactive lesson viewer with progress tracking
 - **Quiz System**: Auto-graded quizzes with instant feedback and attempt history
 - **Analytics Dashboard**: Comprehensive progress tracking with performance metrics
+- **Instructor Dashboard**: Advanced analytics and student performance tracking for instructors
 - **Material Design**: Responsive UI with Angular Material components
 - **Performance Optimized**: Smart caching, lazy loading, and efficient change detection
 
@@ -21,7 +22,9 @@ A full-stack Learning Management System built with Angular 20 and Express.js, fe
 - Role-based authorization (student, instructor, admin)
 - Automatic quiz grading system
 - Progress calculation engine
+- Instructor analytics with detailed student performance tracking
 - Comprehensive course and curriculum management
+- Data export capabilities (CSV/JSON)
 - Secure password hashing with bcrypt
 
 ## Tech Stack
@@ -391,6 +394,13 @@ npm run seed
 - `GET /course/:courseId` - Get all quiz attempts for a course (admin only)
 - `GET /` - Get all quiz attempts across the system (admin only)
 
+### Instructor Analytics (`/api/instructor/analytics`)
+- `GET /course/:courseId/overview` - Get course analytics overview (instructor/admin only)
+- `GET /course/:courseId/students` - Get all students enrolled in a course with progress (instructor/admin only)
+- `GET /course/:courseId/quiz-performance` - Get quiz performance analytics for a course (instructor/admin only)
+- `GET /student/:studentId/detail` - Get detailed performance for a specific student (instructor/admin only)
+- `GET /course/:courseId/export` - Export course data in CSV or JSON format (instructor/admin only)
+
 ## Project Structure
 
 ```
@@ -401,6 +411,7 @@ angular-sample-app/
 │   │   │   ├── guards/           # Route guards (functional)
 │   │   │   │   ├── auth.guard.ts
 │   │   │   │   ├── admin.guard.ts
+│   │   │   │   ├── instructor.guard.ts
 │   │   │   │   └── blockit.guard.ts
 │   │   │   └── interceptors/     # HTTP interceptors (functional)
 │   │   │       ├── auth.interceptor.ts
@@ -414,7 +425,11 @@ angular-sample-app/
 │   │   │   │   ├── quiz-player/
 │   │   │   │   └── ...
 │   │   │   ├── models/           # TypeScript interfaces
+│   │   │   │   ├── analytics.interface.ts
+│   │   │   │   └── ...
 │   │   │   ├── services/         # Frontend services
+│   │   │   │   ├── instructor-analytics.service.ts
+│   │   │   │   └── ...
 │   │   │   └── course.routes.ts  # Route-based lazy loading
 │   │   ├── customer/             # Customer feature (standalone components)
 │   │   │   ├── components/       # Customer components
@@ -423,6 +438,18 @@ angular-sample-app/
 │   │   │   │   ├── user-dashboard/
 │   │   │   │   └── ...
 │   │   │   └── customer.routes.ts
+│   │   ├── instructor/           # Instructor feature (standalone components)
+│   │   │   ├── instructor-dashboard.component.ts
+│   │   │   ├── course-analytics/  # Course analytics view
+│   │   │   ├── student-detail/    # Student detail view
+│   │   │   └── shared/            # Shared instructor components
+│   │   │       ├── analytics-card/
+│   │   │       └── performance-badge/
+│   │   ├── shared/               # Shared services and utilities
+│   │   │   ├── services/         # Shared services
+│   │   │   │   ├── export.service.ts
+│   │   │   │   └── ...
+│   │   │   └── animations/       # Reusable animations
 │   │   ├── app.component.ts      # Root component (standalone)
 │   │   ├── app.config.ts         # Application configuration
 │   │   └── app.routes.ts         # Root routing configuration
@@ -444,8 +471,14 @@ angular-sample-app/
 │   │   │   ├── QuizAttempt.ts
 │   │   │   └── UserAnswer.ts
 │   │   ├── services/             # Business logic services
+│   │   │   ├── instructorService.ts
+│   │   │   └── ...
 │   │   ├── controllers/          # Route controllers
+│   │   │   ├── instructorController.ts
+│   │   │   └── ...
 │   │   ├── routes/               # API routes
+│   │   │   ├── instructorRoutes.ts
+│   │   │   └── ...
 │   │   ├── middleware/           # Custom middleware
 │   │   ├── config/               # Configuration files
 │   │   ├── utils/                # Utility functions and seed data
@@ -503,6 +536,44 @@ The dashboard provides comprehensive quiz performance analytics:
    - Red (< 60%): Needs improvement
 5. **Completion Tracking**: Completed vs. total quizzes per course
 6. **Admin Access**: Instructors can view all student attempts for analysis
+
+### Instructor Dashboard with Student Analytics
+
+The instructor dashboard provides comprehensive analytics and insights for course management:
+
+#### Dashboard Overview
+1. **Course Cards**: Visual overview of all courses with key metrics
+2. **Enrollment Statistics**: Active, completed, and dropped student counts
+3. **Average Progress**: Track overall student progress across the course
+4. **Quiz Performance**: Average quiz scores and pass rates
+5. **Data Export**: Export analytics as CSV or Excel files
+
+#### Course Analytics Page
+1. **Student Table**: Searchable and sortable table of all enrolled students
+   - Student name, email, and profile information
+   - Enrollment status (active, completed, dropped)
+   - Progress percentage and completed lessons
+   - Average quiz scores and attempts
+   - Last access date tracking
+2. **Filters**: Filter students by enrollment status
+3. **Search**: Quick search by student name or email
+4. **Bulk Export**: Export student data for reporting
+
+#### Student Detail View
+1. **Performance Overview**: Individual student metrics
+   - Total time spent in course
+   - Completion percentage
+   - Detailed progress records
+2. **Lesson Progress**: Track completion status for each lesson
+3. **Quiz Attempts**: View all quiz attempts with scores and dates
+4. **Export Options**: Export individual student performance data
+
+#### Features
+- **Real-time Analytics**: Live data from enrolled students
+- **Question-Level Analytics**: Identify difficult quiz questions
+- **Performance Metrics**: Track accuracy rates and common mistakes
+- **Role-Based Access**: Protected routes for instructors and admins only
+- **Data Export**: CSV and Excel export for further analysis
 
 ## Development
 
@@ -661,9 +732,9 @@ For issues and questions, please open an issue on the repository.
 - [x] Add seed data script for sample courses
 - [x] Implement quiz attempt tracking and analytics
 - [x] Add comprehensive user dashboard with progress tracking
+- [x] Implement instructor dashboard with student analytics
 
 ### Planned Features 🚀
-- [ ] Implement instructor dashboard with student analytics
 - [ ] Add video lesson support with progress tracking
 - [ ] Implement course certificates upon completion
 - [ ] Add discussion forums per course
