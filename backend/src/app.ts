@@ -32,6 +32,7 @@ import curriculumRoutes from './routes/curriculumRoutes';
 import enrollmentRoutes from './routes/enrollmentRoutes';
 import progressRoutes from './routes/progressRoutes';
 import quizRoutes from './routes/quizRoutes';
+import quizAttemptRoutes from './routes/quizAttemptRoutes';
 
 // API Routes
 app.use('/api/auth', authRoutes);
@@ -40,6 +41,7 @@ app.use('/api', curriculumRoutes); // Includes /api/courses/:id/sections and /ap
 app.use('/api/enrollments', enrollmentRoutes);
 app.use('/api/progress', progressRoutes);
 app.use('/api/quizzes', quizRoutes);
+app.use('/api/quiz-attempts', quizAttemptRoutes);
 
 // Error handling middleware (must be last)
 app.use(errorHandler);

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -68,6 +68,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
   private router = inject(Router);
   private notificationService = inject(NotificationService);
   private logger = inject(LoggerService);
+  private cdr = inject(ChangeDetectorRef);
 
   private destroy$ = new Subject<void>();
   currentUser: User | null = null;
@@ -89,11 +90,13 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
   loadDashboardData(): void {
     this.isLoading = true;
     this.error = null;
+    this.cdr.markForCheck();
 
     const userId = this.currentUser?.id;
     if (!userId) {
       this.error = 'User not found';
       this.isLoading = false;
+      this.cdr.markForCheck();
       return;
     }
 
@@ -104,6 +107,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
         next: (enrollments) => {
           if (enrollments.length === 0) {
             this.isLoading = false;
+            this.cdr.markForCheck();
             return;
           }
 
@@ -142,6 +146,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
                       });
 
                       this.isLoading = false;
+                      this.cdr.markForCheck();
                     },
                     error: (error) => {
                       this.logger.error('Error loading quiz attempts:', error);
@@ -154,6 +159,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
                         totalQuizzes: 0
                       }));
                       this.isLoading = false;
+                      this.cdr.markForCheck();
                     }
                   });
               },
@@ -161,6 +167,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
                 this.logger.error('Error loading courses:', error);
                 this.error = 'Failed to load course details';
                 this.isLoading = false;
+                this.cdr.markForCheck();
               }
             });
         },
@@ -168,6 +175,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
           this.logger.error('Error loading enrollments:', error);
           this.error = 'Failed to load your enrolled courses';
           this.isLoading = false;
+          this.cdr.markForCheck();
         }
       });
   }
