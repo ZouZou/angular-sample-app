@@ -5,14 +5,14 @@ A full-stack Learning Management System built with Angular 20 and Express.js, fe
 ## Features
 
 ### Frontend (Angular 20)
-- Course browsing and detailed course views
-- User authentication (register/login) with JWT
-- Course enrollment system
-- Interactive course player with lesson viewer
-- Quiz system with instant feedback
-- Progress tracking dashboard
-- Responsive Material Design UI
-- Secure HTTP interceptor for automatic token management
+- **Modern Architecture**: 100% standalone components with OnPush change detection
+- **Course Management**: Browse courses, view details, and track progress
+- **Authentication**: Secure JWT-based login/register with functional interceptors
+- **Course Player**: Interactive lesson viewer with progress tracking
+- **Quiz System**: Auto-graded quizzes with instant feedback and attempt history
+- **Analytics Dashboard**: Comprehensive progress tracking with performance metrics
+- **Material Design**: Responsive UI with Angular Material components
+- **Performance Optimized**: Smart caching, lazy loading, and efficient change detection
 
 ### Backend (Express.js + TypeORM)
 - RESTful API architecture
@@ -27,17 +27,89 @@ A full-stack Learning Management System built with Angular 20 and Express.js, fe
 ## Tech Stack
 
 **Frontend:**
-- Angular 20.3.10
-- Angular Material 20.2.11
+- Angular 20.3.12 (Standalone Components Architecture)
+- Angular Material 20.2.13
 - RxJS 7.8.2
 - TypeScript 5.8
+- Modern Angular Features:
+  - 100% Standalone Components
+  - Functional Guards & Interceptors
+  - OnPush Change Detection Strategy
+  - Modern Control Flow (@if, @for, @switch)
+  - Signal-based Reactivity
 
 **Backend:**
-- Node.js with Express 4.18.2
-- TypeORM 0.3.17
+- Node.js with Express 4.21.2
+- TypeORM 0.3.27
 - PostgreSQL
 - JWT authentication
 - bcrypt password hashing
+
+## Modern Angular Architecture
+
+This application has been fully modernized to Angular 20 with cutting-edge best practices:
+
+### Standalone Components (100% Coverage)
+- All 25 components are standalone with `standalone: true`
+- No traditional NgModules - complete migration to standalone architecture
+- Components directly declare their dependencies via `imports` array
+- Cleaner, more maintainable code with better tree-shaking
+
+### Application Bootstrap
+- Modern `bootstrapApplication()` pattern in `main.ts`
+- Centralized configuration in `app.config.ts` with:
+  - `provideZoneChangeDetection()` for performance optimization
+  - `provideRouter()` with preloading strategies
+  - `provideHttpClient()` with functional interceptors
+  - `provideAnimations()` for Material components
+
+### Functional Guards & Interceptors
+- **Guards:** Modern `CanActivateFn` patterns using `inject()`
+  - `authGuard` - Protects authenticated routes
+  - `adminGuard` - Restricts admin-only access
+  - `blockitGuard` - Custom route protection
+- **Interceptors:** Functional `HttpInterceptorFn` patterns
+  - `authInterceptorFn` - JWT token injection
+  - `cacheInterceptorFn` - Response caching
+
+### OnPush Change Detection
+- All components use `ChangeDetectionStrategy.OnPush`
+- Significant performance improvements through reduced change detection cycles
+- Smart use of `ChangeDetectorRef.markForCheck()` for async operations
+
+### Modern Control Flow Syntax
+Templates use Angular's new control flow (Angular 17+):
+```html
+@if (condition) {
+  <div>Content</div>
+} @else {
+  <div>Alternative</div>
+}
+
+@for (item of items; track item.id) {
+  <div>{{ item.name }}</div>
+}
+
+@switch (value) {
+  @case ('option1') { <div>Option 1</div> }
+  @case ('option2') { <div>Option 2</div> }
+  @default { <div>Default</div> }
+}
+```
+
+### Route-Based Architecture
+- File-based routing with `app.routes.ts`, `course.routes.ts`, `customer.routes.ts`
+- Lazy loading with selective preloading strategy
+- Cleaner route definitions without module overhead
+
+### Dependency Injection
+- Modern `inject()` function instead of constructor injection
+- Example:
+```typescript
+private authService = inject(AuthService);
+private router = inject(Router);
+private fb = inject(FormBuilder);
+```
 
 ## Prerequisites
 
@@ -259,7 +331,12 @@ npm run build
 
 # Run production build
 npm start
+
+# Seed database with sample data
+npm run seed
 ```
+
+**Note:** The seed script populates the database with sample courses, users, quizzes, and other data for testing and development.
 
 ## API Endpoints
 
@@ -309,23 +386,48 @@ npm start
 - `GET /attempts/:attemptId` - Get attempt details with answers
 - `GET /attempts/quiz/:quizId/best` - Get best attempt for a quiz
 
+### Quiz Attempts (`/api/quiz-attempts`)
+- `GET /user/:userId` - Get all quiz attempts for a specific user (protected)
+- `GET /course/:courseId` - Get all quiz attempts for a course (admin only)
+- `GET /` - Get all quiz attempts across the system (admin only)
+
 ## Project Structure
 
 ```
 angular-sample-app/
 ├── src/                          # Frontend source code
 │   ├── app/
-│   │   ├── core/                 # Core services and interceptors
-│   │   │   └── interceptors/
-│   │   │       └── auth.interceptor.ts
-│   │   ├── course/               # Course feature module
+│   │   ├── core/                 # Core functionality
+│   │   │   ├── guards/           # Route guards (functional)
+│   │   │   │   ├── auth.guard.ts
+│   │   │   │   ├── admin.guard.ts
+│   │   │   │   └── blockit.guard.ts
+│   │   │   └── interceptors/     # HTTP interceptors (functional)
+│   │   │       ├── auth.interceptor.ts
+│   │   │       └── cache.interceptor.ts
+│   │   ├── course/               # Course feature (standalone components)
 │   │   │   ├── components/       # Course components
+│   │   │   │   ├── course-list/
+│   │   │   │   ├── course-detail/
+│   │   │   │   ├── course-player/
+│   │   │   │   ├── lesson-viewer/
+│   │   │   │   ├── quiz-player/
+│   │   │   │   └── ...
 │   │   │   ├── models/           # TypeScript interfaces
-│   │   │   └── services/         # Frontend services
-│   │   ├── app.component.ts
-│   │   ├── app.module.ts
-│   │   └── app-routing.module.ts
+│   │   │   ├── services/         # Frontend services
+│   │   │   └── course.routes.ts  # Route-based lazy loading
+│   │   ├── customer/             # Customer feature (standalone components)
+│   │   │   ├── components/       # Customer components
+│   │   │   │   ├── login/
+│   │   │   │   ├── register/
+│   │   │   │   ├── user-dashboard/
+│   │   │   │   └── ...
+│   │   │   └── customer.routes.ts
+│   │   ├── app.component.ts      # Root component (standalone)
+│   │   ├── app.config.ts         # Application configuration
+│   │   └── app.routes.ts         # Root routing configuration
 │   ├── environments/             # Environment configurations
+│   ├── main.ts                   # Bootstrap with bootstrapApplication()
 │   └── index.html
 ├── backend/                      # Backend source code
 │   ├── src/
@@ -346,12 +448,19 @@ angular-sample-app/
 │   │   ├── routes/               # API routes
 │   │   ├── middleware/           # Custom middleware
 │   │   ├── config/               # Configuration files
+│   │   ├── utils/                # Utility functions and seed data
 │   │   └── app.ts                # Express app entry point
 │   ├── package.json
 │   ├── tsconfig.json
 │   └── .env                      # Environment variables
 └── package.json                  # Root package.json
 ```
+
+**Key Architecture Changes:**
+- ❌ Removed: `app.module.ts`, `app-routing.module.ts`, `course.module.ts`, `shared.module.ts`
+- ✅ Added: `app.config.ts`, `app.routes.ts`, `course.routes.ts`, `customer.routes.ts`
+- All components are standalone with direct imports
+- Functional guards and interceptors instead of class-based
 
 ## Key Features Explained
 
@@ -382,6 +491,19 @@ Progress is calculated by:
 5. Backend middleware validates token on protected routes
 6. Auto-logout on token expiration (401 errors)
 
+### Quiz Attempt Tracking & Analytics
+
+The dashboard provides comprehensive quiz performance analytics:
+1. **Individual Attempt History**: View all quiz attempts with scores and timestamps
+2. **Best Score Tracking**: Display best performance per quiz
+3. **Course-Level Analytics**: Average quiz scores grouped by course
+4. **Progress Visualization**: Color-coded performance indicators:
+   - Green (≥ 80%): Excellent performance
+   - Yellow (60-79%): Good performance
+   - Red (< 60%): Needs improvement
+5. **Completion Tracking**: Completed vs. total quizzes per course
+6. **Admin Access**: Instructors can view all student attempts for analysis
+
 ## Development
 
 ### Code Generation
@@ -407,15 +529,49 @@ TypeORM will automatically create tables on first run when `synchronize: true` i
 
 ## Testing
 
-### Frontend Tests
+### Frontend Unit Tests
+
+Run Jasmine/Karma unit tests:
 
 ```bash
 npm test
 ```
 
+### End-to-End Tests (Playwright)
+
+The application includes comprehensive E2E tests using Playwright:
+
+```bash
+# Run E2E tests
+npm run test:e2e
+
+# Run with UI mode
+npm run test:e2e:ui
+
+# Run in headed mode (see browser)
+npm run test:e2e:headed
+
+# Debug mode
+npm run test:e2e:debug
+
+# View test report
+npm run test:e2e:report
+```
+
 ### Backend Tests
 
-*(To be implemented)*
+Run Jest tests:
+
+```bash
+cd backend
+npm test
+
+# Watch mode
+npm run test:watch
+
+# Coverage report
+npm run test:coverage
+```
 
 ## Production Build
 
@@ -497,12 +653,23 @@ For issues and questions, please open an issue on the repository.
 
 ## Roadmap
 
-- [ ] Add seed data script for sample courses
-- [ ] Implement instructor dashboard
-- [ ] Add video lesson support
-- [ ] Implement course certificates
-- [ ] Add discussion forums
-- [ ] Email notifications
-- [ ] Payment integration
-- [ ] Advanced analytics dashboard
+### Recently Completed ✅
+- [x] Migrate to Angular 20 standalone components (100% completion)
+- [x] Implement OnPush change detection strategy
+- [x] Add functional guards and interceptors
+- [x] Modernize to new control flow syntax (@if, @for, @switch)
+- [x] Add seed data script for sample courses
+- [x] Implement quiz attempt tracking and analytics
+- [x] Add comprehensive user dashboard with progress tracking
+
+### Planned Features 🚀
+- [ ] Implement instructor dashboard with student analytics
+- [ ] Add video lesson support with progress tracking
+- [ ] Implement course certificates upon completion
+- [ ] Add discussion forums per course
+- [ ] Email notifications for course updates and deadlines
+- [ ] Payment integration for premium courses
+- [ ] Advanced analytics dashboard with data visualization
 - [ ] Mobile app (React Native)
+- [ ] Real-time collaboration features
+- [ ] AI-powered course recommendations
