@@ -19,4 +19,11 @@ export interface Lesson {
   videoUrl?: string;
   completed?: boolean;
   quizId?: number;
+  videoType?: 'embed' | 'upload';
+  videoFilePath?: string;
+  videoMimeType?: string;
+  videoSizeBytes?: number;
+  transcriptUrl?: string;
+  transcriptFilePath?: string;
+  thumbnailPath?: string;
 }

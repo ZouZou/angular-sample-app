@@ -9,6 +9,7 @@ A full-stack Learning Management System built with Angular 20 and Express.js, fe
 - **Course Management**: Browse courses, view details, and track progress
 - **Authentication**: Secure JWT-based login/register with functional interceptors
 - **Course Player**: Interactive lesson viewer with progress tracking
+- **Video Lessons**: Professional Video.js player with progress tracking, resume playback, and playback speed controls
 - **Quiz System**: Auto-graded quizzes with instant feedback and attempt history
 - **Analytics Dashboard**: Comprehensive progress tracking with performance metrics
 - **Instructor Dashboard**: Advanced analytics and student performance tracking for instructors
@@ -20,9 +21,11 @@ A full-stack Learning Management System built with Angular 20 and Express.js, fe
 - PostgreSQL database with TypeORM
 - JWT-based authentication
 - Role-based authorization (student, instructor, admin)
+- Video file upload and streaming with range request support
+- Automatic video progress tracking with resume functionality
 - Automatic quiz grading system
 - Progress calculation engine
-- Instructor analytics with detailed student performance tracking
+- Instructor analytics with detailed student performance tracking and video analytics
 - Comprehensive course and curriculum management
 - Data export capabilities (CSV/JSON)
 - Secure password hashing with bcrypt
@@ -733,9 +736,9 @@ For issues and questions, please open an issue on the repository.
 - [x] Implement quiz attempt tracking and analytics
 - [x] Add comprehensive user dashboard with progress tracking
 - [x] Implement instructor dashboard with student analytics
+- [x] Add video lesson support with progress tracking
 
 ### Planned Features 🚀
-- [ ] Add video lesson support with progress tracking
 - [ ] Implement course certificates upon completion
 - [ ] Add discussion forums per course
 - [ ] Email notifications for course updates and deadlines
