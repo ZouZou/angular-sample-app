@@ -1,0 +1,287 @@
+<div class="course-analytics-container">
+  <!-- Header -->
+  <div class="analytics-header">
+    <button mat-icon-button (click)="router.navigate(['/instructor'])" class="back-button">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+
+    <div class="header-content">
+      <div class="course-info">
+        @if (course) {
+          <h1>{{ course.title }}</h1>
+          <p>{{ course.category }} • {{ course.level }}</p>
+        }
+      </div>
+
+      <div class="header-actions">
+        <button mat-raised-button color="primary" [matMenuTriggerFor]="exportMenu">
+          <mat-icon>file_download</mat-icon>
+          Export Data
+        </button>
+        <mat-menu #exportMenu="matMenu">
+          <button mat-menu-item (click)="exportStudents('csv')">
+            <mat-icon>description</mat-icon>
+            <span>Export as CSV</span>
+          </button>
+          <button mat-menu-item (click)="exportStudents('xlsx')">
+            <mat-icon>table_chart</mat-icon>
+            <span>Export as Excel</span>
+          </button>
+        </mat-menu>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  @if (isLoading) {
+    <div class="loading-container">
+      <mat-icon class="spinning">refresh</mat-icon>
+      <p>Loading analytics...</p>
+    </div>
+  }
+
+  <!-- Error State -->
+  @if (error && !isLoading) {
+    <div class="error-container">
+      <mat-icon color="warn">error</mat-icon>
+      <p>{{ error }}</p>
+      <button mat-raised-button color="primary" (click)="loadData()">
+        Retry
+      </button>
+    </div>
+  }
+
+  <!-- Analytics Content -->
+  @if (!isLoading && !error && analytics) {
+    <div class="analytics-content" @fadeInUp>
+      <!-- Overview Cards -->
+      <section class="overview-section">
+        <h2>Course Overview</h2>
+        <div class="analytics-cards">
+          <app-analytics-card
+            title="Total Enrolled"
+            [value]="analytics.totalEnrolled"
+            icon="people"
+            color="primary"
+            @scaleIn>
+          </app-analytics-card>
+
+          <app-analytics-card
+            title="Active Students"
+            [value]="analytics.activeStudents"
+            icon="school"
+            color="success"
+            @scaleIn>
+          </app-analytics-card>
+
+          <app-analytics-card
+            title="Completion Rate"
+            [value]="(analytics.completionRate | number:'1.0-1') + '%'"
+            icon="check_circle"
+            color="accent"
+            @scaleIn>
+          </app-analytics-card>
+
+          @if (analytics.averageQuizScore !== null) {
+            <app-analytics-card
+              title="Avg Quiz Score"
+              [value]="(analytics.averageQuizScore | number:'1.0-1') + '%'"
+              icon="quiz"
+              color="info"
+              @scaleIn>
+            </app-analytics-card>
+          }
+        </div>
+      </section>
+
+      <!-- Student List -->
+      <section class="students-section">
+        <div class="section-header">
+          <h2>Students ({{ students.length }})</h2>
+
+          <div class="filters">
+            <mat-form-field appearance="outline" class="search-field">
+              <mat-label>Search students</mat-label>
+              <input matInput [formControl]="searchControl" placeholder="Name or email...">
+              <mat-icon matPrefix>search</mat-icon>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="status-filter">
+              <mat-label>Filter by status</mat-label>
+              <mat-select [formControl]="statusFilter">
+                <mat-option value="all">All Students</mat-option>
+                <mat-option value="active">Active</mat-option>
+                <mat-option value="completed">Completed</mat-option>
+                <mat-option value="dropped">Dropped</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table mat-table [dataSource]="dataSource" matSort class="students-table">
+            <!-- Name Column -->
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Student</th>
+              <td mat-cell *matCellDef="let student">
+                <div class="student-cell">
+                  <div class="student-avatar">
+                    @if (student.userAvatar) {
+                      <img [src]="student.userAvatar" [alt]="student.userName">
+                    } @else {
+                      <mat-icon>person</mat-icon>
+                    }
+                  </div>
+                  <span>{{ student.userName }}</span>
+                </div>
+              </td>
+            </ng-container>
+
+            <!-- Email Column -->
+            <ng-container matColumnDef="email">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
+              <td mat-cell *matCellDef="let student">{{ student.userEmail }}</td>
+            </ng-container>
+
+            <!-- Status Column -->
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+              <td mat-cell *matCellDef="let student">
+                <span class="status-badge" [ngClass]="'status-' + student.status">
+                  {{ student.status | titlecase }}
+                </span>
+              </td>
+            </ng-container>
+
+            <!-- Progress Column -->
+            <ng-container matColumnDef="progress">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Progress</th>
+              <td mat-cell *matCellDef="let student">
+                <div class="progress-cell">
+                  <span class="progress-text">{{ student.progress }}%</span>
+                  <mat-progress-bar
+                    [value]="student.progress"
+                    mode="determinate"
+                    class="mini-progress">
+                  </mat-progress-bar>
+                </div>
+              </td>
+            </ng-container>
+
+            <!-- Quiz Score Column -->
+            <ng-container matColumnDef="quizScore">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Quiz Score</th>
+              <td mat-cell *matCellDef="let student">
+                @if (student.averageQuizScore !== null) {
+                  <app-performance-badge
+                    [score]="student.averageQuizScore"
+                    size="small"
+                    [showLabel]="false">
+                  </app-performance-badge>
+                } @else {
+                  <span class="no-data">N/A</span>
+                }
+              </td>
+            </ng-container>
+
+            <!-- Last Active Column -->
+            <ng-container matColumnDef="lastActive">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Last Active</th>
+              <td mat-cell *matCellDef="let student">
+                @if (student.lastAccessedDate) {
+                  {{ student.lastAccessedDate | date:'short' }}
+                } @else {
+                  <span class="no-data">Never</span>
+                }
+              </td>
+            </ng-container>
+
+            <!-- Actions Column -->
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef>Actions</th>
+              <td mat-cell *matCellDef="let student">
+                <button mat-icon-button (click)="viewStudentDetail(student.userId)" matTooltip="View Details">
+                  <mat-icon>visibility</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+            <!-- No Data Row -->
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+                <div class="no-data-message">
+                  @if (searchControl.value || statusFilter.value !== 'all') {
+                    <p>No students match your filters</p>
+                  } @else {
+                    <p>No students enrolled in this course yet</p>
+                  }
+                </div>
+              </td>
+            </tr>
+          </table>
+
+          <mat-paginator
+            [pageSizeOptions]="[10, 25, 50, 100]"
+            showFirstLastButtons>
+          </mat-paginator>
+        </div>
+      </section>
+
+      <!-- Quiz Performance -->
+      @if (quizPerformance.length > 0) {
+        <section class="quiz-performance-section">
+          <h2>Quiz Performance</h2>
+
+          <div class="quiz-cards">
+            @for (quiz of quizPerformance; track quiz.quizId) {
+              <mat-card class="quiz-card" @scaleIn>
+                <mat-card-header>
+                  <mat-card-title>{{ quiz.quizTitle }}</mat-card-title>
+                  <mat-card-subtitle>{{ quiz.totalAttempts }} attempts</mat-card-subtitle>
+                </mat-card-header>
+
+                <mat-card-content>
+                  <div class="quiz-metrics">
+                    <div class="metric">
+                      <span class="metric-label">Average Score</span>
+                      <span class="metric-value" [style.color]="getScoreColor(quiz.averageScore)">
+                        {{ quiz.averageScore | number:'1.0-1' }}%
+                      </span>
+                    </div>
+                    <div class="metric">
+                      <span class="metric-label">Pass Rate</span>
+                      <span class="metric-value" [style.color]="getScoreColor(quiz.passRate)">
+                        {{ quiz.passRate | number:'1.0-1' }}%
+                      </span>
+                    </div>
+                  </div>
+
+                  <!-- Most Missed Questions -->
+                  @if (quiz.questionAnalytics.length > 0) {
+                    <div class="question-analytics">
+                      <h4>Most Challenging Questions</h4>
+                      @for (question of quiz.questionAnalytics.slice(0, 3); track question.questionId) {
+                        <div class="question-item">
+                          <div class="question-text">{{ question.questionText }}</div>
+                          <div class="question-stats">
+                            <span class="accuracy-rate" [style.color]="getScoreColor(question.accuracyRate)">
+                              {{ question.accuracyRate | number:'1.0-0' }}% accuracy
+                            </span>
+                            <span class="attempt-count">{{ question.totalAttempts }} attempts</span>
+                          </div>
+                        </div>
+                      }
+                    </div>
+                  }
+                </mat-card-content>
+              </mat-card>
+            }
+          </div>
+        </section>
+      }
+    </div>
+  }
+</div>

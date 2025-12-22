@@ -2,12 +2,17 @@ import { AppDataSource } from '../config/database';
 import { CourseSection } from '../entities/CourseSection';
 import { Lesson } from '../entities/Lesson';
 import { Course } from '../entities/Course';
+import { Enrollment } from '../entities/Enrollment';
 import { AppError } from '../middleware/errorHandler';
+import { EmailService } from './emailService';
+
+const emailService = new EmailService();
 
 export class CurriculumService {
   private sectionRepository = AppDataSource.getRepository(CourseSection);
   private lessonRepository = AppDataSource.getRepository(Lesson);
   private courseRepository = AppDataSource.getRepository(Course);
+  private enrollmentRepository = AppDataSource.getRepository(Enrollment);
 
   // Section methods
   async getCourseSections(courseId: number) {
@@ -118,14 +123,40 @@ export class CurriculumService {
     videoUrl?: string;
     quizId?: number;
   }) {
-    // Verify section exists
-    const section = await this.sectionRepository.findOne({ where: { id: data.sectionId } });
+    // Verify section exists and get course info
+    const section = await this.sectionRepository.findOne({
+      where: { id: data.sectionId },
+      relations: ['course']
+    });
     if (!section) {
       throw new AppError('Section not found', 404);
     }
 
     const lesson = this.lessonRepository.create(data);
     await this.lessonRepository.save(lesson);
+
+    // Send new lesson notification to enrolled students
+    if (section.course) {
+      try {
+        const enrollments = await this.enrollmentRepository.find({
+          where: { courseId: section.courseId, status: 'active' },
+          relations: ['user']
+        });
+
+        // Send emails in parallel
+        await Promise.all(
+          enrollments.map(enrollment =>
+            enrollment.user
+              ? emailService.sendNewLessonNotification(enrollment.user, section.course, lesson.title)
+              : Promise.resolve()
+          )
+        );
+      } catch (error) {
+        console.error('Failed to send new lesson notification emails:', error);
+        // Don't fail the lesson creation if emails fail
+      }
+    }
+
     return lesson;
   }
 

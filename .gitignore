@@ -12,3 +12,6 @@ backend/.env
 /test-results/
 /playwright-report/
 /playwright/.cache/
+
+# Auto Claude data directory
+.auto-claude/

@@ -5,7 +5,11 @@ import { QuizOption } from '../entities/QuizOption';
 import { QuizAttempt } from '../entities/QuizAttempt';
 import { UserAnswer } from '../entities/UserAnswer';
 import { Course } from '../entities/Course';
+import { User } from '../entities/User';
 import { AppError } from '../middleware/errorHandler';
+import { EmailService } from './emailService';
+
+const emailService = new EmailService();
 
 export class QuizService {
   private quizRepository = AppDataSource.getRepository(Quiz);
@@ -14,6 +18,7 @@ export class QuizService {
   private attemptRepository = AppDataSource.getRepository(QuizAttempt);
   private answerRepository = AppDataSource.getRepository(UserAnswer);
   private courseRepository = AppDataSource.getRepository(Course);
+  private userRepository = AppDataSource.getRepository(User);
 
   async getQuiz(id: number, includeCorrectAnswers: boolean = false) {
     const quiz = await this.quizRepository.findOne({
@@ -182,6 +187,21 @@ export class QuizService {
     attempt.completedAt = new Date();
 
     await this.attemptRepository.save(attempt);
+
+    // Send quiz score notification email
+    try {
+      const user = await this.userRepository.findOne({ where: { id: attempt.userId } });
+      if (user) {
+        await emailService.sendQuizScoreNotification(
+          user,
+          attempt.quiz.title,
+          attempt,
+          attempt.quiz.passingScore
+        );
+      }
+    } catch (error) {
+      console.error('Failed to send quiz score notification email:', error);
+    }
 
     return attempt;
   }

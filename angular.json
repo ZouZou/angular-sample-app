@@ -31,10 +31,13 @@
               "src/assets"
             ],
             "styles": [
+              "node_modules/video.js/dist/video-js.min.css",
               "src/theme.scss",
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/video.js/dist/video.min.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -108,10 +111,13 @@
               "src/assets"
             ],
             "styles": [
+              "node_modules/video.js/dist/video-js.min.css",
               "src/theme.scss",
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/video.js/dist/video.min.js"
+            ]
           }
         }
       }

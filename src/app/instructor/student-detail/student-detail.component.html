@@ -1,0 +1,258 @@
+<div class="student-detail-container">
+  <!-- Header -->
+  <div class="detail-header">
+    <button mat-icon-button (click)="router.navigate(['/instructor/course', courseId])" class="back-button">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+
+    <div class="header-content">
+      @if (studentData) {
+        <div class="student-profile">
+          <div class="student-avatar-large">
+            @if (studentData.user.avatarUrl) {
+              <img [src]="studentData.user.avatarUrl" [alt]="studentData.user.name">
+            } @else {
+              <mat-icon>person</mat-icon>
+            }
+          </div>
+          <div class="student-info">
+            <h1>{{ studentData.user.name }}</h1>
+            <p>{{ studentData.user.email }}</p>
+            <div class="enrollment-status">
+              <mat-chip [ngClass]="'chip-' + studentData.enrollment.status">
+                {{ studentData.enrollment.status | titlecase }}
+              </mat-chip>
+            </div>
+          </div>
+        </div>
+      }
+
+      <div class="header-actions">
+        <button mat-raised-button color="primary" [matMenuTriggerFor]="exportMenu">
+          <mat-icon>file_download</mat-icon>
+          Export Data
+        </button>
+        <mat-menu #exportMenu="matMenu">
+          <button mat-menu-item (click)="exportStudentData('csv')">
+            <mat-icon>description</mat-icon>
+            <span>Export as CSV</span>
+          </button>
+          <button mat-menu-item (click)="exportStudentData('xlsx')">
+            <mat-icon>table_chart</mat-icon>
+            <span>Export as Excel</span>
+          </button>
+        </mat-menu>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  @if (isLoading) {
+    <div class="loading-container">
+      <mat-icon class="spinning">refresh</mat-icon>
+      <p>Loading student details...</p>
+    </div>
+  }
+
+  <!-- Error State -->
+  @if (error && !isLoading) {
+    <div class="error-container">
+      <mat-icon color="warn">error</mat-icon>
+      <p>{{ error }}</p>
+      <button mat-raised-button color="primary" (click)="loadStudentData()">
+        Retry
+      </button>
+    </div>
+  }
+
+  <!-- Student Details -->
+  @if (!isLoading && !error && studentData) {
+    <div class="detail-content" @fadeInUp>
+      <!-- Performance Metrics -->
+      <section class="metrics-section">
+        <h2>Performance Overview</h2>
+        <div class="metrics-cards">
+          <app-analytics-card
+            title="Total Time Spent"
+            [value]="formatTimeSpent(studentData.totalTimeSpent)"
+            icon="schedule"
+            color="primary"
+            @scaleIn>
+          </app-analytics-card>
+
+          <app-analytics-card
+            title="Course Progress"
+            [value]="studentData.completionPercentage + '%'"
+            icon="trending_up"
+            color="success"
+            @scaleIn>
+          </app-analytics-card>
+
+          <app-analytics-card
+            title="Lessons Completed"
+            [value]="getCompletedLessonsCount() + '/' + studentData.progressRecords.length"
+            icon="check_circle"
+            color="accent"
+            @scaleIn>
+          </app-analytics-card>
+
+          <app-analytics-card
+            title="Quiz Attempts"
+            [value]="studentData.quizAttempts.length"
+            icon="quiz"
+            color="info"
+            @scaleIn>
+          </app-analytics-card>
+        </div>
+      </section>
+
+      <!-- Overall Progress Bar -->
+      <section class="progress-section">
+        <div class="progress-header">
+          <h3>Overall Course Progress</h3>
+          <span class="progress-value">{{ studentData.enrollment.progress }}%</span>
+        </div>
+        <mat-progress-bar
+          [value]="studentData.enrollment.progress"
+          mode="determinate"
+          class="large-progress">
+        </mat-progress-bar>
+      </section>
+
+      <!-- Lesson Progress -->
+      <section class="lessons-section">
+        <h2>Lesson Progress ({{ studentData.progressRecords.length }})</h2>
+
+        <div class="table-container">
+          <table mat-table [dataSource]="studentData.progressRecords" class="lessons-table">
+            <!-- Lesson Column -->
+            <ng-container matColumnDef="lesson">
+              <th mat-header-cell *matHeaderCellDef>Lesson</th>
+              <td mat-cell *matCellDef="let progress">
+                Lesson ID: {{ progress.lessonId }}
+              </td>
+            </ng-container>
+
+            <!-- Status Column -->
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef>Status</th>
+              <td mat-cell *matCellDef="let progress">
+                @if (progress.completed) {
+                  <mat-icon color="primary" class="status-icon">check_circle</mat-icon>
+                  <span class="status-text completed">Completed</span>
+                } @else {
+                  <mat-icon class="status-icon incomplete">radio_button_unchecked</mat-icon>
+                  <span class="status-text">In Progress</span>
+                }
+              </td>
+            </ng-container>
+
+            <!-- Time Spent Column -->
+            <ng-container matColumnDef="timeSpent">
+              <th mat-header-cell *matHeaderCellDef>Time Spent</th>
+              <td mat-cell *matCellDef="let progress">
+                {{ formatTimeSpent(progress.timeSpent) }}
+              </td>
+            </ng-container>
+
+            <!-- Completed Date Column -->
+            <ng-container matColumnDef="completedDate">
+              <th mat-header-cell *matHeaderCellDef>Completed Date</th>
+              <td mat-cell *matCellDef="let progress">
+                @if (progress.completedDate) {
+                  {{ progress.completedDate | date:'medium' }}
+                } @else {
+                  <span class="no-data">Not completed</span>
+                }
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="progressColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: progressColumns;"></tr>
+          </table>
+        </div>
+      </section>
+
+      <!-- Quiz Attempts -->
+      @if (studentData.quizAttempts.length > 0) {
+        <section class="quizzes-section">
+          <h2>Quiz Attempts ({{ studentData.quizAttempts.length }})</h2>
+
+          <div class="table-container">
+            <table mat-table [dataSource]="studentData.quizAttempts" class="quizzes-table">
+              <!-- Quiz Column -->
+              <ng-container matColumnDef="quiz">
+                <th mat-header-cell *matHeaderCellDef>Quiz</th>
+                <td mat-cell *matCellDef="let attempt">
+                  Quiz ID: {{ attempt.quizId }}
+                </td>
+              </ng-container>
+
+              <!-- Score Column -->
+              <ng-container matColumnDef="score">
+                <th mat-header-cell *matHeaderCellDef>Score</th>
+                <td mat-cell *matCellDef="let attempt">
+                  <app-performance-badge
+                    [score]="attempt.percentage"
+                    size="small"
+                    [showLabel]="false">
+                  </app-performance-badge>
+                  <span class="score-detail">{{ attempt.score }}/{{ attempt.totalPoints }} points</span>
+                </td>
+              </ng-container>
+
+              <!-- Passed Column -->
+              <ng-container matColumnDef="passed">
+                <th mat-header-cell *matHeaderCellDef>Result</th>
+                <td mat-cell *matCellDef="let attempt">
+                  @if (attempt.passed) {
+                    <span class="result-badge passed">
+                      <mat-icon>check_circle</mat-icon>
+                      Passed
+                    </span>
+                  } @else {
+                    <span class="result-badge failed">
+                      <mat-icon>cancel</mat-icon>
+                      Failed
+                    </span>
+                  }
+                </td>
+              </ng-container>
+
+              <!-- Attempts Column -->
+              <ng-container matColumnDef="attempts">
+                <th mat-header-cell *matHeaderCellDef>Attempt #</th>
+                <td mat-cell *matCellDef="let attempt">
+                  {{ attempt.attemptNumber }}
+                </td>
+              </ng-container>
+
+              <!-- Completed Date Column -->
+              <ng-container matColumnDef="completedDate">
+                <th mat-header-cell *matHeaderCellDef>Completed</th>
+                <td mat-cell *matCellDef="let attempt">
+                  @if (attempt.completedAt) {
+                    {{ attempt.completedAt | date:'medium' }}
+                  } @else {
+                    <span class="no-data">In progress</span>
+                  }
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="quizColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: quizColumns;"></tr>
+            </table>
+          </div>
+        </section>
+      }
+
+      <!-- No Quiz Attempts -->
+      @if (studentData.quizAttempts.length === 0) {
+        <section class="no-quizzes">
+          <mat-icon>quiz</mat-icon>
+          <p>This student hasn't attempted any quizzes yet.</p>
+        </section>
+      }
+    </div>
+  }
+</div>

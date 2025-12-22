@@ -323,6 +323,32 @@
     }
   }
 
+  .certificate-section {
+    margin-top: var(--space-3);
+    padding: var(--space-3);
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.1) 0%, rgba(255, 152, 0, 0.1) 100%);
+    border: 2px solid rgba(255, 193, 7, 0.3);
+    border-radius: var(--radius-md);
+
+    .certificate-badge {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      color: var(--color-warning);
+      font-weight: var(--font-weight-semibold);
+
+      mat-icon {
+        font-size: 24px;
+        width: 24px;
+        height: 24px;
+      }
+
+      span {
+        font-size: var(--font-size-body);
+      }
+    }
+  }
+
   mat-card-actions {
     display: flex;
     gap: var(--space-3);

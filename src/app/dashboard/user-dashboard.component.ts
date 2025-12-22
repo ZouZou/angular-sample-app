@@ -9,6 +9,7 @@ import { AuthService } from '../course/services/auth.service';
 import { EnrollmentService } from '../course/services/enrollment.service';
 import { CourseService } from '../course/services/course.service';
 import { QuizService } from '../course/services/quiz.service';
+import { CertificateService } from '../course/services/certificate.service';
 import { User } from '../course/models/user.interface';
 import { Enrollment } from '../course/models/enrollment.interface';
 import { Course } from '../course/models/course.interface';
@@ -65,6 +66,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
   private enrollmentService = inject(EnrollmentService);
   private courseService = inject(CourseService);
   private quizService = inject(QuizService);
+  private certificateService = inject(CertificateService);
   private router = inject(Router);
   private notificationService = inject(NotificationService);
   private logger = inject(LoggerService);
@@ -229,6 +231,16 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
     if (score >= 80) return '#4caf50'; // Green
     if (score >= 60) return '#ff9800'; // Orange
     return '#f44336'; // Red
+  }
+
+  viewCertificate(enrollmentId: number): void {
+    this.certificateService.viewCertificate(enrollmentId);
+    this.notificationService.success('Opening certificate...');
+  }
+
+  downloadCertificate(enrollmentId: number): void {
+    this.certificateService.downloadCertificate(enrollmentId);
+    this.notificationService.success('Downloading certificate...');
   }
 
   logout(): void {

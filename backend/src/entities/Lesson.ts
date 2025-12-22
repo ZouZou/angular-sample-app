@@ -34,6 +34,27 @@ export class Lesson {
   @Column({ name: 'quiz_id', nullable: true })
   quizId?: number;
 
+  @Column({ name: 'video_type', nullable: true })
+  videoType?: 'embed' | 'upload';
+
+  @Column({ name: 'video_file_path', nullable: true })
+  videoFilePath?: string;
+
+  @Column({ name: 'video_mime_type', nullable: true })
+  videoMimeType?: string;
+
+  @Column({ name: 'video_size_bytes', type: 'bigint', nullable: true })
+  videoSizeBytes?: number;
+
+  @Column({ name: 'transcript_url', nullable: true })
+  transcriptUrl?: string;
+
+  @Column({ name: 'transcript_file_path', nullable: true })
+  transcriptFilePath?: string;
+
+  @Column({ name: 'thumbnail_path', nullable: true })
+  thumbnailPath?: string;
+
   @CreateDateColumn({ name: 'created_at' })
   createdAt!: Date;
 
