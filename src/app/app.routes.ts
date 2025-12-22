@@ -25,6 +25,16 @@ export const routes: Routes = [
     canActivate: [authGuard, adminGuard]
   },
   {
+    path: 'admin/analytics',
+    loadComponent: () => import('./admin/analytics/admin-analytics.component').then(m => m.AdminAnalyticsComponent),
+    canActivate: [authGuard, adminGuard]
+  },
+  {
+    path: 'my-analytics',
+    loadComponent: () => import('./dashboard/student-analytics/student-analytics.component').then(m => m.StudentAnalyticsComponent),
+    canActivate: [authGuard]
+  },
+  {
     path: 'instructor',
     loadComponent: () => import('./instructor/instructor-dashboard.component').then(m => m.InstructorDashboardComponent),
     canActivate: [authGuard, instructorGuard]

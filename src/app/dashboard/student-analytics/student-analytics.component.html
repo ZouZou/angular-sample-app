@@ -1,0 +1,244 @@
+<div class="student-analytics-container">
+  <!-- Header -->
+  <div class="analytics-header">
+    <div>
+      <h1>📈 My Learning Analytics</h1>
+      <p>Track your progress and achievements</p>
+    </div>
+    <button mat-raised-button color="primary" (click)="refresh()">
+      <mat-icon>refresh</mat-icon>
+      Refresh
+    </button>
+  </div>
+
+  <!-- Loading State -->
+  @if (isLoading && !analytics) {
+    <div class="loading-container">
+      <mat-spinner></mat-spinner>
+      <p>Loading your analytics...</p>
+    </div>
+  }
+
+  <!-- Error State -->
+  @if (error && !isLoading) {
+    <div class="error-container">
+      <mat-icon color="warn">error</mat-icon>
+      <p>{{ error }}</p>
+      <button mat-raised-button color="primary" (click)="refresh()">
+        Retry
+      </button>
+    </div>
+  }
+
+  <!-- Analytics Content -->
+  @if (!isLoading || analytics) {
+    <div class="analytics-content" @fadeInUp>
+
+      <!-- Stats Cards -->
+      @if (analytics) {
+        <div class="stats-grid" [@staggerList]="8">
+
+          <!-- Learning Streak -->
+          <mat-card class="stat-card highlight-card" @scaleIn>
+            <mat-card-content>
+              <div class="stat-icon" [style.color]="getStreakColor()">
+                <mat-icon>{{ getStreakIcon() }}</mat-icon>
+              </div>
+              <div class="stat-info">
+                <h3>{{ analytics.learningStreak }} Days</h3>
+                <p>Learning Streak</p>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <!-- Total Courses -->
+          <mat-card class="stat-card" @scaleIn>
+            <mat-card-content>
+              <div class="stat-icon courses">
+                <mat-icon>school</mat-icon>
+              </div>
+              <div class="stat-info">
+                <h3>{{ analytics.totalCoursesEnrolled }}</h3>
+                <p>Courses Enrolled</p>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <!-- Active Courses -->
+          <mat-card class="stat-card" @scaleIn>
+            <mat-card-content>
+              <div class="stat-icon active">
+                <mat-icon>play_circle</mat-icon>
+              </div>
+              <div class="stat-info">
+                <h3>{{ analytics.activeCourses }}</h3>
+                <p>Active Courses</p>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <!-- Completed Courses -->
+          <mat-card class="stat-card" @scaleIn>
+            <mat-card-content>
+              <div class="stat-icon completed">
+                <mat-icon>check_circle</mat-icon>
+              </div>
+              <div class="stat-info">
+                <h3>{{ analytics.completedCourses }}</h3>
+                <p>Completed</p>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <!-- Lessons Completed -->
+          <mat-card class="stat-card" @scaleIn>
+            <mat-card-content>
+              <div class="stat-icon lessons">
+                <mat-icon>menu_book</mat-icon>
+              </div>
+              <div class="stat-info">
+                <h3>{{ analytics.totalLessonsCompleted }}</h3>
+                <p>Lessons Completed</p>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <!-- Quizzes Taken -->
+          <mat-card class="stat-card" @scaleIn>
+            <mat-card-content>
+              <div class="stat-icon quizzes">
+                <mat-icon>quiz</mat-icon>
+              </div>
+              <div class="stat-info">
+                <h3>{{ analytics.totalQuizzesTaken }}</h3>
+                <p>Quizzes Taken</p>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <!-- Average Score -->
+          <mat-card class="stat-card" @scaleIn>
+            <mat-card-content>
+              <div class="stat-icon score">
+                <mat-icon>grade</mat-icon>
+              </div>
+              <div class="stat-info">
+                <h3>{{ analytics.averageQuizScore | number:'1.0-1' }}%</h3>
+                <p>Avg Quiz Score</p>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <!-- Performance Level -->
+          <mat-card class="stat-card performance-card" @scaleIn>
+            <mat-card-content>
+              <div class="stat-icon performance">
+                <mat-icon>emoji_events</mat-icon>
+              </div>
+              <div class="stat-info">
+                <h3>{{ getPerformanceLevel() }}</h3>
+                <p>Performance Level</p>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+        </div>
+
+        <!-- Charts Section -->
+        <div class="charts-section">
+
+          <!-- Progress Over Time -->
+          @if (progressChartData.length > 0) {
+            <mat-card>
+              <mat-card-header>
+                <mat-card-title>
+                  <mat-icon>trending_up</mat-icon>
+                  Learning Progress Over Time
+                </mat-card-title>
+                <mat-card-subtitle>
+                  Track your learning journey
+                </mat-card-subtitle>
+              </mat-card-header>
+              <mat-card-content>
+                <ngx-charts-line-chart
+                  [view]="chartView"
+                  [results]="progressChartData"
+                  [xAxis]="showXAxis"
+                  [yAxis]="showYAxis"
+                  [showXAxisLabel]="showXAxisLabel"
+                  [showYAxisLabel]="showYAxisLabel"
+                  [xAxisLabel]="'Date'"
+                  [yAxisLabel]="'Progress'"
+                  [autoScale]="true"
+                  [timeline]="false"
+                  [scheme]="colorScheme"
+                  [animations]="animations"
+                  [curve]="'monotoneX'">
+                </ngx-charts-line-chart>
+              </mat-card-content>
+            </mat-card>
+          }
+
+          <!-- Quiz Performance -->
+          @if (quizPerformanceData.length > 0) {
+            <mat-card>
+              <mat-card-header>
+                <mat-card-title>
+                  <mat-icon>assessment</mat-icon>
+                  Quiz Performance Trends
+                </mat-card-title>
+                <mat-card-subtitle>
+                  See how your quiz scores improve over time
+                </mat-card-subtitle>
+              </mat-card-header>
+              <mat-card-content>
+                <ngx-charts-area-chart
+                  [view]="chartView"
+                  [results]="quizPerformanceData"
+                  [xAxis]="showXAxis"
+                  [yAxis]="showYAxis"
+                  [showXAxisLabel]="showXAxisLabel"
+                  [showYAxisLabel]="showYAxisLabel"
+                  [xAxisLabel]="'Date'"
+                  [yAxisLabel]="'Average Score (%)'"
+                  [autoScale]="true"
+                  [timeline]="false"
+                  [scheme]="colorScheme"
+                  [animations]="animations">
+                </ngx-charts-area-chart>
+              </mat-card-content>
+            </mat-card>
+          }
+
+          <!-- Motivational Card -->
+          <mat-card class="motivational-card">
+            <mat-card-content>
+              <mat-icon>star</mat-icon>
+              <h3>Keep Up the Great Work!</h3>
+              <p>
+                @if (analytics.learningStreak >= 7) {
+                  🔥 Amazing! You've maintained a {{ analytics.learningStreak }}-day learning streak!
+                } @else if (analytics.learningStreak >= 3) {
+                  💪 Great job! You're on a {{ analytics.learningStreak }}-day streak. Keep it going!
+                } @else {
+                  ⭐ Start building your learning streak by completing lessons daily!
+                }
+              </p>
+              <p>
+                @if (analytics.averageQuizScore >= 80) {
+                  🎯 Your quiz performance is excellent! Keep up the outstanding work!
+                } @else if (analytics.averageQuizScore >= 60) {
+                  📚 Good progress! Review course materials to boost your quiz scores even higher.
+                } @else {
+                  💡 Take your time with the course materials and don't hesitate to review lessons before quizzes.
+                }
+              </p>
+            </mat-card-content>
+          </mat-card>
+
+        </div>
+      }
+
+    </div>
+  }
+</div>

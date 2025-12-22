@@ -308,7 +308,37 @@ Environment variables are configured in `docker-compose.yml`. For production:
 1. Update database password in `docker-compose.yml`
 2. Change `JWT_SECRET` to a secure random string
 3. Update `CORS_ORIGIN` to your production domain
-4. Review security settings in `nginx.conf`
+4. Configure email settings (see Email Configuration below)
+5. Review security settings in `nginx.conf`
+
+#### Email Configuration
+
+The platform supports email notifications for various events. To enable email functionality, add the following environment variables to your backend `.env` file:
+
+```bash
+# Email Configuration
+EMAIL_HOST=smtp.gmail.com          # Your SMTP server (Gmail, SendGrid, etc.)
+EMAIL_PORT=587                     # SMTP port (usually 587 for TLS or 465 for SSL)
+EMAIL_SECURE=false                 # true for SSL (port 465), false for TLS (port 587)
+EMAIL_USER=your-email@gmail.com    # SMTP username/email
+EMAIL_PASSWORD=your-app-password   # SMTP password or app-specific password
+EMAIL_FROM=noreply@lms.com        # From email address
+EMAIL_FROM_NAME=LMS Platform       # From name displayed in emails
+```
+
+**Email Notifications Sent:**
+- ✉️ **Enrollment Confirmation** - When a user enrolls in a course
+- 🎓 **Course Completion** - When a user completes a course (includes certificate link)
+- 📝 **Quiz Score Notification** - When a user completes a quiz (includes pass/fail status)
+- 📚 **New Lesson Alert** - When a new lesson is added to an enrolled course
+- 👋 **Welcome Email** - When a new user registers
+
+**Note:** If email credentials are not configured, the platform will log email notifications to the console instead of sending them, allowing the system to function normally without email.
+
+**Gmail Setup Example:**
+1. Enable 2-factor authentication on your Google account
+2. Generate an App Password: https://myaccount.google.com/apppasswords
+3. Use your email and the generated app password in the configuration
 
 For detailed Docker deployment instructions, see [DOCKER_DEPLOYMENT.md](DOCKER_DEPLOYMENT.md).
 
@@ -403,6 +433,26 @@ npm run seed
 - `GET /course/:courseId/quiz-performance` - Get quiz performance analytics for a course (instructor/admin only)
 - `GET /student/:studentId/detail` - Get detailed performance for a specific student (instructor/admin only)
 - `GET /course/:courseId/export` - Export course data in CSV or JSON format (instructor/admin only)
+
+### Certificates (`/api/certificates`)
+- `POST /:enrollmentId/generate` - Generate certificate for completed enrollment (protected)
+- `GET /:enrollmentId` - View certificate (public)
+- `GET /:enrollmentId/download` - Download certificate as PDF (public)
+- `DELETE /:enrollmentId` - Delete certificate (admin/instructor only)
+
+**Note:** Certificates are automatically generated when a course is completed (progress reaches 100%). Students can view and download their certificates from the user dashboard.
+
+### Analytics (`/api/analytics`)
+**System Analytics (Admin only):**
+- `GET /system/overview` - Get system-wide statistics
+- `GET /system/user-growth?days=30` - Get user growth trends
+- `GET /system/enrollment-trends?days=30` - Get enrollment trends over time
+- `GET /system/top-courses?limit=10` - Get top performing courses
+- `GET /system/completion-rates` - Get course completion rates
+- `GET /system/quiz-distribution` - Get quiz score distribution
+
+**Student Analytics:**
+- `GET /student/my-analytics` - Get personal learning analytics (protected)
 
 ## Project Structure
 
@@ -737,13 +787,10 @@ For issues and questions, please open an issue on the repository.
 - [x] Add comprehensive user dashboard with progress tracking
 - [x] Implement instructor dashboard with student analytics
 - [x] Add video lesson support with progress tracking
+- [x] Implement course certificates upon completion
+- [x] Email notifications for course updates and quiz scores
+- [x] Advanced analytics dashboard with data visualization
 
 ### Planned Features 🚀
-- [ ] Implement course certificates upon completion
-- [ ] Add discussion forums per course
-- [ ] Email notifications for course updates and deadlines
-- [ ] Payment integration for premium courses
-- [ ] Advanced analytics dashboard with data visualization
-- [ ] Mobile app (React Native)
 - [ ] Real-time collaboration features
 - [ ] AI-powered course recommendations

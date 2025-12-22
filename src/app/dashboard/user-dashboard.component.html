@@ -186,14 +186,42 @@
                     <span>Last accessed: {{ data.enrollment.lastAccessedDate | date:'short' }}</span>
                   </div>
                 }
+                @if (data.enrollment.completedDate) {
+                  <div class="info-item">
+                    <mat-icon>check_circle</mat-icon>
+                    <span>Completed: {{ data.enrollment.completedDate | date:'mediumDate' }}</span>
+                  </div>
+                }
               </div>
+
+              <!-- Certificate Section -->
+              @if (data.enrollment.status === 'completed' && data.enrollment.certificateUrl) {
+                <div class="certificate-section">
+                  <div class="certificate-badge">
+                    <mat-icon>workspace_premium</mat-icon>
+                    <span>Certificate Available</span>
+                  </div>
+                </div>
+              }
             </mat-card-content>
 
             <mat-card-actions>
-              <button mat-raised-button color="primary" (click)="continueLearning(data.course.id!)">
-                <mat-icon>play_circle</mat-icon>
-                {{ data.enrollment.progress > 0 ? 'Continue Learning' : 'Start Learning' }}
-              </button>
+              @if (data.enrollment.status === 'completed' && data.enrollment.certificateUrl) {
+                <button mat-raised-button color="accent" (click)="viewCertificate(data.enrollment.id!)">
+                  <mat-icon>workspace_premium</mat-icon>
+                  View Certificate
+                </button>
+                <button mat-button (click)="downloadCertificate(data.enrollment.id!)">
+                  <mat-icon>download</mat-icon>
+                  Download
+                </button>
+              }
+              @if (data.enrollment.status !== 'completed') {
+                <button mat-raised-button color="primary" (click)="continueLearning(data.course.id!)">
+                  <mat-icon>play_circle</mat-icon>
+                  {{ data.enrollment.progress > 0 ? 'Continue Learning' : 'Start Learning' }}
+                </button>
+              }
               <button mat-button (click)="viewCourse(data.course.id!)">
                 <mat-icon>info</mat-icon>
                 View Details

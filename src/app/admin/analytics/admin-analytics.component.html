@@ -1,0 +1,303 @@
+<div class="analytics-container">
+  <!-- Header -->
+  <div class="analytics-header">
+    <div>
+      <h1>📊 System Analytics Dashboard</h1>
+      <p>Comprehensive platform insights and metrics</p>
+    </div>
+    <button mat-raised-button color="primary" (click)="refresh()">
+      <mat-icon>refresh</mat-icon>
+      Refresh Data
+    </button>
+  </div>
+
+  <!-- Loading State -->
+  @if (isLoading && !systemOverview) {
+    <div class="loading-container">
+      <mat-spinner></mat-spinner>
+      <p>Loading analytics data...</p>
+    </div>
+  }
+
+  <!-- Error State -->
+  @if (error && !isLoading) {
+    <div class="error-container">
+      <mat-icon color="warn">error</mat-icon>
+      <p>{{ error }}</p>
+      <button mat-raised-button color="primary" (click)="refresh()">
+        Retry
+      </button>
+    </div>
+  }
+
+  <!-- Analytics Content -->
+  @if (!isLoading || systemOverview) {
+    <div class="analytics-content" @fadeInUp>
+
+      <!-- System Overview Cards -->
+      @if (systemOverview) {
+        <div class="overview-cards" [@staggerList]="7">
+          <mat-card class="stat-card" @fadeInUp>
+            <mat-card-content>
+              <div class="stat-icon users">
+                <mat-icon>people</mat-icon>
+              </div>
+              <div class="stat-info">
+                <h3>{{ systemOverview.totalUsers | number }}</h3>
+                <p>Total Users</p>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <mat-card class="stat-card" @fadeInUp>
+            <mat-card-content>
+              <div class="stat-icon courses">
+                <mat-icon>school</mat-icon>
+              </div>
+              <div class="stat-info">
+                <h3>{{ systemOverview.totalCourses | number }}</h3>
+                <p>Total Courses</p>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <mat-card class="stat-card" @fadeInUp>
+            <mat-card-content>
+              <div class="stat-icon enrollments">
+                <mat-icon>assignment</mat-icon>
+              </div>
+              <div class="stat-info">
+                <h3>{{ systemOverview.totalEnrollments | number }}</h3>
+                <p>Total Enrollments</p>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <mat-card class="stat-card" @fadeInUp>
+            <mat-card-content>
+              <div class="stat-icon active">
+                <mat-icon>trending_up</mat-icon>
+              </div>
+              <div class="stat-info">
+                <h3>{{ systemOverview.activeEnrollments | number }}</h3>
+                <p>Active Enrollments</p>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <mat-card class="stat-card" @fadeInUp>
+            <mat-card-content>
+              <div class="stat-icon completed">
+                <mat-icon>check_circle</mat-icon>
+              </div>
+              <div class="stat-info">
+                <h3>{{ systemOverview.completedEnrollments | number }}</h3>
+                <p>Completed Courses</p>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <mat-card class="stat-card" @fadeInUp>
+            <mat-card-content>
+              <div class="stat-icon quizzes">
+                <mat-icon>quiz</mat-icon>
+              </div>
+              <div class="stat-info">
+                <h3>{{ systemOverview.totalQuizAttempts | number }}</h3>
+                <p>Quiz Attempts</p>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <mat-card class="stat-card" @fadeInUp>
+            <mat-card-content>
+              <div class="stat-icon score">
+                <mat-icon>grade</mat-icon>
+              </div>
+              <div class="stat-info">
+                <h3>{{ systemOverview.averageQuizScore | number:'1.0-1' }}%</h3>
+                <p>Avg Quiz Score</p>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      }
+
+      <!-- Charts Section -->
+      <mat-tab-group class="charts-section" animationDuration="300ms">
+
+        <!-- Growth Trends Tab -->
+        <mat-tab label="Growth Trends">
+          <div class="tab-content">
+            @if (userGrowth.length > 0) {
+              <mat-card>
+                <mat-card-header>
+                  <mat-card-title>User Growth (Last 30 Days)</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                  <ngx-charts-line-chart
+                    [view]="lineChartView"
+                    [results]="userGrowth"
+                    [xAxis]="lineChartXAxis"
+                    [yAxis]="lineChartYAxis"
+                    [showXAxisLabel]="lineChartShowXAxisLabel"
+                    [showYAxisLabel]="lineChartShowYAxisLabel"
+                    [xAxisLabel]="'Date'"
+                    [yAxisLabel]="lineChartYAxisLabel"
+                    [autoScale]="lineChartAutoScale"
+                    [timeline]="false"
+                    [scheme]="colorScheme">
+                  </ngx-charts-line-chart>
+                </mat-card-content>
+              </mat-card>
+            }
+
+            @if (enrollmentTrends.length > 0) {
+              <mat-card>
+                <mat-card-header>
+                  <mat-card-title>Enrollment Trends (Last 30 Days)</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                  <ngx-charts-area-chart
+                    [view]="lineChartView"
+                    [results]="enrollmentTrends"
+                    [xAxis]="lineChartXAxis"
+                    [yAxis]="lineChartYAxis"
+                    [showXAxisLabel]="lineChartShowXAxisLabel"
+                    [showYAxisLabel]="lineChartShowYAxisLabel"
+                    [xAxisLabel]="'Date'"
+                    [yAxisLabel]="'New Enrollments'"
+                    [autoScale]="lineChartAutoScale"
+                    [timeline]="false"
+                    [scheme]="colorScheme">
+                  </ngx-charts-area-chart>
+                </mat-card-content>
+              </mat-card>
+            }
+          </div>
+        </mat-tab>
+
+        <!-- Top Courses Tab -->
+        <mat-tab label="Top Courses">
+          <div class="tab-content">
+            @if (topCourses.length > 0) {
+              <mat-card>
+                <mat-card-header>
+                  <mat-card-title>Top 10 Courses by Enrollment</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                  <div class="courses-table">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Rank</th>
+                          <th>Course Title</th>
+                          <th>Total Enrollments</th>
+                          <th>Active</th>
+                          <th>Completed</th>
+                          <th>Completion Rate</th>
+                          <th>Avg Progress</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        @for (course of topCourses; track course.courseId; let i = $index) {
+                          <tr>
+                            <td>{{ i + 1 }}</td>
+                            <td class="course-title">{{ course.courseTitle }}</td>
+                            <td>{{ course.totalEnrollments }}</td>
+                            <td>{{ course.activeEnrollments }}</td>
+                            <td>{{ course.completedEnrollments }}</td>
+                            <td>
+                              <span class="completion-badge" [ngClass]="{
+                                'high': course.completionRate >= 70,
+                                'medium': course.completionRate >= 40 && course.completionRate < 70,
+                                'low': course.completionRate < 40
+                              }">
+                                {{ course.completionRate }}%
+                              </span>
+                            </td>
+                            <td>{{ course.averageProgress }}%</td>
+                          </tr>
+                        }
+                      </tbody>
+                    </table>
+                  </div>
+                </mat-card-content>
+              </mat-card>
+            }
+          </div>
+        </mat-tab>
+
+        <!-- Course Performance Tab -->
+        <mat-tab label="Course Performance">
+          <div class="tab-content">
+            @if (completionRates.length > 0) {
+              <mat-card>
+                <mat-card-header>
+                  <mat-card-title>Course Completion Rates</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                  <ngx-charts-bar-horizontal
+                    [view]="barChartView"
+                    [results]="completionRates"
+                    [xAxis]="barChartShowXAxis"
+                    [yAxis]="barChartShowYAxis"
+                    [showXAxisLabel]="barChartShowXAxisLabel"
+                    [showYAxisLabel]="barChartShowYAxisLabel"
+                    [xAxisLabel]="'Completion Rate (%)'"
+                    [yAxisLabel]="'Course'"
+                    [scheme]="colorScheme">
+                  </ngx-charts-bar-horizontal>
+                </mat-card-content>
+              </mat-card>
+            }
+          </div>
+        </mat-tab>
+
+        <!-- Quiz Analytics Tab -->
+        <mat-tab label="Quiz Analytics">
+          <div class="tab-content">
+            @if (quizDistribution.length > 0) {
+              <mat-card>
+                <mat-card-header>
+                  <mat-card-title>Quiz Score Distribution</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                  <div class="chart-row">
+                    <div class="chart-col">
+                      <h4>Distribution (Pie Chart)</h4>
+                      <ngx-charts-pie-chart
+                        [view]="pieChartView"
+                        [results]="quizDistribution"
+                        [gradient]="pieChartGradient"
+                        [legend]="pieChartShowLegend"
+                        [labels]="pieChartShowLabels"
+                        [doughnut]="pieChartIsDoughnut"
+                        [scheme]="colorScheme">
+                      </ngx-charts-pie-chart>
+                    </div>
+                    <div class="chart-col">
+                      <h4>Distribution (Bar Chart)</h4>
+                      <ngx-charts-bar-vertical
+                        [view]="[500, 300]"
+                        [results]="quizDistribution"
+                        [xAxis]="true"
+                        [yAxis]="true"
+                        [showXAxisLabel]="true"
+                        [showYAxisLabel]="true"
+                        [xAxisLabel]="'Score Range'"
+                        [yAxisLabel]="'Number of Attempts'"
+                        [scheme]="colorScheme">
+                      </ngx-charts-bar-vertical>
+                    </div>
+                  </div>
+                </mat-card-content>
+              </mat-card>
+            }
+          </div>
+        </mat-tab>
+
+      </mat-tab-group>
+    </div>
+  }
+</div>

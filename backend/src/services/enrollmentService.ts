@@ -6,8 +6,12 @@ import { UserProgress } from '../entities/UserProgress';
 import { Lesson } from '../entities/Lesson';
 import { AppError } from '../middleware/errorHandler';
 import { CourseService } from './courseService';
+import { CertificateService } from './certificateService';
+import { EmailService } from './emailService';
 
 const courseService = new CourseService();
+const certificateService = new CertificateService();
+const emailService = new EmailService();
 
 export class EnrollmentService {
   private enrollmentRepository = AppDataSource.getRepository(Enrollment);
@@ -51,6 +55,14 @@ export class EnrollmentService {
 
     // Increment course enrollment count
     await courseService.incrementEnrollmentCount(courseId);
+
+    // Send enrollment confirmation email
+    try {
+      await emailService.sendEnrollmentConfirmation(user, course, enrollment);
+    } catch (error) {
+      console.error('Failed to send enrollment confirmation email:', error);
+      // Don't fail the enrollment if email fails
+    }
 
     return enrollment;
   }
@@ -102,12 +114,16 @@ export class EnrollmentService {
   }
 
   async updateEnrollmentStatus(id: number, status: 'active' | 'completed' | 'dropped') {
-    const enrollment = await this.enrollmentRepository.findOne({ where: { id } });
+    const enrollment = await this.enrollmentRepository.findOne({
+      where: { id },
+      relations: ['user', 'course']
+    });
 
     if (!enrollment) {
       throw new AppError('Enrollment not found', 404);
     }
 
+    const wasCompleted = enrollment.status === 'completed';
     enrollment.status = status;
     enrollment.lastAccessedAt = new Date();
 
@@ -117,12 +133,41 @@ export class EnrollmentService {
     }
 
     await this.enrollmentRepository.save(enrollment);
+
+    // Auto-generate certificate when course is completed
+    if (status === 'completed' && !enrollment.certificateUrl) {
+      try {
+        await certificateService.generateCertificate(id);
+        // Reload enrollment to get the updated certificateUrl
+        const updatedEnrollment = await this.enrollmentRepository.findOne({
+          where: { id },
+          relations: ['user', 'course']
+        });
+        if (updatedEnrollment) {
+          Object.assign(enrollment, updatedEnrollment);
+        }
+      } catch (error) {
+        // Log error but don't fail the status update
+        console.error('Failed to auto-generate certificate:', error);
+      }
+    }
+
+    // Send course completion email (only if not already completed)
+    if (status === 'completed' && !wasCompleted && enrollment.user && enrollment.course) {
+      try {
+        await emailService.sendCourseCompletion(enrollment.user, enrollment.course, enrollment);
+      } catch (error) {
+        console.error('Failed to send course completion email:', error);
+      }
+    }
+
     return enrollment;
   }
 
   async calculateProgress(enrollmentId: number) {
     const enrollment = await this.enrollmentRepository.findOne({
-      where: { id: enrollmentId }
+      where: { id: enrollmentId },
+      relations: ['user', 'course']
     });
 
     if (!enrollment) {
@@ -154,7 +199,41 @@ export class EnrollmentService {
     enrollment.progress = Math.round(percentage * 100) / 100; // Round to 2 decimal places
     enrollment.lastAccessedAt = new Date();
 
+    // Auto-complete enrollment and generate certificate if 100% progress
+    const wasCompleted = enrollment.status === 'completed';
+    if (enrollment.progress >= 100 && enrollment.status !== 'completed') {
+      enrollment.status = 'completed';
+      enrollment.completedAt = new Date();
+    }
+
     await this.enrollmentRepository.save(enrollment);
+
+    // Auto-generate certificate when course is completed
+    if (enrollment.progress >= 100 && !enrollment.certificateUrl) {
+      try {
+        await certificateService.generateCertificate(enrollmentId);
+        // Reload enrollment to get the updated certificateUrl
+        const updatedEnrollment = await this.enrollmentRepository.findOne({
+          where: { id: enrollmentId },
+          relations: ['user', 'course']
+        });
+        if (updatedEnrollment) {
+          Object.assign(enrollment, updatedEnrollment);
+        }
+      } catch (error) {
+        // Log error but don't fail the progress calculation
+        console.error('Failed to auto-generate certificate:', error);
+      }
+    }
+
+    // Send course completion email (only if just completed)
+    if (enrollment.progress >= 100 && !wasCompleted && enrollment.user && enrollment.course) {
+      try {
+        await emailService.sendCourseCompletion(enrollment.user, enrollment.course, enrollment);
+      } catch (error) {
+        console.error('Failed to send course completion email:', error);
+      }
+    }
 
     return enrollment.progress;
   }
