@@ -124,7 +124,7 @@ class RecommendationService {
     // Get all published courses
     let allCourses = await this.courseRepository.find({
       where: { published: true },
-      relations: ['instructor', 'enrollments']
+      relations: ['enrollments']
     });
 
     // Exclude enrolled courses if requested
@@ -165,8 +165,7 @@ class RecommendationService {
    */
   async getSimilarCourses(courseId: number, limit = 5): Promise<Recommendation[]> {
     const targetCourse = await this.courseRepository.findOne({
-      where: { id: courseId },
-      relations: ['instructor']
+      where: { id: courseId }
     });
 
     if (!targetCourse) {
@@ -180,7 +179,7 @@ class RecommendationService {
         id: Not(courseId),
         category: targetCourse.category
       },
-      relations: ['instructor', 'enrollments']
+      relations: ['enrollments']
     });
 
     // Score based on similarity
@@ -247,7 +246,7 @@ class RecommendationService {
 
     const candidates = await this.courseRepository.find({
       where: query,
-      relations: ['instructor', 'enrollments'],
+      relations: ['enrollments'],
       order: { enrollmentCount: 'DESC', rating: 'DESC' },
       take: 5
     });
@@ -280,7 +279,7 @@ class RecommendationService {
 
     const courses = await this.courseRepository.find({
       where: { published: true },
-      relations: ['instructor', 'enrollments'],
+      relations: ['enrollments'],
       order: { enrollmentCount: 'DESC', rating: 'DESC' },
       take: limit * 2 // Get more to filter
     });
@@ -308,7 +307,7 @@ class RecommendationService {
     // Get all enrollments
     const enrollments = await this.enrollmentRepository.find({
       where: { userId },
-      relations: ['course', 'course.instructor']
+      relations: ['course']
     });
 
     const enrolledCourses = enrollments.map(e => e.course);
