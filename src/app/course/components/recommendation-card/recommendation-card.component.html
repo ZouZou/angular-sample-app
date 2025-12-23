@@ -1,0 +1,112 @@
+<mat-card
+  class="recommendation-card"
+  [class.compact]="compact"
+  (click)="viewCourse()"
+  @scaleIn>
+  <!-- Reason Badge -->
+  @if (showReason && recommendation.reason) {
+    <div class="reason-badge" [attr.data-color]="reasonColor">
+      <mat-icon>{{ reasonIcon }}</mat-icon>
+      <span>{{ recommendation.reason }}</span>
+    </div>
+  }
+
+  <!-- Course Thumbnail -->
+  <div class="card-image">
+    @if (recommendation.course.thumbnailUrl) {
+      <img
+        [src]="recommendation.course.thumbnailUrl"
+        [alt]="recommendation.course.title"
+        loading="lazy">
+    } @else {
+      <div class="placeholder-image">
+        <mat-icon>school</mat-icon>
+      </div>
+    }
+
+    <!-- Match Score Badge -->
+    @if (!compact && matchPercentage >= 70) {
+      <div class="match-badge" [matTooltip]="'Match score: ' + matchPercentage + '%'">
+        <mat-icon>check_circle</mat-icon>
+        <span>{{ matchPercentage }}%</span>
+      </div>
+    }
+  </div>
+
+  <!-- Course Content -->
+  <mat-card-content>
+    <div class="course-header">
+      <h3 class="course-title" [matTooltip]="recommendation.course.title">
+        {{ recommendation.course.title }}
+      </h3>
+
+      @if (recommendation.course.instructor) {
+        <p class="instructor">
+          <mat-icon>person</mat-icon>
+          {{ recommendation.course.instructor }}
+        </p>
+      }
+    </div>
+
+    @if (!compact) {
+      <p class="course-description">
+        {{ recommendation.course.description }}
+      </p>
+    }
+
+    <!-- Course Meta Information -->
+    <div class="course-meta">
+      <!-- Rating -->
+      @if (recommendation.course.rating) {
+        <div class="rating">
+          @for (star of starRating; track $index) {
+            <mat-icon [class.filled]="star === 1">
+              {{ star === 1 ? 'star' : 'star_border' }}
+            </mat-icon>
+          }
+          <span class="rating-text">{{ recommendation.course.rating | number:'1.1-1' }}</span>
+        </div>
+      }
+
+      <!-- Level -->
+      @if (recommendation.course.level) {
+        <mat-chip class="level-chip" [attr.data-level]="recommendation.course.level">
+          {{ recommendation.course.level }}
+        </mat-chip>
+      }
+
+      <!-- Duration -->
+      @if (recommendation.course.duration && !compact) {
+        <span class="duration">
+          <mat-icon>schedule</mat-icon>
+          {{ formattedDuration }}
+        </span>
+      }
+
+      <!-- Category -->
+      @if (recommendation.course.category && !compact) {
+        <span class="category">
+          <mat-icon>category</mat-icon>
+          {{ recommendation.course.category }}
+        </span>
+      }
+    </div>
+  </mat-card-content>
+
+  <!-- Card Actions -->
+  <mat-card-actions>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="viewCourse(); $event.stopPropagation()">
+      View Course
+    </button>
+
+    @if (!compact && recommendation.course.enrollmentCount) {
+      <span class="enrollment-count">
+        <mat-icon>people</mat-icon>
+        {{ recommendation.course.enrollmentCount }} enrolled
+      </span>
+    }
+  </mat-card-actions>
+</mat-card>

@@ -1,0 +1,208 @@
+.recommended-section {
+  margin: var(--space-6) 0;
+  padding: var(--space-4);
+  background: var(--background-primary);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-4);
+    padding-bottom: var(--space-3);
+    border-bottom: 2px solid var(--border-color);
+
+    .header-content {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+
+      mat-icon {
+        font-size: 32px;
+        width: 32px;
+        height: 32px;
+        color: var(--primary-color);
+      }
+
+      h2 {
+        margin: 0;
+        font-size: var(--font-size-h2);
+        font-weight: var(--font-weight-bold);
+        color: var(--text-primary);
+      }
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+
+      button mat-icon {
+        margin-left: 4px;
+      }
+    }
+  }
+
+  .loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 80px var(--space-4);
+    text-align: center;
+
+    mat-spinner {
+      margin-bottom: var(--space-4);
+    }
+
+    p {
+      margin: 0;
+      font-size: var(--font-size-body);
+      color: var(--text-secondary);
+    }
+  }
+
+  .error-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px var(--space-4);
+    text-align: center;
+
+    mat-icon {
+      font-size: 64px;
+      width: 64px;
+      height: 64px;
+      color: var(--warn-color);
+      margin-bottom: var(--space-3);
+    }
+
+    p {
+      margin: var(--space-2) 0;
+      font-size: var(--font-size-body);
+      color: var(--text-secondary);
+    }
+
+    button {
+      margin-top: var(--space-3);
+    }
+  }
+
+  .recommendations-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: var(--space-4);
+  }
+
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 80px var(--space-4);
+    text-align: center;
+    background: linear-gradient(135deg, rgba(63, 81, 181, 0.05) 0%, rgba(103, 58, 183, 0.05) 100%);
+    border-radius: var(--radius-lg);
+    border: 2px dashed rgba(63, 81, 181, 0.2);
+
+    mat-icon {
+      font-size: 80px;
+      width: 80px;
+      height: 80px;
+      color: var(--primary-color);
+      opacity: 0.7;
+      margin-bottom: var(--space-3);
+    }
+
+    h3 {
+      margin: 0 0 var(--space-2) 0;
+      font-size: var(--font-size-h3);
+      font-weight: var(--font-weight-semibold);
+      color: var(--text-primary);
+    }
+
+    p {
+      margin: 0 0 var(--space-4) 0;
+      max-width: 500px;
+      font-size: var(--font-size-body);
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 1200px) {
+  .recommended-section {
+    .recommendations-grid {
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .recommended-section {
+    padding: var(--space-3);
+
+    .section-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-3);
+
+      .header-content {
+        h2 {
+          font-size: var(--font-size-h3);
+        }
+
+        mat-icon {
+          font-size: 24px;
+          width: 24px;
+          height: 24px;
+        }
+      }
+
+      .header-actions {
+        width: 100%;
+        justify-content: space-between;
+
+        button:last-child {
+          margin-left: auto;
+        }
+      }
+    }
+
+    .recommendations-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-3);
+    }
+
+    .empty-state {
+      padding: 60px var(--space-3);
+
+      mat-icon {
+        font-size: 60px;
+        width: 60px;
+        height: 60px;
+      }
+
+      h3 {
+        font-size: var(--font-size-h4);
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .recommended-section {
+    margin: var(--space-4) 0;
+    padding: var(--space-2);
+
+    .section-header {
+      .header-actions button:not(:last-child) {
+        display: none; // Hide refresh button on very small screens
+      }
+    }
+  }
+}

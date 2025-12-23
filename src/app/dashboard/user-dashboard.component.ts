@@ -20,6 +20,7 @@ import { NotificationService } from '../shared/services/notification.service';
 import { LoggerService } from '../shared/services/logger.service';
 import { fadeInUp, staggerList, scaleIn } from '../shared/animations/animations';
 import { SkeletonCourseCardComponent } from '../shared/components/skeleton-course-card/skeleton-course-card.component';
+import { RecommendedCoursesComponent } from './recommended-courses/recommended-courses.component';
 
 interface EnrolledCourseData {
   enrollment: Enrollment;
@@ -44,7 +45,8 @@ interface EnrolledCourseData {
     MatCardModule,
     MatIconModule,
     MatProgressBarModule,
-    SkeletonCourseCardComponent
+    SkeletonCourseCardComponent,
+    RecommendedCoursesComponent
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })

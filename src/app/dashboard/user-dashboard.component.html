@@ -67,6 +67,11 @@
     </div>
   }
 
+  <!-- Recommended Courses -->
+  @if (!isLoading && !error) {
+    <app-recommended-courses></app-recommended-courses>
+  }
+
   <!-- Enrolled Courses -->
   @if (!isLoading && !error && enrolledCourses.length > 0) {
     <div class="courses-section" @fadeInUp>

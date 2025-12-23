@@ -37,6 +37,7 @@ import instructorRoutes from './routes/instructorRoutes';
 import videoRoutes from './routes/videoRoutes';
 import certificateRoutes from './routes/certificateRoutes';
 import analyticsRoutes from './routes/analyticsRoutes';
+import recommendationRoutes from './routes/recommendationRoutes';
 
 // API Routes
 app.use('/api/auth', authRoutes);
@@ -50,6 +51,7 @@ app.use('/api/instructor', instructorRoutes);
 app.use('/api/videos', videoRoutes);
 app.use('/api/certificates', certificateRoutes);
 app.use('/api/analytics', analyticsRoutes);
+app.use('/api/recommendations', recommendationRoutes);
 
 // Error handling middleware (must be last)
 app.use(errorHandler);

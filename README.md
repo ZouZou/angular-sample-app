@@ -454,6 +454,41 @@ npm run seed
 **Student Analytics:**
 - `GET /student/my-analytics` - Get personal learning analytics (protected)
 
+### Recommendations (`/api/recommendations`)
+**Personalized Recommendations:**
+- `GET /for-me?limit=10&excludeEnrolled=true` - Get AI-powered personalized course recommendations (protected)
+  - Uses hybrid algorithm combining content-based filtering, collaborative filtering, performance analysis, popularity metrics, and engagement patterns
+  - Returns recommendations with explanation for why each course is suggested
+  - Query params: `limit` (max results, default: 10), `excludeEnrolled` (exclude enrolled courses, default: true)
+
+**Course Discovery:**
+- `GET /similar/:courseId?limit=5` - Get courses similar to a specific course (public)
+  - Finds courses in same category, level, and instructor
+  - Useful for "Students also viewed" sections
+
+**Learning Path Suggestions:**
+- `GET /next/:courseId` - Get suggested next course after completing a course (protected)
+  - Suggests next difficulty level in same category
+  - Helps guide progressive learning
+
+**Trending Courses:**
+- `GET /popular?limit=10` - Get popular and trending courses (public)
+  - Ranked by enrollment count and ratings
+  - Cached for performance
+
+**Cache Management:**
+- `DELETE /cache` - Clear all recommendation caches (admin only)
+
+**Recommendation Algorithm:**
+The hybrid recommendation system combines multiple signals with weighted scoring:
+- **Content-based (25%)**: Category match, level progression, learning outcomes
+- **Collaborative filtering (30%)**: "Students who took X also took Y" patterns
+- **Performance-based (20%)**: Quiz scores matched to course difficulty
+- **Popularity (15%)**: Enrollment count, ratings, completion rates
+- **Engagement (10%)**: Learning streak, time investment patterns
+
+Each recommendation includes a human-readable reason (e.g., "Popular in Data Science", "Because you completed X", "Next level after Y") to help users understand why it was suggested.
+
 ## Project Structure
 
 ```
@@ -790,7 +825,7 @@ For issues and questions, please open an issue on the repository.
 - [x] Implement course certificates upon completion
 - [x] Email notifications for course updates and quiz scores
 - [x] Advanced analytics dashboard with data visualization
+- [x] AI-powered course recommendations with hybrid algorithm
 
 ### Planned Features 🚀
 - [ ] Real-time collaboration features
-- [ ] AI-powered course recommendations
